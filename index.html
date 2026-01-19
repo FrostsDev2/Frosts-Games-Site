@@ -6,6 +6,7 @@
 <title>Frosts Inc - Game Portal</title>
 <link rel="icon" id="favicon" href="icons/logo.jpg">
 <style>
+/* (Keep all existing CSS styles exactly as they are) */
 * { margin:0; padding:0; box-sizing:border-box; }
 
 :root {
@@ -421,12 +422,12 @@ footer {
 </div>
 
 <script>
-// Simplified game data
+// Modified game data - remove Ruffle subdirectories
 const GAMES = [
   {title: "Proxy (BETA)", description: "Google Anything", image: "thumbnails/proxy.jpg", link: "https://above-shirl-frosts-9c0fe087.koyeb.app/"},
   {title: "Cut The Rope", description: "cut the rope", image: "thumbnails/cuttherope.jpg", link: "games/cuttherope/index.html"},
-  {title: "RaftWars", description: "USING FLASH/Ruffle!", image: "thumbnails/raftwars1.jpg", link: "games/ruffle/raftwars/index.html"},
-  {title: "Bloxorz", description: "USING FLASH/Ruffle!", image: "thumbnails/bloxorz.jpg", link: "games/ruffle/bloxorz/index.html"},
+  {title: "RaftWars", description: "USING FLASH/Ruffle!", image: "thumbnails/raftwars1.jpg", link: "games/ruffle/index.html?game=raftwars"},
+  {title: "Bloxorz", description: "USING FLASH/Ruffle!", image: "thumbnails/bloxorz.jpg", link: "games/ruffle/index.html?game=bloxorz"},
   {title: "Cut The Rope HOLIDAY", description: "cut the rope", image: "thumbnails/cuttheropeh.jpg", link: "games/cuttheropeholiday/index.html"},
   {title: "Baseball Bros", description: "Baseball :)", image: "thumbnails/baseballbros.jpg", link: "games/baseballbros/index.html"},
   {title: "Monkey Mart", description: "Monkey Works", image: "thumbnails/monkeymart.jpg", link: "games/monkeymart/index.html"},
@@ -529,8 +530,21 @@ const menu = document.getElementById('game-menu');
 const iframe = document.getElementById('game-frame');
 
 function openGame(link, title) {
-  menu.style.display = 'flex';
-  iframe.src = link;
+  // Check if it's a Ruffle game by looking at the URL pattern
+  if (link.includes('games/ruffle/index.html')) {
+    // Extract game name from URL parameter or use title
+    const url = new URL(link, window.location.origin);
+    const gameName = url.searchParams.get('game') || title.toLowerCase().replace(/\s+/g, '');
+    
+    // Construct the Ruffle URL with the SWF file parameter
+    const ruffleUrl = `games/ruffle/index.html?swf=/games/ruffle/games/${gameName}.swf`;
+    menu.style.display = 'flex';
+    iframe.src = ruffleUrl;
+  } else {
+    // Regular game loading
+    menu.style.display = 'flex';
+    iframe.src = link;
+  }
   document.body.style.overflow = 'hidden';
 }
 
