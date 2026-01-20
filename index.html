@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IXL | Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>IXL | Game Portal</title>
 <link rel="icon" id="favicon" href="icons/IMG_4366.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-/* ===== CSS Variables ===== */
+/* ===== CSS Variables with Responsive Sizes ===== */
 :root {
   --primary: #00ffff;
   --primary-dark: #00cccc;
@@ -22,8 +22,16 @@
   --accent: #ff0044;
   --accent-dark: #cc0033;
   --success: #00ff88;
-  --sidebar-width: 280px;
-  --header-height: 120px;
+  
+  /* Dynamic sizing based on screen */
+  --sidebar-width: clamp(240px, 25vw, 320px);
+  --header-height: clamp(80px, 12vh, 120px);
+  --game-card-width: clamp(250px, 30vw, 320px);
+  --font-size-base: clamp(14px, 1.5vw, 16px);
+  --font-size-title: clamp(1.8rem, 4vw, 3.2rem);
+  --font-size-heading: clamp(1.3rem, 2.5vw, 1.8rem);
+  --font-size-button: clamp(0.9rem, 1.2vw, 1rem);
+  
   --transition: all 0.3s ease;
   --shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
   --shadow-light: 0 5px 15px rgba(0, 255, 255, 0.1);
@@ -38,13 +46,20 @@
   box-sizing: border-box;
 }
 
+html {
+  font-size: var(--font-size-base);
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
 body {
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   background: linear-gradient(135deg, var(--dark) 0%, #0a0a1a 100%);
   color: var(--text);
   overflow-x: hidden;
   min-height: 100vh;
   width: 100%;
+  line-height: 1.5;
 }
 
 /* ===== Loading Screen ===== */
@@ -61,14 +76,14 @@ body {
 }
 
 .loader {
-  width: 70px;
-  height: 70px;
+  width: clamp(50px, 10vw, 70px);
+  height: clamp(50px, 10vw, 70px);
   border: 4px solid transparent;
   border-top: 4px solid var(--primary);
   border-right: 4px solid var(--secondary);
   border-radius: 50%;
   animation: spin 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
-  margin-bottom: 25px;
+  margin-bottom: clamp(15px, 3vh, 25px);
   position: relative;
 }
 
@@ -106,9 +121,9 @@ body {
 /* ===== Sidebar ===== */
 .sidebar {
   width: var(--sidebar-width);
-  background: rgba(10, 10, 20, 0.9);
+  background: rgba(10, 10, 20, 0.95);
   backdrop-filter: blur(10px);
-  padding: 25px 15px;
+  padding: clamp(15px, 2vh, 25px) clamp(10px, 1.5vw, 15px);
   position: fixed;
   left: 0;
   top: var(--header-height);
@@ -127,17 +142,17 @@ body {
 
 .sidebar-toggle {
   position: fixed;
-  left: 20px;
-  top: calc(var(--header-height) + 20px);
+  left: clamp(10px, 2vw, 20px);
+  top: calc(var(--header-height) + clamp(10px, 2vh, 20px));
   background: linear-gradient(135deg, var(--primary), var(--secondary));
   color: white;
   border: none;
-  width: 50px;
-  height: 50px;
+  width: clamp(40px, 8vw, 50px);
+  height: clamp(40px, 8vw, 50px);
   border-radius: 50%;
   cursor: pointer;
   z-index: 95;
-  font-size: 1.5rem;
+  font-size: clamp(1.2rem, 2.5vw, 1.5rem);
   box-shadow: var(--shadow);
   transition: var(--transition);
   display: flex;
@@ -150,11 +165,11 @@ body {
 }
 
 .sidebar-title {
-  font-size: 1.4rem;
-  margin-bottom: 25px;
+  font-size: clamp(1.2rem, 2vw, 1.4rem);
+  margin-bottom: clamp(15px, 3vh, 25px);
   color: var(--primary);
   text-align: center;
-  padding-bottom: 15px;
+  padding-bottom: clamp(10px, 2vh, 15px);
   border-bottom: 1px solid rgba(0, 255, 255, 0.2);
   position: relative;
 }
@@ -171,20 +186,21 @@ body {
 
 .genre-list {
   list-style: none;
-  margin-bottom: 30px;
+  margin-bottom: clamp(20px, 4vh, 30px);
 }
 
 .genre-item {
-  padding: 14px 18px;
-  margin-bottom: 10px;
+  padding: clamp(10px, 2vh, 14px) clamp(12px, 1.5vw, 18px);
+  margin-bottom: clamp(8px, 1.5vh, 10px);
   background: rgba(20, 20, 35, 0.6);
   border-radius: var(--radius-small);
   cursor: pointer;
   transition: var(--transition);
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: clamp(8px, 1vw, 12px);
   border-left: 3px solid transparent;
+  font-size: clamp(0.85rem, 1.5vw, 0.95rem);
 }
 
 .genre-item:hover {
@@ -201,8 +217,8 @@ body {
 
 .genre-icon {
   color: var(--primary);
-  font-size: 1.1rem;
-  width: 24px;
+  font-size: clamp(1rem, 1.5vw, 1.1rem);
+  width: clamp(20px, 3vw, 24px);
   text-align: center;
 }
 
@@ -213,9 +229,9 @@ body {
 
 .genre-count {
   background: rgba(255, 255, 255, 0.1);
-  padding: 3px 8px;
+  padding: clamp(2px, 0.5vh, 3px) clamp(6px, 1vw, 8px);
   border-radius: 10px;
-  font-size: 0.8rem;
+  font-size: clamp(0.7rem, 1.2vw, 0.8rem);
   color: var(--text-secondary);
 }
 
@@ -223,8 +239,8 @@ body {
 .ad-container {
   background: rgba(15, 15, 30, 0.8);
   border-radius: var(--radius);
-  padding: 20px;
-  margin: 25px 0;
+  padding: clamp(15px, 2vh, 20px);
+  margin: clamp(15px, 3vh, 25px) 0;
   text-align: center;
   border: 1px dashed rgba(0, 255, 255, 0.2);
   transition: var(--transition);
@@ -239,24 +255,24 @@ body {
   display: inline-block;
   background: linear-gradient(90deg, var(--primary), var(--secondary));
   color: white;
-  padding: 5px 15px;
+  padding: clamp(4px, 0.8vh, 5px) clamp(12px, 2vw, 15px);
   border-radius: 20px;
-  font-size: 0.8rem;
-  margin-bottom: 15px;
+  font-size: clamp(0.7rem, 1.2vw, 0.8rem);
+  margin-bottom: clamp(10px, 2vh, 15px);
   font-weight: 600;
 }
 
 .ad-placeholder {
   color: var(--text-secondary);
-  font-size: 0.9rem;
-  padding: 30px 10px;
+  font-size: clamp(0.8rem, 1.5vw, 0.9rem);
+  padding: clamp(20px, 4vh, 30px) clamp(8px, 1.5vw, 10px);
   background: rgba(0, 0, 0, 0.3);
   border-radius: var(--radius-small);
 }
 
 .ad-placeholder i {
-  font-size: 2rem;
-  margin-bottom: 10px;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  margin-bottom: clamp(8px, 1.5vh, 10px);
   color: var(--primary);
   opacity: 0.5;
 }
@@ -264,13 +280,17 @@ body {
 /* ===== Main Content ===== */
 .content {
   flex: 1;
-  padding: 30px;
+  padding: clamp(15px, 3vw, 30px);
   margin-left: 0;
   transition: var(--transition);
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .content.shifted {
   margin-left: var(--sidebar-width);
+  width: calc(100% - var(--sidebar-width));
 }
 
 /* ===== Header ===== */
@@ -287,22 +307,23 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 0 20px;
+  padding: clamp(5px, 1vh, 10px) clamp(15px, 3vw, 20px);
   border-bottom: 1px solid rgba(0, 255, 255, 0.1);
   box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
 }
 
 .title {
-  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-size: var(--font-size-title);
   background: linear-gradient(90deg, var(--primary), var(--secondary), #ff00ff);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  margin-bottom: 10px;
+  margin-bottom: clamp(5px, 1vh, 10px);
   font-weight: 800;
   letter-spacing: 1px;
   text-align: center;
   animation: titleGlow 3s infinite alternate;
+  line-height: 1.2;
 }
 
 @keyframes titleGlow {
@@ -313,13 +334,14 @@ body {
 .header-buttons {
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: clamp(10px, 2vw, 20px);
   flex-wrap: wrap;
-  margin-top: 10px;
+  margin-top: clamp(5px, 1vh, 10px);
+  width: 100%;
 }
 
 .btn {
-  padding: 12px 24px;
+  padding: clamp(10px, 2vh, 12px) clamp(15px, 3vw, 24px);
   border-radius: var(--radius-small);
   border: none;
   background: linear-gradient(135deg, rgba(128,0,255,0.25), rgba(0,255,255,0.15));
@@ -329,9 +351,11 @@ body {
   font-weight: 600;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: clamp(6px, 1vw, 10px);
   position: relative;
   overflow: hidden;
+  font-size: var(--font-size-button);
+  white-space: nowrap;
 }
 
 .btn:before {
@@ -358,7 +382,7 @@ body {
 /* ===== Search ===== */
 .games-header {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: clamp(25px, 5vh, 40px);
   position: relative;
 }
 
@@ -366,29 +390,29 @@ body {
   position: relative;
   display: inline-block;
   width: 100%;
-  max-width: 500px;
-  margin-bottom: 20px;
+  max-width: min(500px, 90vw);
+  margin-bottom: clamp(15px, 3vh, 20px);
 }
 
 .search-container i {
   position: absolute;
-  left: 20px;
+  left: clamp(15px, 3vw, 20px);
   top: 50%;
   transform: translateY(-50%);
   color: var(--primary);
   z-index: 1;
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 2vw, 1.2rem);
 }
 
 #gameSearch {
-  padding: 16px 20px 16px 55px;
+  padding: clamp(12px, 2.5vh, 16px) clamp(15px, 3vw, 20px) clamp(12px, 2.5vh, 16px) clamp(45px, 8vw, 55px);
   border-radius: var(--radius);
   border: 2px solid transparent;
   background: rgba(20,20,30,0.9);
   color: var(--text);
   outline: none;
   width: 100%;
-  font-size: 1.1rem;
+  font-size: clamp(0.95rem, 1.8vw, 1.1rem);
   transition: var(--transition);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
@@ -399,12 +423,12 @@ body {
 }
 
 #totalGames {
-  margin-top: 15px;
-  font-size: 1.1rem;
+  margin-top: clamp(10px, 2vh, 15px);
+  font-size: clamp(0.95rem, 1.8vw, 1.1rem);
   color: var(--primary);
   background: rgba(0,0,0,0.3);
   display: inline-block;
-  padding: 8px 20px;
+  padding: clamp(6px, 1.5vh, 8px) clamp(15px, 3vw, 20px);
   border-radius: 30px;
   border: 1px solid rgba(0, 255, 255, 0.2);
   font-weight: 600;
@@ -420,10 +444,10 @@ body {
 /* ===== Games Grid ===== */
 .games-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 25px;
-  padding: 10px;
-  max-width: 1600px;
+  grid-template-columns: repeat(auto-fill, minmax(min(var(--game-card-width), 100%), 1fr));
+  gap: clamp(15px, 3vw, 25px);
+  padding: clamp(5px, 1vw, 10px);
+  max-width: 100%;
   margin: 0 auto;
 }
 
@@ -440,6 +464,7 @@ body {
   opacity: 0;
   transform: translateY(20px);
   animation: cardAppear 0.5s forwards;
+  max-width: 100%;
 }
 
 .game-card:nth-child(odd) {
@@ -482,7 +507,7 @@ body {
 .card-image-container {
   position: relative;
   width: 100%;
-  height: 180px;
+  height: clamp(140px, 25vw, 180px);
   overflow: hidden;
 }
 
@@ -498,37 +523,54 @@ body {
 }
 
 .card-content {
-  padding: 20px;
+  padding: clamp(12px, 2.5vw, 20px);
 }
 
 .game-title {
-  font-size: 1.3rem;
+  font-size: clamp(1.1rem, 2vw, 1.3rem);
   color: var(--primary);
-  margin-bottom: 10px;
+  margin-bottom: clamp(6px, 1.5vh, 10px);
   font-weight: 700;
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  line-height: 1.3;
 }
 
 .game-description {
-  font-size: 0.95rem;
+  font-size: clamp(0.85rem, 1.5vw, 0.95rem);
   color: var(--text-secondary);
   line-height: 1.5;
-  margin-bottom: 20px;
+  margin-bottom: clamp(12px, 2.5vh, 20px);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
+.genre-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(3px, 0.8vw, 5px);
+  margin-bottom: clamp(10px, 2.5vh, 15px);
+}
+
+.genre-tag {
+  background: rgba(0,255,255,0.1);
+  color: var(--primary);
+  padding: clamp(2px, 0.5vh, 3px) clamp(6px, 1.5vw, 8px);
+  border-radius: 12px;
+  font-size: clamp(0.7rem, 1.2vw, 0.75rem);
+  white-space: nowrap;
+}
+
 .play-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 12px 20px;
+  gap: clamp(6px, 1vw, 10px);
+  padding: clamp(10px, 2vh, 12px) clamp(15px, 3vw, 20px);
   background: linear-gradient(90deg, var(--primary), var(--secondary));
   color: white;
   border-radius: var(--radius-small);
@@ -539,6 +581,7 @@ body {
   transition: var(--transition);
   position: relative;
   overflow: hidden;
+  font-size: var(--font-size-button);
 }
 
 .play-btn:after {
@@ -571,7 +614,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: clamp(10px, 3vw, 20px);
   opacity: 0;
   transition: opacity 0.3s;
 }
@@ -587,9 +630,9 @@ body {
 }
 
 #game-frame {
-  width: 95vw;
-  height: 70vh;
-  max-width: 1300px;
+  width: min(95vw, 1300px);
+  height: min(70vh, 600px);
+  max-width: 100%;
   border: none;
   border-radius: var(--radius);
   background: #000;
@@ -597,17 +640,17 @@ body {
 }
 
 .menu-buttons {
-  margin-top: 30px;
+  margin-top: clamp(20px, 4vh, 30px);
   display: flex;
   justify-content: center;
-  gap: 15px;
+  gap: clamp(10px, 2vw, 15px);
   flex-wrap: wrap;
   width: 95%;
-  max-width: 1300px;
+  max-width: min(95vw, 1300px);
 }
 
 .menu-btn {
-  padding: 14px 25px;
+  padding: clamp(10px, 2.5vh, 14px) clamp(15px, 3vw, 25px);
   border-radius: var(--radius-small);
   border: none;
   cursor: pointer;
@@ -615,11 +658,12 @@ body {
   transition: var(--transition);
   display: flex;
   align-items: center;
-  gap: 10px;
-  min-width: 140px;
+  gap: clamp(6px, 1vw, 10px);
+  min-width: min(140px, 30vw);
   justify-content: center;
   position: relative;
   overflow: hidden;
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
 }
 
 .menu-btn:hover {
@@ -662,17 +706,17 @@ body {
 /* ===== Footer ===== */
 footer {
   text-align: center;
-  padding: 30px 20px;
-  margin-top: 60px;
+  padding: clamp(20px, 4vh, 30px) clamp(15px, 3vw, 20px);
+  margin-top: clamp(40px, 8vh, 60px);
   border-top: 1px solid rgba(255,255,255,0.1);
   color: var(--text-secondary);
-  font-size: 0.95rem;
+  font-size: clamp(0.85rem, 1.5vw, 0.95rem);
   background: rgba(5, 5, 10, 0.8);
   backdrop-filter: blur(5px);
 }
 
 footer p {
-  margin-bottom: 10px;
+  margin-bottom: clamp(8px, 1.5vh, 10px);
 }
 
 /* ===== TOS Modal ===== */
@@ -682,7 +726,7 @@ footer p {
   inset: 0;
   background: rgba(0,0,0,0.95);
   z-index: 9998;
-  padding: 20px;
+  padding: clamp(15px, 3vw, 20px);
   overflow: auto;
   opacity: 0;
   transition: opacity 0.3s;
@@ -700,9 +744,9 @@ footer p {
 
 .tos-content {
   background: linear-gradient(135deg, rgba(25,25,35,0.95), rgba(15,15,25,0.98));
-  padding: 40px;
+  padding: clamp(25px, 5vw, 40px);
   border-radius: var(--radius);
-  max-width: 800px;
+  max-width: min(800px, 90vw);
   margin: auto;
   color: #ccc;
   border: 1px solid rgba(0, 255, 255, 0.1);
@@ -719,21 +763,21 @@ footer p {
 
 .tos-content h2 {
   color: var(--accent);
-  margin-bottom: 25px;
-  font-size: 2rem;
+  margin-bottom: clamp(15px, 3vh, 25px);
+  font-size: clamp(1.5rem, 3vw, 2rem);
 }
 
 .tos-content ul {
-  margin: 20px 0 30px 25px;
+  margin: clamp(15px, 3vh, 20px) 0 clamp(20px, 4vh, 30px) clamp(20px, 4vw, 25px);
 }
 
 .tos-content li {
-  margin-bottom: 12px;
-  padding-left: 10px;
+  margin-bottom: clamp(8px, 1.5vh, 12px);
+  padding-left: clamp(8px, 1.5vw, 10px);
 }
 
 .tos-content button {
-  padding: 12px 30px;
+  padding: clamp(10px, 2.5vh, 12px) clamp(20px, 4vw, 30px);
   background: var(--accent);
   color: white;
   border: none;
@@ -741,6 +785,7 @@ footer p {
   cursor: pointer;
   font-weight: 600;
   transition: var(--transition);
+  font-size: clamp(0.9rem, 1.5vw, 1rem);
 }
 
 .tos-content button:hover {
@@ -751,7 +796,7 @@ footer p {
 
 /* ===== Scrollbar ===== */
 ::-webkit-scrollbar {
-  width: 10px;
+  width: clamp(8px, 1.5vw, 10px);
 }
 
 ::-webkit-scrollbar-track {
@@ -768,86 +813,190 @@ footer p {
   background: linear-gradient(180deg, var(--primary-dark), var(--secondary-dark));
 }
 
-/* ===== Responsive ===== */
+/* ===== Responsive Breakpoints ===== */
+
+/* Medium screens (tablets, small laptops) */
 @media (max-width: 1200px) {
-  .sidebar {
-    width: 250px;
-  }
-  
-  .content.shifted {
-    margin-left: 250px;
+  :root {
+    --sidebar-width: clamp(200px, 25vw, 250px);
+    --game-card-width: clamp(220px, 28vw, 280px);
   }
   
   .games-container {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: clamp(12px, 2vw, 20px);
   }
 }
 
+/* Small screens (tablets, large phones) */
 @media (max-width: 992px) {
   .sidebar {
-    transform: translateX(-100%);
-    width: 300px;
+    width: min(300px, 85vw);
   }
   
   .content {
     margin-left: 0 !important;
-    padding: 20px;
+    padding: clamp(12px, 2.5vw, 20px);
   }
   
   .sidebar-toggle {
     display: flex;
   }
-}
-
-@media (max-width: 768px) {
+  
   .games-container {
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(min(220px, 45vw), 1fr));
   }
   
   .header-buttons {
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-  }
-  
-  .btn {
-    width: 100%;
-    max-width: 300px;
-  }
-  
-  .menu-buttons {
-    flex-direction: column;
-    gap: 12px;
-  }
-  
-  .menu-btn {
-    width: 100%;
-  }
-  
-  .sidebar {
-    width: 100%;
+    gap: clamp(8px, 1.5vw, 12px);
   }
 }
 
+/* Very small screens (phones) */
+@media (max-width: 768px) {
+  :root {
+    --header-height: clamp(70px, 15vh, 90px);
+    --game-card-width: min(200px, 90vw);
+  }
+  
+  .games-container {
+    grid-template-columns: repeat(auto-fill, minmax(min(180px, 45vw), 1fr));
+    gap: clamp(10px, 2vw, 15px);
+  }
+  
+  .header-buttons {
+    flex-direction: row;
+    justify-content: center;
+  }
+  
+  .btn {
+    padding: clamp(8px, 1.5vh, 10px) clamp(12px, 2.5vw, 16px);
+    font-size: clamp(0.8rem, 1.2vw, 0.9rem);
+  }
+  
+  .menu-buttons {
+    flex-direction: row;
+    gap: clamp(8px, 1.5vw, 10px);
+  }
+  
+  .menu-btn {
+    min-width: min(120px, 28vw);
+    padding: clamp(8px, 2vh, 10px) clamp(12px, 2.5vw, 16px);
+  }
+  
+  .sidebar {
+    width: min(280px, 90vw);
+  }
+}
+
+/* Extra small screens */
 @media (max-width: 576px) {
+  :root {
+    --header-height: clamp(60px, 12vh, 75px);
+  }
+  
   .games-container {
     grid-template-columns: 1fr;
     padding: 5px;
   }
   
   .content {
-    padding: 15px;
+    padding: clamp(10px, 2vw, 15px);
   }
   
   .title {
-    font-size: 2.2rem;
+    font-size: clamp(1.5rem, 6vw, 2rem);
   }
   
   #gameSearch {
-    padding: 14px 20px 14px 50px;
-    font-size: 1rem;
+    padding: clamp(10px, 2vh, 12px) clamp(12px, 2.5vw, 15px) clamp(10px, 2vh, 12px) clamp(40px, 8vw, 45px);
+    font-size: clamp(0.9rem, 1.5vw, 1rem);
+  }
+  
+  .menu-buttons {
+    flex-direction: column;
+    gap: clamp(8px, 1.5vh, 10px);
+  }
+  
+  .menu-btn {
+    width: 100%;
+    min-width: auto;
+  }
+  
+  .sidebar {
+    width: 100%;
+    padding: clamp(12px, 2.5vw, 15px);
+  }
+}
+
+/* Ultra small screens */
+@media (max-width: 400px) {
+  :root {
+    --header-height: clamp(55px, 10vh, 65px);
+  }
+  
+  .btn {
+    width: 100%;
+    max-width: 250px;
+    justify-content: center;
+  }
+  
+  .header-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .game-card {
+    max-width: 100%;
+  }
+}
+
+/* High DPI screens (Retina) */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .game-card, .btn, .menu-btn {
+    border-width: 0.5px;
+  }
+}
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .game-card:hover {
+    transform: none;
+  }
+  
+  .btn:hover, .menu-btn:hover, .genre-item:hover {
+    transform: none;
+  }
+  
+  .play-btn:hover {
+    transform: none;
+  }
+  
+  /* Increase touch target sizes */
+  .btn, .menu-btn, .play-btn, .genre-item {
+    min-height: 44px;
+  }
+}
+
+/* Print styles */
+@media print {
+  .sidebar, .sidebar-toggle, .ad-container, #game-menu, .menu-buttons, .btn {
+    display: none !important;
+  }
+  
+  .content {
+    margin-left: 0 !important;
+    padding: 0;
+  }
+  
+  body {
+    background: white;
+    color: black;
+  }
+  
+  .game-card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #ddd;
   }
 }
 
@@ -878,6 +1027,48 @@ footer p {
   10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
   20%, 40%, 60%, 80% { transform: translateX(5px); }
 }
+
+/* Performance optimizations */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Dark mode support (if user prefers) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --dark: #0a0a0a;
+    --dark-card: #111122;
+  }
+}
+
+/* Light mode support */
+@media (prefers-color-scheme: light) {
+  :root {
+    --dark: #f0f0f0;
+    --dark-card: #ffffff;
+    --text: #000000;
+    --text-secondary: #555555;
+    --card-bg: rgba(240, 240, 255, 0.9);
+  }
+  
+  body {
+    background: linear-gradient(135deg, #f0f0f0 0%, #e0e0ff 100%);
+  }
+  
+  .game-card {
+    background: linear-gradient(145deg, rgba(255,255,255,0.9), rgba(240,240,255,0.95));
+    color: #000;
+    border: 1px solid rgba(0,0,0,0.1);
+  }
+  
+  .game-description {
+    color: #666;
+  }
+}
 </style>
 </head>
 <body>
@@ -885,12 +1076,12 @@ footer p {
 <!-- Loading Screen -->
 <div id="loading-screen">
   <div class="loader"></div>
-  <div style="margin-top: 20px; font-size: 1.2rem; color: var(--primary);">Loading Game Portal...</div>
-  <div style="margin-top: 10px; color: var(--text-secondary); font-size: 0.9rem;">Powered by Frosts Inc</div>
+  <div style="margin-top: clamp(15px, 3vh, 20px); font-size: clamp(1rem, 2vw, 1.2rem); color: var(--primary);">Loading Game Portal...</div>
+  <div style="margin-top: clamp(8px, 1.5vh, 10px); color: var(--text-secondary); font-size: clamp(0.8rem, 1.5vw, 0.9rem);">Powered by Frosts Inc</div>
 </div>
 
 <!-- Sidebar Toggle -->
-<button class="sidebar-toggle" id="sidebar-toggle">
+<button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle sidebar">
   <i class="fas fa-bars"></i>
 </button>
 
@@ -909,7 +1100,7 @@ footer p {
     <div class="ad-placeholder">
       <i class="fas fa-ad"></i>
       <div>Ad Space (300x250)</div>
-      <div style="font-size: 0.8rem; margin-top: 5px;">Your ad could be here</div>
+      <div style="font-size: clamp(0.7rem, 1.2vw, 0.8rem); margin-top: 5px;">Your ad could be here</div>
     </div>
   </div>
   
@@ -918,15 +1109,15 @@ footer p {
     <div class="ad-placeholder">
       <i class="fas fa-star"></i>
       <div>Featured Game</div>
-      <div style="font-size: 0.8rem; margin-top: 5px;">Promote your game</div>
+      <div style="font-size: clamp(0.7rem, 1.2vw, 0.8rem); margin-top: 5px;">Promote your game</div>
     </div>
   </div>
   
-  <div style="text-align: center; margin-top: 30px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: var(--radius-small);">
-    <div style="color: var(--primary); margin-bottom: 10px; font-weight: 600;">
+  <div style="text-align: center; margin-top: clamp(20px, 4vh, 30px); padding: clamp(10px, 2vh, 15px); background: rgba(0,0,0,0.3); border-radius: var(--radius-small);">
+    <div style="color: var(--primary); margin-bottom: clamp(8px, 1.5vh, 10px); font-weight: 600; font-size: clamp(0.9rem, 1.5vw, 1rem);">
       <i class="fas fa-fire"></i> Trending Now
     </div>
-    <div style="color: var(--text-secondary); font-size: 0.9rem;">
+    <div style="color: var(--text-secondary); font-size: clamp(0.8rem, 1.2vw, 0.9rem);">
       Slope, Drift Hunters, Run 3
     </div>
   </div>
@@ -938,13 +1129,13 @@ footer p {
   <div class="header-container">
     <div class="title">FROSTS INC GAMES</div>
     <div class="header-buttons">
-      <button class="btn discord-btn" onclick="window.open('https://discord.gg/mCUHppWjv7')">
+      <button class="btn discord-btn" onclick="window.open('https://discord.gg/mCUHppWjv7')" aria-label="Join our Discord server">
         <i class="fab fa-discord"></i> Join Discord
       </button>
-      <button class="btn tos-btn" id="tos-btn">
-        <i class="fas fa-file-contract"></i> Terms of Service
+      <button class="btn tos-btn" id="tos-btn" aria-label="View Terms of Service">
+        <i class="fas fa-file-contract"></i> Terms
       </button>
-      <button class="btn" id="theme-toggle">
+      <button class="btn" id="theme-toggle" aria-label="Change theme">
         <i class="fas fa-palette"></i> Theme
       </button>
     </div>
@@ -955,7 +1146,7 @@ footer p {
     <div class="games-header">
       <div class="search-container">
         <i class="fas fa-search"></i>
-        <input type="text" id="gameSearch" placeholder="Search games by name or genre...">
+        <input type="text" id="gameSearch" placeholder="Search games by name or genre..." aria-label="Search games">
       </div>
       <div id="totalGames"></div>
     </div>
@@ -964,12 +1155,12 @@ footer p {
       <!-- Games will be dynamically inserted here -->
     </div>
     
-    <div class="ad-container" style="max-width: 728px; margin: 40px auto;">
+    <div class="ad-container" style="max-width: min(728px, 90vw); margin: clamp(25px, 5vh, 40px) auto;">
       <div class="ad-label">Leaderboard Ad</div>
-      <div class="ad-placeholder" style="padding: 40px 10px;">
+      <div class="ad-placeholder" style="padding: clamp(25px, 5vh, 40px) clamp(8px, 1.5vw, 10px);">
         <i class="fas fa-chart-line"></i>
         <div>Ad Space (728x90)</div>
-        <div style="font-size: 0.8rem; margin-top: 5px;">Premium advertising spot</div>
+        <div style="font-size: clamp(0.7rem, 1.2vw, 0.8rem); margin-top: 5px;">Premium advertising spot</div>
       </div>
     </div>
   </div>
@@ -979,14 +1170,14 @@ footer p {
 <footer>
   <p>Frosts Inc Game Portal &copy; <span id="currentYear"></span></p>
   <p>For entertainment purposes only | All games belong to their respective owners</p>
-  <p style="margin-top: 15px; font-size: 0.85rem;">
+  <p style="margin-top: clamp(10px, 2vh, 15px); font-size: clamp(0.8rem, 1.2vw, 0.85rem);">
     <i class="fas fa-heart" style="color: var(--accent);"></i> Made with passion for gamers worldwide
   </p>
 </footer>
 
 <!-- Game Menu -->
 <div id="game-menu">
-  <iframe id="game-frame" title="Game Frame"></iframe>
+  <iframe id="game-frame" title="Game Frame" allowfullscreen></iframe>
   
   <div class="menu-buttons">
     <button class="menu-btn" id="fav-btn">
@@ -1096,6 +1287,7 @@ const GENRES = [
   {id: "puzzle", name: "Puzzle", icon: "fa-puzzle-piece", count: GAMES.filter(g => g.genre.includes("Puzzle")).length},
   {id: "strategy", name: "Strategy", icon: "fa-chess", count: GAMES.filter(g => g.genre.includes("Strategy")).length},
   {id: "action", name: "Action", icon: "fa-fist-raised", count: GAMES.filter(g => g.genre.includes("Action")).length},
+  {id: "shooter", name: "Shooter", icon: "fa-crosshairs", count: GAMES.filter(g => g.genre.includes("Shooter")).length},
   {id: "simulation", name: "Simulation", icon: "fa-desktop", count: GAMES.filter(g => g.genre.includes("Simulation")).length},
   {id: "platformer", name: "Platformer", icon: "fa-running", count: GAMES.filter(g => g.genre.includes("Platformer")).length},
   {id: "clicker", name: "Clicker", icon: "fa-mouse-pointer", count: GAMES.filter(g => g.genre.includes("Clicker")).length},
@@ -1117,8 +1309,13 @@ window.addEventListener('load', function() {
       document.getElementById('totalGames').textContent = `${GAMES.length} Games Available`;
       initGenres();
       renderGames();
+      
+      // Initialize sidebar based on screen size
+      if (window.innerWidth > 992) {
+        toggleSidebar(); // Open sidebar on larger screens
+      }
     }, 300);
-  }, 1000);
+  }, 800);
 });
 
 // Initialize genres sidebar
@@ -1192,8 +1389,8 @@ function renderGames(gamesArray = GAMES) {
       <div class="card-content">
         <div class="game-title">${game.title}</div>
         <div class="game-description">${game.description}</div>
-        <div style="margin-bottom: 15px; display: flex; flex-wrap: wrap; gap: 5px;">
-          ${game.genre.map(g => `<span style="background: rgba(0,255,255,0.1); color: var(--primary); padding: 3px 8px; border-radius: 12px; font-size: 0.75rem;">${g}</span>`).join('')}
+        <div class="genre-tags">
+          ${game.genre.map(g => `<span class="genre-tag">${g}</span>`).join('')}
         </div>
         <button class="play-btn" onclick="openGame('${game.link}', '${game.title}')">
           <i class="fas fa-play"></i> PLAY NOW
@@ -1304,7 +1501,12 @@ document.getElementById('tos-agree').onclick = function() {
 // Theme toggle (placeholder)
 document.getElementById('theme-toggle').onclick = function() {
   // In a real implementation, this would toggle between themes
-  alert('Theme selector coming soon!');
+  const themes = ['dark', 'light', 'neon'];
+  const currentTheme = document.body.getAttribute('data-theme') || 'dark';
+  const nextTheme = themes[(themes.indexOf(currentTheme) + 1) % themes.length];
+  
+  document.body.setAttribute('data-theme', nextTheme);
+  this.innerHTML = `<i class="fas fa-palette"></i> ${nextTheme.charAt(0).toUpperCase() + nextTheme.slice(1)}`;
 };
 
 // Close modals on escape
@@ -1346,34 +1548,54 @@ document.getElementById('sidebar-toggle').addEventListener('click', toggleSideba
 initGenres();
 
 // Responsive sidebar handling
-window.addEventListener('resize', function() {
+function handleResize() {
+  const sidebar = document.getElementById('sidebar');
+  const content = document.getElementById('content');
+  const toggleBtn = document.getElementById('sidebar-toggle');
+  
   if (window.innerWidth > 992) {
-    // On larger screens, ensure sidebar is visible
-    const sidebar = document.getElementById('sidebar');
-    const content = document.getElementById('content');
-    const toggleBtn = document.getElementById('sidebar-toggle');
-    
+    // On larger screens, ensure sidebar is visible by default
     if (!sidebar.classList.contains('active')) {
       sidebar.classList.add('active');
       content.classList.add('shifted');
-      toggleBtn.querySelector('i').className = 'fas fa-bars';
+      if (toggleBtn) {
+        toggleBtn.querySelector('i').className = 'fas fa-times';
+      }
     }
   } else {
     // On smaller screens, ensure sidebar is hidden by default
-    const sidebar = document.getElementById('sidebar');
-    const content = document.getElementById('content');
-    const toggleBtn = document.getElementById('sidebar-toggle');
-    
     if (sidebar.classList.contains('active')) {
       sidebar.classList.remove('active');
       content.classList.remove('shifted');
-      toggleBtn.querySelector('i').className = 'fas fa-bars';
+      if (toggleBtn) {
+        toggleBtn.querySelector('i').className = 'fas fa-bars';
+      }
     }
   }
-});
+}
+
+// Listen for resize events
+window.addEventListener('resize', handleResize);
 
 // Trigger initial resize to set correct state
-window.dispatchEvent(new Event('resize'));
+handleResize();
+
+// Performance optimization: throttle resize events
+let resizeTimer;
+window.addEventListener('resize', function() {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(handleResize, 250);
+});
+
+// Touch device optimizations
+if ('ontouchstart' in window) {
+  document.documentElement.classList.add('touch-device');
+  
+  // Increase touch targets
+  document.querySelectorAll('.btn, .menu-btn, .play-btn, .genre-item').forEach(el => {
+    el.style.minHeight = '44px';
+  });
+}
 </script>
 </body>
 </html>
