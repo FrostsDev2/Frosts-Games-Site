@@ -5,173 +5,484 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>IXL | Dashboard</title>
 <link rel="icon" id="favicon" href="icons/IMG_4366.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-/* (Keep all existing CSS styles exactly as they are) */
-* { margin:0; padding:0; box-sizing:border-box; }
-
+/* ===== CSS Variables ===== */
 :root {
   --primary: #00ffff;
+  --primary-dark: #00cccc;
   --secondary: #8000ff;
+  --secondary-dark: #6000cc;
   --dark: #050505;
+  --dark-card: #0a0a14;
   --light: #f2f2f2;
-  --card-bg: rgba(20, 20, 30, 0.7);
-  --text: #fff;
+  --card-bg: rgba(20, 20, 30, 0.8);
+  --text: #ffffff;
+  --text-secondary: #a0a0c0;
+  --accent: #ff0044;
+  --accent-dark: #cc0033;
+  --success: #00ff88;
+  --sidebar-width: 280px;
+  --header-height: 120px;
+  --transition: all 0.3s ease;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  --shadow-light: 0 5px 15px rgba(0, 255, 255, 0.1);
+  --radius: 12px;
+  --radius-small: 8px;
+}
+
+/* ===== Base Styles ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-  font-family: system-ui, -apple-system, sans-serif;
-  background: var(--dark);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: linear-gradient(135deg, var(--dark) 0%, #0a0a1a 100%);
   color: var(--text);
   overflow-x: hidden;
   min-height: 100vh;
   width: 100%;
 }
 
-/* ===== LOADING SCREEN ===== */
+/* ===== Loading Screen ===== */
 #loading-screen {
-  position:fixed;
-  inset:0;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  background:#000;
-  z-index:9999;
-  transition: opacity 0.8s;
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #000 0%, var(--dark) 100%);
+  z-index: 9999;
+  transition: opacity 0.8s ease, visibility 0.8s ease;
 }
 
 .loader {
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   border: 4px solid transparent;
   border-top: 4px solid var(--primary);
+  border-right: 4px solid var(--secondary);
   border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 20px;
+  animation: spin 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+  margin-bottom: 25px;
+  position: relative;
 }
 
-@keyframes spin { 
-  to { transform: rotate(360deg); } 
+.loader:after {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+  border: 3px solid transparent;
+  border-bottom: 3px solid rgba(255, 0, 255, 0.7);
+  border-radius: 50%;
+  animation: spinReverse 1s linear infinite;
 }
 
-/* ===== HEADER ===== */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes spinReverse {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-360deg); }
+}
+
+/* ===== Layout ===== */
+.main-container {
+  display: flex;
+  min-height: 100vh;
+  padding-top: var(--header-height);
+  transition: var(--transition);
+}
+
+/* ===== Sidebar ===== */
+.sidebar {
+  width: var(--sidebar-width);
+  background: rgba(10, 10, 20, 0.9);
+  backdrop-filter: blur(10px);
+  padding: 25px 15px;
+  position: fixed;
+  left: 0;
+  top: var(--header-height);
+  height: calc(100vh - var(--header-height));
+  overflow-y: auto;
+  border-right: 1px solid rgba(0, 255, 255, 0.1);
+  z-index: 90;
+  transform: translateX(-100%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow);
+}
+
+.sidebar.active {
+  transform: translateX(0);
+}
+
+.sidebar-toggle {
+  position: fixed;
+  left: 20px;
+  top: calc(var(--header-height) + 20px);
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 95;
+  font-size: 1.5rem;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-toggle:hover {
+  transform: scale(1.1) rotate(90deg);
+}
+
+.sidebar-title {
+  font-size: 1.4rem;
+  margin-bottom: 25px;
+  color: var(--primary);
+  text-align: center;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+  position: relative;
+}
+
+.sidebar-title:after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 25%;
+  width: 50%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+}
+
+.genre-list {
+  list-style: none;
+  margin-bottom: 30px;
+}
+
+.genre-item {
+  padding: 14px 18px;
+  margin-bottom: 10px;
+  background: rgba(20, 20, 35, 0.6);
+  border-radius: var(--radius-small);
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-left: 3px solid transparent;
+}
+
+.genre-item:hover {
+  background: rgba(0, 255, 255, 0.1);
+  transform: translateX(5px);
+  border-left: 3px solid var(--primary);
+}
+
+.genre-item.active {
+  background: rgba(128, 0, 255, 0.2);
+  border-left: 3px solid var(--secondary);
+  box-shadow: 0 0 15px rgba(128, 0, 255, 0.3);
+}
+
+.genre-icon {
+  color: var(--primary);
+  font-size: 1.1rem;
+  width: 24px;
+  text-align: center;
+}
+
+.genre-name {
+  font-weight: 500;
+  flex: 1;
+}
+
+.genre-count {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 3px 8px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+/* ===== Ad Containers ===== */
+.ad-container {
+  background: rgba(15, 15, 30, 0.8);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin: 25px 0;
+  text-align: center;
+  border: 1px dashed rgba(0, 255, 255, 0.2);
+  transition: var(--transition);
+}
+
+.ad-container:hover {
+  border: 1px dashed var(--primary);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+}
+
+.ad-label {
+  display: inline-block;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  color: white;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.ad-placeholder {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  padding: 30px 10px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: var(--radius-small);
+}
+
+.ad-placeholder i {
+  font-size: 2rem;
+  margin-bottom: 10px;
+  color: var(--primary);
+  opacity: 0.5;
+}
+
+/* ===== Main Content ===== */
+.content {
+  flex: 1;
+  padding: 30px;
+  margin-left: 0;
+  transition: var(--transition);
+}
+
+.content.shifted {
+  margin-left: var(--sidebar-width);
+}
+
+/* ===== Header ===== */
 .header-container {
-  text-align:center;
-  margin-top: 30px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-height);
+  background: rgba(5, 5, 10, 0.95);
+  backdrop-filter: blur(10px);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   padding: 0 20px;
+  border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
 }
 
 .title {
-  font-size: clamp(2rem, 8vw, 3rem);
-  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  background: linear-gradient(90deg, var(--primary), var(--secondary), #ff00ff);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-align: center;
+  animation: titleGlow 3s infinite alternate;
+}
+
+@keyframes titleGlow {
+  0% { filter: drop-shadow(0 0 5px rgba(0, 255, 255, 0.5)); }
+  100% { filter: drop-shadow(0 0 15px rgba(128, 0, 255, 0.7)); }
 }
 
 .header-buttons {
   display: flex;
   justify-content: center;
-  gap: 15px;
+  gap: 20px;
   flex-wrap: wrap;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .btn {
   padding: 12px 24px;
-  border-radius: 8px;
+  border-radius: var(--radius-small);
   border: none;
   background: linear-gradient(135deg, rgba(128,0,255,0.25), rgba(0,255,255,0.15));
   color: white;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: var(--transition);
   font-weight: 600;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn:hover:before {
+  left: 100%;
 }
 
 .btn:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-light);
   background: linear-gradient(135deg, rgba(128,0,255,0.4), rgba(0,255,255,0.25));
 }
 
-/* ===== SEARCH ===== */
+/* ===== Search ===== */
 .games-header {
-  text-align:center;
-  margin-top: 40px;
-  padding: 0 20px;
+  text-align: center;
+  margin-bottom: 40px;
+  position: relative;
 }
 
 .search-container {
   position: relative;
   display: inline-block;
-  margin-bottom: 20px;
   width: 100%;
-  max-width: 400px;
+  max-width: 500px;
+  margin-bottom: 20px;
 }
 
 .search-container i {
   position: absolute;
-  left: 15px;
+  left: 20px;
   top: 50%;
   transform: translateY(-50%);
   color: var(--primary);
   z-index: 1;
+  font-size: 1.2rem;
 }
 
 #gameSearch {
-  padding: 12px 20px 12px 45px;
-  border-radius: 8px;
+  padding: 16px 20px 16px 55px;
+  border-radius: var(--radius);
   border: 2px solid transparent;
-  background: rgba(20,20,30,0.8);
+  background: rgba(20,20,30,0.9);
   color: var(--text);
   outline: none;
   width: 100%;
-  max-width: 400px;
-  font-size: 1rem;
+  font-size: 1.1rem;
+  transition: var(--transition);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+#gameSearch:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
 }
 
 #totalGames {
   margin-top: 15px;
-  font-size: 1rem;
-  color: #88c0d0;
+  font-size: 1.1rem;
+  color: var(--primary);
   background: rgba(0,0,0,0.3);
   display: inline-block;
-  padding: 6px 15px;
-  border-radius: 20px;
+  padding: 8px 20px;
+  border-radius: 30px;
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  font-weight: 600;
+  animation: pulse 2s infinite;
 }
 
-/* ===== GAMES GRID ===== */
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(0, 255, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0); }
+}
+
+/* ===== Games Grid ===== */
 .games-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
-  padding: 20px;
-  max-width: 1400px;
-  margin: 30px auto;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+  padding: 10px;
+  max-width: 1600px;
+  margin: 0 auto;
 }
 
 .game-card {
-  background: linear-gradient(145deg, rgba(25,25,40,0.8), rgba(15,15,25,0.9));
-  border-radius: 12px;
+  background: linear-gradient(145deg, rgba(25,25,40,0.9), rgba(15,15,25,0.95));
+  border-radius: var(--radius);
   overflow: hidden;
   text-decoration: none;
   color: white;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-  transition: transform 0.3s;
-  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+  border: 1px solid rgba(255,255,255,0.05);
+  position: relative;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: cardAppear 0.5s forwards;
+}
+
+.game-card:nth-child(odd) {
+  animation-delay: 0.1s;
+}
+
+.game-card:nth-child(even) {
+  animation-delay: 0.2s;
+}
+
+@keyframes cardAppear {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .game-card:hover {
-  transform: translateY(-8px);
+  transform: translateY(-10px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+  border-color: rgba(0, 255, 255, 0.3);
+}
+
+.game-card:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  transform: scaleX(0);
+  transition: transform 0.3s;
+}
+
+.game-card:hover:before {
+  transform: scaleX(1);
 }
 
 .card-image-container {
   position: relative;
   width: 100%;
-  height: 160px;
+  height: 180px;
   overflow: hidden;
 }
 
@@ -179,310 +490,622 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.5s;
+}
+
+.game-card:hover .card-image {
+  transform: scale(1.05);
 }
 
 .card-content {
-  padding: 15px;
+  padding: 20px;
 }
 
 .game-title {
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   color: var(--primary);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   font-weight: 700;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .game-description {
-  font-size: 0.9rem;
-  color: #ccc;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
   line-height: 1.5;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .play-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 10px 15px;
+  gap: 10px;
+  padding: 12px 20px;
   background: linear-gradient(90deg, var(--primary), var(--secondary));
   color: white;
-  border-radius: 6px;
+  border-radius: var(--radius-small);
   font-weight: 600;
   border: none;
   cursor: pointer;
   width: 100%;
-  transition: transform 0.3s;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.play-btn:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s;
+}
+
+.play-btn:hover:after {
+  left: 100%;
 }
 
 .play-btn:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 7px 15px rgba(128, 0, 255, 0.4);
 }
 
-/* ===== GAME MENU ===== */
+/* ===== Game Menu ===== */
 #game-menu {
-  display:none;
-  position:fixed;
-  inset:0;
-  background: rgba(0,0,0,0.98);
-  z-index:10000;
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.98);
+  z-index: 10000;
   flex-direction: column;
-  justify-content:center;
-  align-items:center;
+  justify-content: center;
+  align-items: center;
   padding: 20px;
+  opacity: 0;
+  transition: opacity 0.3s;
 }
 
-#game-menu iframe {
+#game-menu.active {
+  display: flex;
+  animation: menuFadeIn 0.3s forwards;
+}
+
+@keyframes menuFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+#game-frame {
   width: 95vw;
   height: 70vh;
-  max-width: 1200px;
-  border:none;
-  border-radius: 8px;
+  max-width: 1300px;
+  border: none;
+  border-radius: var(--radius);
   background: #000;
+  box-shadow: 0 0 40px rgba(0, 255, 255, 0.2);
 }
 
 .menu-buttons {
-  margin-top: 20px;
-  display:flex;
-  justify-content:center;
-  gap: 10px;
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
   flex-wrap: wrap;
   width: 95%;
-  max-width: 1200px;
+  max-width: 1300px;
 }
 
 .menu-btn {
-  padding: 10px 20px;
-  border-radius: 6px;
+  padding: 14px 25px;
+  border-radius: var(--radius-small);
   border: none;
   cursor: pointer;
   font-weight: 600;
-  transition: transform 0.3s;
+  transition: var(--transition);
   display: flex;
   align-items: center;
-  gap: 8px;
-  min-width: 120px;
+  gap: 10px;
+  min-width: 140px;
   justify-content: center;
+  position: relative;
+  overflow: hidden;
 }
 
 .menu-btn:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  box-shadow: 0 7px 15px rgba(0, 0, 0, 0.4);
+}
+
+.menu-btn:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.menu-btn:hover:before {
+  left: 100%;
 }
 
 #fav-btn { 
-  background: #FFD700;
-  color:#000;
+  background: linear-gradient(135deg, #FFD700, #FFAA00);
+  color: #000;
 }
 #fullscreen-btn { 
-  background: var(--secondary);
-  color:#fff;
+  background: linear-gradient(135deg, var(--secondary), var(--primary));
+  color: #fff;
 }
 #newtab-btn { 
-  background: #FFAA00;
-  color:#000;
+  background: linear-gradient(135deg, #FFAA00, #FF6600);
+  color: #000;
 }
 #exit-btn { 
-  background: #ff0044;
-  color:#fff;
+  background: linear-gradient(135deg, var(--accent), #ff0066);
+  color: #fff;
 }
 
-/* ===== FOOTER ===== */
+/* ===== Footer ===== */
 footer {
   text-align: center;
-  padding: 25px 20px;
-  margin-top: 40px;
+  padding: 30px 20px;
+  margin-top: 60px;
   border-top: 1px solid rgba(255,255,255,0.1);
-  color: #88c0d0;
-  font-size: 0.9rem;
-  background: rgba(0,0,0,0.3);
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  background: rgba(5, 5, 10, 0.8);
+  backdrop-filter: blur(5px);
 }
 
-/* ===== RESPONSIVE ===== */
+footer p {
+  margin-bottom: 10px;
+}
+
+/* ===== TOS Modal ===== */
+#tos-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.95);
+  z-index: 9998;
+  padding: 20px;
+  overflow: auto;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+#tos-modal.active {
+  display: flex;
+  animation: modalFadeIn 0.3s forwards;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.tos-content {
+  background: linear-gradient(135deg, rgba(25,25,35,0.95), rgba(15,15,25,0.98));
+  padding: 40px;
+  border-radius: var(--radius);
+  max-width: 800px;
+  margin: auto;
+  color: #ccc;
+  border: 1px solid rgba(0, 255, 255, 0.1);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+  transform: translateY(20px);
+  animation: tosSlideUp 0.4s forwards;
+}
+
+@keyframes tosSlideUp {
+  to {
+    transform: translateY(0);
+  }
+}
+
+.tos-content h2 {
+  color: var(--accent);
+  margin-bottom: 25px;
+  font-size: 2rem;
+}
+
+.tos-content ul {
+  margin: 20px 0 30px 25px;
+}
+
+.tos-content li {
+  margin-bottom: 12px;
+  padding-left: 10px;
+}
+
+.tos-content button {
+  padding: 12px 30px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: var(--radius-small);
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.tos-content button:hover {
+  background: var(--accent-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 7px 15px rgba(255, 0, 68, 0.3);
+}
+
+/* ===== Scrollbar ===== */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0,0,0,0.3);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--primary), var(--secondary));
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, var(--primary-dark), var(--secondary-dark));
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1200px) {
+  .sidebar {
+    width: 250px;
+  }
+  
+  .content.shifted {
+    margin-left: 250px;
+  }
+  
+  .games-container {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}
+
+@media (max-width: 992px) {
+  .sidebar {
+    transform: translateX(-100%);
+    width: 300px;
+  }
+  
+  .content {
+    margin-left: 0 !important;
+    padding: 20px;
+  }
+  
+  .sidebar-toggle {
+    display: flex;
+  }
+}
+
 @media (max-width: 768px) {
   .games-container {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    padding: 15px;
-    gap: 15px;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
   }
   
   .header-buttons {
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+    width: 100%;
   }
   
   .btn {
     width: 100%;
-    max-width: 280px;
-  }
-  
-  .menu-buttons {
-    flex-direction: row;
-    gap: 8px;
-  }
-  
-  .menu-btn {
-    min-width: 110px;
-    padding: 8px 15px;
-    font-size: 0.85rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .games-container {
-    grid-template-columns: 1fr;
-    padding: 10px;
+    max-width: 300px;
   }
   
   .menu-buttons {
     flex-direction: column;
+    gap: 12px;
   }
   
   .menu-btn {
     width: 100%;
   }
+  
+  .sidebar {
+    width: 100%;
+  }
 }
 
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
+@media (max-width: 576px) {
+  .games-container {
+    grid-template-columns: 1fr;
+    padding: 5px;
+  }
+  
+  .content {
+    padding: 15px;
+  }
+  
+  .title {
+    font-size: 2.2rem;
+  }
+  
+  #gameSearch {
+    padding: 14px 20px 14px 50px;
+    font-size: 1rem;
+  }
 }
 
-::-webkit-scrollbar-track {
-  background: rgba(0,0,0,0.3);
+/* ===== Utility Classes ===== */
+.hidden {
+  display: none !important;
 }
 
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, var(--primary), var(--secondary));
-  border-radius: 4px;
+.fade-in {
+  animation: fadeIn 0.5s forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+.shake {
+  animation: shake 0.5s;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
 }
 </style>
 </head>
 <body>
 
+<!-- Loading Screen -->
 <div id="loading-screen">
   <div class="loader"></div>
-  <div>Loading...</div>
+  <div style="margin-top: 20px; font-size: 1.2rem; color: var(--primary);">Loading Game Portal...</div>
+  <div style="margin-top: 10px; color: var(--text-secondary); font-size: 0.9rem;">Powered by Frosts Inc</div>
 </div>
 
-<div class="header-container">
-  <div class="title">FROSTS INC</div>
-  <div class="header-buttons">
-    <button class="btn discord-btn" onclick="window.open('https://discord.gg/mCUHppWjv7')">
-      Join Discord
-    </button>
-    <button class="btn tos-btn" id="tos-btn">
-      Terms of Service
-    </button>
+<!-- Sidebar Toggle -->
+<button class="sidebar-toggle" id="sidebar-toggle">
+  <i class="fas fa-bars"></i>
+</button>
+
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-title">
+    <i class="fas fa-gamepad"></i> Game Genres
+  </div>
+  
+  <ul class="genre-list" id="genre-list">
+    <!-- Genre items will be dynamically inserted here -->
+  </ul>
+  
+  <div class="ad-container">
+    <div class="ad-label">Advertisement</div>
+    <div class="ad-placeholder">
+      <i class="fas fa-ad"></i>
+      <div>Ad Space (300x250)</div>
+      <div style="font-size: 0.8rem; margin-top: 5px;">Your ad could be here</div>
+    </div>
+  </div>
+  
+  <div class="ad-container">
+    <div class="ad-label">Sponsored</div>
+    <div class="ad-placeholder">
+      <i class="fas fa-star"></i>
+      <div>Featured Game</div>
+      <div style="font-size: 0.8rem; margin-top: 5px;">Promote your game</div>
+    </div>
+  </div>
+  
+  <div style="text-align: center; margin-top: 30px; padding: 15px; background: rgba(0,0,0,0.3); border-radius: var(--radius-small);">
+    <div style="color: var(--primary); margin-bottom: 10px; font-weight: 600;">
+      <i class="fas fa-fire"></i> Trending Now
+    </div>
+    <div style="color: var(--text-secondary); font-size: 0.9rem;">
+      Slope, Drift Hunters, Run 3
+    </div>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<div class="main-container">
+  <!-- Header -->
+  <div class="header-container">
+    <div class="title">FROSTS INC GAMES</div>
+    <div class="header-buttons">
+      <button class="btn discord-btn" onclick="window.open('https://discord.gg/mCUHppWjv7')">
+        <i class="fab fa-discord"></i> Join Discord
+      </button>
+      <button class="btn tos-btn" id="tos-btn">
+        <i class="fas fa-file-contract"></i> Terms of Service
+      </button>
+      <button class="btn" id="theme-toggle">
+        <i class="fas fa-palette"></i> Theme
+      </button>
+    </div>
+  </div>
+  
+  <!-- Main Content Area -->
+  <div class="content" id="content">
+    <div class="games-header">
+      <div class="search-container">
+        <i class="fas fa-search"></i>
+        <input type="text" id="gameSearch" placeholder="Search games by name or genre...">
+      </div>
+      <div id="totalGames"></div>
+    </div>
+    
+    <div class="games-container" id="games-container">
+      <!-- Games will be dynamically inserted here -->
+    </div>
+    
+    <div class="ad-container" style="max-width: 728px; margin: 40px auto;">
+      <div class="ad-label">Leaderboard Ad</div>
+      <div class="ad-placeholder" style="padding: 40px 10px;">
+        <i class="fas fa-chart-line"></i>
+        <div>Ad Space (728x90)</div>
+        <div style="font-size: 0.8rem; margin-top: 5px;">Premium advertising spot</div>
+      </div>
+    </div>
   </div>
 </div>
 
-<div class="games-header">
-  <div class="search-container">
-    <i class="fas fa-search"></i>
-    <input type="text" id="gameSearch" placeholder="Search games...">
-  </div>
-  <div id="totalGames"></div>
-</div>
-
-<div class="games-container" id="games-container">
-  <!-- Games will be dynamically inserted here -->
-</div>
-
+<!-- Footer -->
 <footer>
   <p>Frosts Inc Game Portal &copy; <span id="currentYear"></span></p>
-  <p>For entertainment purposes only</p>
+  <p>For entertainment purposes only | All games belong to their respective owners</p>
+  <p style="margin-top: 15px; font-size: 0.85rem;">
+    <i class="fas fa-heart" style="color: var(--accent);"></i> Made with passion for gamers worldwide
+  </p>
 </footer>
 
+<!-- Game Menu -->
 <div id="game-menu">
   <iframe id="game-frame" title="Game Frame"></iframe>
   
   <div class="menu-buttons">
-    <button class="menu-btn" id="fav-btn">Favorite</button>
-    <button class="menu-btn" id="fullscreen-btn">Fullscreen</button>
-    <button class="menu-btn" id="newtab-btn">New Tab</button>
-    <button class="menu-btn" id="exit-btn">Exit</button>
+    <button class="menu-btn" id="fav-btn">
+      <i class="fas fa-heart"></i> Favorite
+    </button>
+    <button class="menu-btn" id="fullscreen-btn">
+      <i class="fas fa-expand"></i> Fullscreen
+    </button>
+    <button class="menu-btn" id="newtab-btn">
+      <i class="fas fa-external-link-alt"></i> New Tab
+    </button>
+    <button class="menu-btn" id="exit-btn">
+      <i class="fas fa-times"></i> Exit Game
+    </button>
   </div>
 </div>
 
-<div id="tos-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:9998; padding:20px; overflow:auto;">
-  <div style="background:rgba(25,25,35,0.95); padding:30px; border-radius:12px; max-width:800px; margin:auto; color:#ccc;">
-    <h2 style="color:#ff0044; margin-bottom:20px;">Terms of Service</h2>
-    <p>By using Frosts Inc Game Portal, you acknowledge:</p>
-    <ul style="margin:15px 0 15px 20px;">
-      <li>We don't own rights to hosted games</li>
-      <li>Not affiliated with educational institutions</li>
-      <li>Don't use during school instructional time</li>
-      <li>Use at your own responsibility</li>
+<!-- TOS Modal -->
+<div id="tos-modal">
+  <div class="tos-content">
+    <h2>Terms of Service</h2>
+    <p>By using Frosts Inc Game Portal, you acknowledge and agree to the following:</p>
+    <ul>
+      <li>All games hosted on this portal are the property of their respective owners.</li>
+      <li>We do not claim ownership of any game available on this platform.</li>
+      <li>This portal is not affiliated with any educational institutions.</li>
+      <li>Games should not be used during school instructional time without permission.</li>
+      <li>Use of this portal is at your own responsibility and discretion.</li>
+      <li>We are not responsible for any content within the hosted games.</li>
+      <li>By continuing to use this portal, you agree to these terms.</li>
     </ul>
-    <button onclick="document.getElementById('tos-modal').style.display='none'" style="padding:10px 20px; background:#ff0044; color:white; border:none; border-radius:6px; cursor:pointer;">
-      I Understand
+    <button id="tos-agree">
+      <i class="fas fa-check"></i> I Understand & Agree
     </button>
   </div>
 </div>
 
 <script>
-// Modified game data - remove Ruffle subdirectories
+// Game data with genres
 const GAMES = [
-  {title: "Snow Rider 3D", description: "Snow Rider", image: "thumbnails/snowrider3d.jpg", link: "games/snowrider3d/index.html"},
-  {title: "Portal 2D", description: "USING FLASH/Ruffle!", image: "thumbnails/portal2d.jpg", link: "games/ruffle/index.html?game=Portal_wcs2"},
-  {title: "Jack Smith", description: "USING FLASH/Ruffle!", image: "thumbnails/jacksmith.jpg", link: "games/ruffle/index.html?game=jacksmith"},
-  {title: "Run 2", description: "USING FLASH/Ruffle!", image: "thumbnails/run2.jpg", link: "games/ruffle/index.html?game=run2"},
-  {title: "Run 3", description: "USING FLASH/Ruffle!", image: "thumbnails/run3.jpg", link: "games/ruffle/index.html?game=run3-new"},
-  {title: "Awesome Tanks 2", description: "USING FLASH/Ruffle!", image: "thumbnails/at2.jpg", link: "games/ruffle/index.html?game=awesome_tanks_2"},
-  {title: "Ballons Tower Defense 5", description: "USING FLASH/Ruffle!", image: "thumbnails/btd5.jpg", link: "games/ruffle/index.html?game=bloonstd5"},
-  {title: "Cut The Rope", description: "cut the rope", image: "thumbnails/cuttherope.jpg", link: "games/cuttherope/index.html"},
-  {title: "RaftWars", description: "USING FLASH/Ruffle!", image: "thumbnails/raftwars1.jpg", link: "games/ruffle/index.html?game=raftwars"},
-  {title: "Bloxorz", description: "USING FLASH/Ruffle!", image: "thumbnails/bloxorz.jpg", link: "games/ruffle/index.html?game=bloxorz"},
-  {title: "Cut The Rope HOLIDAY", description: "cut the rope", image: "thumbnails/cuttheropeh.jpg", link: "games/cuttheropeholiday/index.html"},
-  {title: "Baseball Bros", description: "Baseball :)", image: "thumbnails/baseballbros.jpg", link: "games/baseballbros/index.html"},
-  {title: "Free Rider 3", description: "FLASH/Ruffle!", image: "thumbnails/freerider3.jpg", link: "games/ruffle/index.html?game=freerider-3"},
-  {title: "Monkey Mart", description: "Monkey Works", image: "thumbnails/monkeymart.jpg", link: "games/monkeymart/index.html"},
-  {title: "Drive Mad", description: "Drive Truck :)", image: "thumbnails/drivemad.jpg", link: "games/drivemad/index.html"},
-  {title: "Temple Run", description: "Run From Moneky", image: "thumbnails/templerun.jpg", link: "games/templerun/index.html"},
-  {title: "Flappy Bird", description: "Flappy Bird", image: "thumbnails/flappybird.jpg", link: "games/flappybird/index.html"},
-  {title: "Football Bros", description: "Football :)", image: "thumbnails/footballbros.jpg", link: "games/footballbros/index.html"},
-  {title: "Duck Clicker", description: "Ducks :)", image: "thumbnails/duckclicker.jpg", link: "games/duckclicker/index.html"},
-  {title: "Basketrandom", description: "Basketrandom", image: "thumbnails/basketrandom.jpg", link: "games/basketrandom/index.html"},
-  {title: "Raft Wars 2", description: "RAFT WARS!", image: "thumbnails/raftwars2.jpg", link: "games/raftwars/index.html"},
-  {title: "Vex3", description: "vex3", image: "thumbnails/vex3.jpg", link: "games/vex3/index.html"},
-  {title: "Vex4", description: "vex4", image: "thumbnails/vex4.jpg", link: "games/vex4/index.html"},
-  {title: "Vex5", description: "vex5", image: "thumbnails/vex5.jpg", link: "games/vex5/index.html"},
-  {title: "Vex6", description: "vex6", image: "thumbnails/vex6.jpg", link: "games/vex6/index.html"},
-  {title: "Ducklife", description: "Ducklife", image: "thumbnails/ducklife.jpg", link: "games/ducklife/index.html"},
-  {title: "Ducklife 2", description: "Ducklife 2", image: "thumbnails/ducklife2.jpg", link: "games/ducklife2/index.html"}, 
-  {title: "Ducklife 3", description: "Ducklife 3", image: "thumbnails/ducklife3.jpg", link: "games/ducklife3/index.html"},
-  {title: "Ducklife 4", description: "Ducklife 4", image: "thumbnails/ducklife4.jpg", link: "games/ducklife4/index.html"},
-  {title: "Tunnel Rush", description: "Tunnel Rush", image: "thumbnails/tunnelrush.jpg", link: "games/tunnelrush/index.html"},
-  {title: "Slope", description: "Slope 1", image: "thumbnails/slope.jpg", link: "games/slope/index.html"},
-  {title: "Slope 2", description: "Slope 2", image: "thumbnails/slope2.jpg", link: "games/slope2/index.html"},
-  {title: "The Impossiable Quiz", description: "Hard Quiz", image: "thumbnails/theimpossiablequiz.jpg", link: "games/theimpossiablequiz/index.html"},
-  {title: "Line Rider", description: "Line Rider", image: "thumbnails/linerider.jpg", link: "games/linerider/index.html"},
-  {title: "CSGO Clicker", description: "Click your way to victory in this CSGO-themed clicker game!", image: "thumbnails/csgo.png", link: "games/csgoclicker/index.html"},
-  {title: "Doodle Jump", description: "Doodle Jump", image: "thumbnails/doodlejump.jpg", link: "games/doodlejump/index.html"},
-  {title: "Nut Simulator", description: "Collect nuts in this hilarious simulation game", image: "thumbnails/nut.png", link: "games/nut-simulator/index.html"},
-  {title: "Tiny Fishing", description: "Relaxing fishing game with cute graphics 🎣", image: "thumbnails/tiny-fishing.jpg", link: "games/tinyfishing/index.html"},
-  {title: "Cluster Rush", description: "Navigate through challenging obstacle courses", image: "thumbnails/clusterrush.jpg", link: "games/clusterrush/index.html"},
-  {title: "Bit Life", description: "Live a virtual life and make important decisions", image: "thumbnails/bitlife.jpg", link: "games/bitlife/index.html"},
-  {title: "Stack", description: "Stack blocks as high as you can without falling", image: "thumbnails/stack.jpg", link: "games/stack/game.html"},
-  {title: "Crossy Roads", description: "Help the chicken cross the road safely 🐔🚙", image: "thumbnails/crossyroads.jpg", link: "games/crossyroads/index.html"},
-  {title: "Poly Track", description: "🏎️", image: "thumbnails/pollytrack.jpg", link: "games/polytrack/index.html"},
-  {title: "House Of Hazards", description: "🏎️", image: "thumbnails/hoh.jpg", link: "games/hoh/index.html"},
-  {title: "Geometry Dash", description: "Rhythm-based action platformer", image: "thumbnails/geodash.jpg", link: "games/geometrydash/index.html"},
-  {title: "Retro Bowl COLLEGE", description: "🏈", image: "thumbnails/rrbc.jpg", link: "games/rrbc/index.html"},
-  {title: "OvO", description: "Platformer", image: "thumbnails/ovo.jpg", link: "games/ovo/index.html"},
-  {title: "Drift Hunters", description: "Realistic drifting simulation with tuning options", image: "thumbnails/drifthunters.jpg", link: "games/drifthunters/index.html"},
-  {title: "Fire boy And Water Girl", description: "Cool Game", image: "thumbnails/fireboyandwatergirl.jpg", link: "games/fireboyandwatergirlforesttemple/index.html"},
-  {title: "Paper.io", description: "Cool Game 👍", image: "thumbnails/paperio.jpg", link: "games/paperio/index.html"},
-  {title: "Basketball Legends 2020", description: "Epic basketball duels with special powers", image: "thumbnails/basketball1.jpg", link: "games/basketballlegends/index.html"},
-  {title: "Basketball Stars", description: "One-on-one basketball with slick moves", image: "thumbnails/basketball2.jpg", link: "games/basketballstars/index.html"},
-  {title: "Basketball Bros IO", description: "Multiplayer basketball madness", image: "thumbnails/basketball3.jpg", link: "games/basketbrosio/index.html"},
-  {title: "Cookie Clicker", description: "The classic clicker game - bake cookies!", image: "thumbnails/cookieclicker.jpg", link: "games/cookieclicker/index.html"},
-  {title: "Retro Bowl", description: "Classic football management game 🏈", image: "thumbnails/retrobowl.jpg", link: "games/retrobowl/index.html"},
-  {title: "Clicker Heroes", description: "Defeat monsters and upgrade your heroes", image: "thumbnails/clickerheros.jpg", link: "games/clickerheroes/index.html"},
-  {title: "PacMan", description: "The classic arcade maze chase game", image: "thumbnails/pacman.jpg", link: "games/pacman/index.html"},
-  {title: "Coming Soon", description: "More exciting games are on the way...", image: "thumbnails/comingsoon.png", link: "#"}
+  {title: "Snow Rider 3D", description: "Snow Rider", image: "thumbnails/snowrider3d.jpg", link: "games/snowrider3d/index.html", genre: ["Racing", "Sports"]},
+  {title: "Portal 2D", description: "USING FLASH/Ruffle!", image: "thumbnails/portal2d.jpg", link: "games/ruffle/index.html?game=Portal_wcs2", genre: ["Puzzle", "Adventure"]},
+  {title: "Jack Smith", description: "USING FLASH/Ruffle!", image: "thumbnails/jacksmith.jpg", link: "games/ruffle/index.html?game=jacksmith", genre: ["Adventure", "Crafting"]},
+  {title: "Run 2", description: "USING FLASH/Ruffle!", image: "thumbnails/run2.jpg", link: "games/ruffle/index.html?game=run2", genre: ["Platformer", "Arcade"]},
+  {title: "Run 3", description: "USING FLASH/Ruffle!", image: "thumbnails/run3.jpg", link: "games/ruffle/index.html?game=run3-new", genre: ["Platformer", "Arcade"]},
+  {title: "Awesome Tanks 2", description: "USING FLASH/Ruffle!", image: "thumbnails/at2.jpg", link: "games/ruffle/index.html?game=awesome_tanks_2", genre: ["Action", "Shooter"]},
+  {title: "Ballons Tower Defense 5", description: "USING FLASH/Ruffle!", image: "thumbnails/btd5.jpg", link: "games/ruffle/index.html?game=bloonstd5", genre: ["Strategy", "Tower Defense"]},
+  {title: "Cut The Rope", description: "cut the rope", image: "thumbnails/cuttherope.jpg", link: "games/cuttherope/index.html", genre: ["Puzzle", "Casual"]},
+  {title: "RaftWars", description: "USING FLASH/Ruffle!", image: "thumbnails/raftwars1.jpg", link: "games/ruffle/index.html?game=raftwars", genre: ["Action", "Shooter"]},
+  {title: "Bloxorz", description: "USING FLASH/Ruffle!", image: "thumbnails/bloxorz.jpg", link: "games/ruffle/index.html?game=bloxorz", genre: ["Puzzle", "Strategy"]},
+  {title: "Cut The Rope HOLIDAY", description: "cut the rope", image: "thumbnails/cuttheropeh.jpg", link: "games/cuttheropeholiday/index.html", genre: ["Puzzle", "Casual"]},
+  {title: "Baseball Bros", description: "Baseball :)", image: "thumbnails/baseballbros.jpg", link: "games/baseballbros/index.html", genre: ["Sports", "Multiplayer"]},
+  {title: "Free Rider 3", description: "FLASH/Ruffle!", image: "thumbnails/freerider3.jpg", link: "games/ruffle/index.html?game=freerider-3", genre: ["Racing", "Sports"]},
+  {title: "Monkey Mart", description: "Monkey Works", image: "thumbnails/monkeymart.jpg", link: "games/monkeymart/index.html", genre: ["Simulation", "Strategy"]},
+  {title: "Drive Mad", description: "Drive Truck :)", image: "thumbnails/drivemad.jpg", link: "games/drivemad/index.html", genre: ["Racing", "Arcade"]},
+  {title: "Temple Run", description: "Run From Moneky", image: "thumbnails/templerun.jpg", link: "games/templerun/index.html", genre: ["Arcade", "Platformer"]},
+  {title: "Flappy Bird", description: "Flappy Bird", image: "thumbnails/flappybird.jpg", link: "games/flappybird/index.html", genre: ["Arcade", "Casual"]},
+  {title: "Football Bros", description: "Football :)", image: "thumbnails/footballbros.jpg", link: "games/footballbros/index.html", genre: ["Sports", "Multiplayer"]},
+  {title: "Duck Clicker", description: "Ducks :)", image: "thumbnails/duckclicker.jpg", link: "games/duckclicker/index.html", genre: ["Clicker", "Casual"]},
+  {title: "Basketrandom", description: "Basketrandom", image: "thumbnails/basketrandom.jpg", link: "games/basketrandom/index.html", genre: ["Sports", "Arcade"]},
+  {title: "Raft Wars 2", description: "RAFT WARS!", image: "thumbnails/raftwars2.jpg", link: "games/raftwars/index.html", genre: ["Action", "Shooter"]},
+  {title: "Vex3", description: "vex3", image: "thumbnails/vex3.jpg", link: "games/vex3/index.html", genre: ["Platformer", "Arcade"]},
+  {title: "Vex4", description: "vex4", image: "thumbnails/vex4.jpg", link: "games/vex4/index.html", genre: ["Platformer", "Arcade"]},
+  {title: "Vex5", description: "vex5", image: "thumbnails/vex5.jpg", link: "games/vex5/index.html", genre: ["Platformer", "Arcade"]},
+  {title: "Vex6", description: "vex6", image: "thumbnails/vex6.jpg", link: "games/vex6/index.html", genre: ["Platformer", "Arcade"]},
+  {title: "Ducklife", description: "Ducklife", image: "thumbnails/ducklife.jpg", link: "games/ducklife/index.html", genre: ["Simulation", "Sports"]},
+  {title: "Ducklife 2", description: "Ducklife 2", image: "thumbnails/ducklife2.jpg", link: "games/ducklife2/index.html", genre: ["Simulation", "Sports"]},
+  {title: "Ducklife 3", description: "Ducklife 3", image: "thumbnails/ducklife3.jpg", link: "games/ducklife3/index.html", genre: ["Simulation", "Sports"]},
+  {title: "Ducklife 4", description: "Ducklife 4", image: "thumbnails/ducklife4.jpg", link: "games/ducklife4/index.html", genre: ["Simulation", "Sports"]},
+  {title: "Tunnel Rush", description: "Tunnel Rush", image: "thumbnails/tunnelrush.jpg", link: "games/tunnelrush/index.html", genre: ["Racing", "Arcade"]},
+  {title: "Slope", description: "Slope 1", image: "thumbnails/slope.jpg", link: "games/slope/index.html", genre: ["Racing", "Arcade"]},
+  {title: "Slope 2", description: "Slope 2", image: "thumbnails/slope2.jpg", link: "games/slope2/index.html", genre: ["Racing", "Arcade"]},
+  {title: "The Impossiable Quiz", description: "Hard Quiz", image: "thumbnails/theimpossiablequiz.jpg", link: "games/theimpossiablequiz/index.html", genre: ["Puzzle", "Trivia"]},
+  {title: "Line Rider", description: "Line Rider", image: "thumbnails/linerider.jpg", link: "games/linerider/index.html", genre: ["Physics", "Casual"]},
+  {title: "CSGO Clicker", description: "Click your way to victory in this CSGO-themed clicker game!", image: "thumbnails/csgo.png", link: "games/csgoclicker/index.html", genre: ["Clicker", "Action"]},
+  {title: "Doodle Jump", description: "Doodle Jump", image: "thumbnails/doodlejump.jpg", link: "games/doodlejump/index.html", genre: ["Platformer", "Arcade"]},
+  {title: "Nut Simulator", description: "Collect nuts in this hilarious simulation game", image: "thumbnails/nut.png", link: "games/nut-simulator/index.html", genre: ["Simulation", "Clicker"]},
+  {title: "Tiny Fishing", description: "Relaxing fishing game with cute graphics 🎣", image: "thumbnails/tiny-fishing.jpg", link: "games/tinyfishing/index.html", genre: ["Simulation", "Casual"]},
+  {title: "Cluster Rush", description: "Navigate through challenging obstacle courses", image: "thumbnails/clusterrush.jpg", link: "games/clusterrush/index.html", genre: ["Arcade", "Platformer"]},
+  {title: "Bit Life", description: "Live a virtual life and make important decisions", image: "thumbnails/bitlife.jpg", link: "games/bitlife/index.html", genre: ["Simulation", "Life"]},
+  {title: "Stack", description: "Stack blocks as high as you can without falling", image: "thumbnails/stack.jpg", link: "games/stack/game.html", genre: ["Puzzle", "Arcade"]},
+  {title: "Crossy Roads", description: "Help the chicken cross the road safely 🐔🚙", image: "thumbnails/crossyroads.jpg", link: "games/crossyroads/index.html", genre: ["Arcade", "Casual"]},
+  {title: "Poly Track", description: "🏎️", image: "thumbnails/pollytrack.jpg", link: "games/polytrack/index.html", genre: ["Racing", "Arcade"]},
+  {title: "House Of Hazards", description: "🏎️", image: "thumbnails/hoh.jpg", link: "games/hoh/index.html", genre: ["Arcade", "Multiplayer"]},
+  {title: "Geometry Dash", description: "Rhythm-based action platformer", image: "thumbnails/geodash.jpg", link: "games/geometrydash/index.html", genre: ["Music", "Platformer"]},
+  {title: "Retro Bowl COLLEGE", description: "🏈", image: "thumbnails/rrbc.jpg", link: "games/rrbc/index.html", genre: ["Sports", "Simulation"]},
+  {title: "OvO", description: "Platformer", image: "thumbnails/ovo.jpg", link: "games/ovo/index.html", genre: ["Platformer", "Arcade"]},
+  {title: "Drift Hunters", description: "Realistic drifting simulation with tuning options", image: "thumbnails/drifthunters.jpg", link: "games/drifthunters/index.html", genre: ["Racing", "Simulation"]},
+  {title: "Fire boy And Water Girl", description: "Cool Game", image: "thumbnails/fireboyandwatergirl.jpg", link: "games/fireboyandwatergirlforesttemple/index.html", genre: ["Puzzle", "Co-op"]},
+  {title: "Paper.io", description: "Cool Game 👍", image: "thumbnails/paperio.jpg", link: "games/paperio/index.html", genre: ["Strategy", "Multiplayer"]},
+  {title: "Basketball Legends 2020", description: "Epic basketball duels with special powers", image: "thumbnails/basketball1.jpg", link: "games/basketballlegends/index.html", genre: ["Sports", "Fighting"]},
+  {title: "Basketball Stars", description: "One-on-one basketball with slick moves", image: "thumbnails/basketball2.jpg", link: "games/basketballstars/index.html", genre: ["Sports", "Arcade"]},
+  {title: "Basketball Bros IO", description: "Multiplayer basketball madness", image: "thumbnails/basketball3.jpg", link: "games/basketbrosio/index.html", genre: ["Sports", "Multiplayer"]},
+  {title: "Cookie Clicker", description: "The classic clicker game - bake cookies!", image: "thumbnails/cookieclicker.jpg", link: "games/cookieclicker/index.html", genre: ["Clicker", "Incremental"]},
+  {title: "Retro Bowl", description: "Classic football management game 🏈", image: "thumbnails/retrobowl.jpg", link: "games/retrobowl/index.html", genre: ["Sports", "Simulation"]},
+  {title: "Clicker Heroes", description: "Defeat monsters and upgrade your heroes", image: "thumbnails/clickerheros.jpg", link: "games/clickerheroes/index.html", genre: ["Clicker", "RPG"]},
+  {title: "PacMan", description: "The classic arcade maze chase game", image: "thumbnails/pacman.jpg", link: "games/pacman/index.html", genre: ["Arcade", "Classic"]},
+  {title: "Coming Soon", description: "More exciting games are on the way...", image: "thumbnails/comingsoon.png", link: "#", genre: ["All"]}
 ];
+
+// Define genres with icons
+const GENRES = [
+  {id: "all", name: "All Games", icon: "fa-gamepad", count: GAMES.length},
+  {id: "arcade", name: "Arcade", icon: "fa-joystick", count: GAMES.filter(g => g.genre.includes("Arcade")).length},
+  {id: "racing", name: "Racing", icon: "fa-car", count: GAMES.filter(g => g.genre.includes("Racing")).length},
+  {id: "sports", name: "Sports", icon: "fa-football-ball", count: GAMES.filter(g => g.genre.includes("Sports")).length},
+  {id: "puzzle", name: "Puzzle", icon: "fa-puzzle-piece", count: GAMES.filter(g => g.genre.includes("Puzzle")).length},
+  {id: "strategy", name: "Strategy", icon: "fa-chess", count: GAMES.filter(g => g.genre.includes("Strategy")).length},
+  {id: "action", name: "Action", icon: "fa-fist-raised", count: GAMES.filter(g => g.genre.includes("Action")).length},
+  {id: "simulation", name: "Simulation", icon: "fa-desktop", count: GAMES.filter(g => g.genre.includes("Simulation")).length},
+  {id: "platformer", name: "Platformer", icon: "fa-running", count: GAMES.filter(g => g.genre.includes("Platformer")).length},
+  {id: "clicker", name: "Clicker", icon: "fa-mouse-pointer", count: GAMES.filter(g => g.genre.includes("Clicker")).length},
+  {id: "casual", name: "Casual", icon: "fa-couch", count: GAMES.filter(g => g.genre.includes("Casual")).length},
+  {id: "multiplayer", name: "Multiplayer", icon: "fa-users", count: GAMES.filter(g => g.genre.includes("Multiplayer")).length}
+];
+
+// DOM Elements
+let currentGenre = "all";
+let currentSearch = "";
 
 // Loading screen
 window.addEventListener('load', function() {
@@ -492,31 +1115,88 @@ window.addEventListener('load', function() {
       document.getElementById('loading-screen').style.display = 'none';
       document.getElementById('currentYear').textContent = new Date().getFullYear();
       document.getElementById('totalGames').textContent = `${GAMES.length} Games Available`;
+      initGenres();
       renderGames();
     }, 300);
-  }, 800);
+  }, 1000);
 });
 
-// Render games
-function renderGames(filter = "") {
+// Initialize genres sidebar
+function initGenres() {
+  const genreList = document.getElementById('genre-list');
+  genreList.innerHTML = GENRES.map(genre => `
+    <li class="genre-item ${genre.id === 'all' ? 'active' : ''}" data-genre="${genre.id}">
+      <i class="fas ${genre.icon} genre-icon"></i>
+      <span class="genre-name">${genre.name}</span>
+      <span class="genre-count">${genre.count}</span>
+    </li>
+  `).join('');
+  
+  // Add event listeners to genre items
+  document.querySelectorAll('.genre-item').forEach(item => {
+    item.addEventListener('click', function() {
+      // Remove active class from all items
+      document.querySelectorAll('.genre-item').forEach(el => el.classList.remove('active'));
+      // Add active class to clicked item
+      this.classList.add('active');
+      
+      // Set current genre and filter games
+      currentGenre = this.dataset.genre;
+      filterGames();
+      
+      // On mobile, close sidebar after selection
+      if (window.innerWidth <= 992) {
+        toggleSidebar();
+      }
+    });
+  });
+}
+
+// Filter and render games based on genre and search
+function filterGames() {
+  let filteredGames = GAMES;
+  
+  // Filter by genre
+  if (currentGenre !== "all") {
+    filteredGames = filteredGames.filter(game => 
+      game.genre.some(g => g.toLowerCase() === currentGenre.toLowerCase())
+    );
+  }
+  
+  // Filter by search
+  if (currentSearch) {
+    const searchLower = currentSearch.toLowerCase();
+    filteredGames = filteredGames.filter(game => 
+      game.title.toLowerCase().includes(searchLower) || 
+      game.description.toLowerCase().includes(searchLower) ||
+      game.genre.some(g => g.toLowerCase().includes(searchLower))
+    );
+  }
+  
+  // Update game count
+  document.getElementById('totalGames').textContent = `${filteredGames.length} Games Available`;
+  
+  // Render games
+  renderGames(filteredGames);
+}
+
+// Render games to the container
+function renderGames(gamesArray = GAMES) {
   const container = document.getElementById('games-container');
-  const searchInput = document.getElementById('gameSearch');
   
-  const filteredGames = GAMES.filter(game => 
-    game.title.toLowerCase().includes(filter.toLowerCase()) || 
-    game.description.toLowerCase().includes(filter.toLowerCase())
-  );
-  
-  container.innerHTML = filteredGames.map(game => `
-    <div class="game-card">
+  container.innerHTML = gamesArray.map(game => `
+    <div class="game-card" data-genres="${game.genre.join(',')}">
       <div class="card-image-container">
-        <img class="card-image" src="${game.image}" alt="${game.title}" loading="lazy">
+        <img class="card-image" src="${game.image}" alt="${game.title}" loading="lazy" onerror="this.src='thumbnails/comingsoon.png'">
       </div>
       <div class="card-content">
         <div class="game-title">${game.title}</div>
         <div class="game-description">${game.description}</div>
+        <div style="margin-bottom: 15px; display: flex; flex-wrap: wrap; gap: 5px;">
+          ${game.genre.map(g => `<span style="background: rgba(0,255,255,0.1); color: var(--primary); padding: 3px 8px; border-radius: 12px; font-size: 0.75rem;">${g}</span>`).join('')}
+        </div>
         <button class="play-btn" onclick="openGame('${game.link}', '${game.title}')">
-          PLAY NOW
+          <i class="fas fa-play"></i> PLAY NOW
         </button>
       </div>
     </div>
@@ -526,11 +1206,30 @@ function renderGames(filter = "") {
 // Search functionality
 let searchTimeout;
 document.getElementById('gameSearch').addEventListener('input', function(e) {
+  currentSearch = e.target.value;
   clearTimeout(searchTimeout);
   searchTimeout = setTimeout(() => {
-    renderGames(e.target.value);
+    filterGames();
   }, 300);
 });
+
+// Toggle sidebar
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const content = document.getElementById('content');
+  const toggleBtn = document.getElementById('sidebar-toggle');
+  
+  sidebar.classList.toggle('active');
+  content.classList.toggle('shifted');
+  
+  // Change icon
+  const icon = toggleBtn.querySelector('i');
+  if (sidebar.classList.contains('active')) {
+    icon.className = 'fas fa-times';
+  } else {
+    icon.className = 'fas fa-bars';
+  }
+}
 
 // Game menu
 const menu = document.getElementById('game-menu');
@@ -545,24 +1244,36 @@ function openGame(link, title) {
     
     // Construct the Ruffle URL with the SWF file parameter
     const ruffleUrl = `games/ruffle/index.html?swf=/games/ruffle/games/${gameName}.swf`;
-    menu.style.display = 'flex';
     iframe.src = ruffleUrl;
-  } else {
+  } else if (link !== '#') {
     // Regular game loading
-    menu.style.display = 'flex';
     iframe.src = link;
+  } else {
+    // Coming soon game
+    alert('This game is coming soon! Stay tuned for updates.');
+    return;
   }
-  document.body.style.overflow = 'hidden';
+  
+  if (link !== '#') {
+    menu.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
 }
 
 document.getElementById('exit-btn').onclick = function() {
   iframe.src = '';
-  menu.style.display = 'none';
+  menu.classList.remove('active');
   document.body.style.overflow = 'auto';
 };
 
 document.getElementById('fullscreen-btn').onclick = function() {
-  if (iframe.requestFullscreen) iframe.requestFullscreen();
+  if (iframe.requestFullscreen) {
+    iframe.requestFullscreen();
+  } else if (iframe.webkitRequestFullscreen) {
+    iframe.webkitRequestFullscreen();
+  } else if (iframe.msRequestFullscreen) {
+    iframe.msRequestFullscreen();
+  }
 };
 
 document.getElementById('newtab-btn').onclick = function() {
@@ -570,23 +1281,49 @@ document.getElementById('newtab-btn').onclick = function() {
 };
 
 document.getElementById('fav-btn').onclick = function() {
-  alert('Favorite feature coming soon!');
+  // Animate the button
+  const btn = this;
+  btn.innerHTML = '<i class="fas fa-heart"></i> Favorited!';
+  btn.style.background = 'linear-gradient(135deg, #ff0066, #ff0044)';
+  
+  setTimeout(() => {
+    btn.innerHTML = '<i class="fas fa-heart"></i> Favorite';
+    btn.style.background = 'linear-gradient(135deg, #FFD700, #FFAA00)';
+  }, 1500);
 };
 
 // TOS modal
 document.getElementById('tos-btn').onclick = function() {
-  document.getElementById('tos-modal').style.display = 'flex';
+  document.getElementById('tos-modal').classList.add('active');
+};
+
+document.getElementById('tos-agree').onclick = function() {
+  document.getElementById('tos-modal').classList.remove('active');
+};
+
+// Theme toggle (placeholder)
+document.getElementById('theme-toggle').onclick = function() {
+  // In a real implementation, this would toggle between themes
+  alert('Theme selector coming soon!');
 };
 
 // Close modals on escape
 document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') {
-    if (menu.style.display === 'flex') {
+    if (menu.classList.contains('active')) {
       iframe.src = '';
-      menu.style.display = 'none';
+      menu.classList.remove('active');
       document.body.style.overflow = 'auto';
     }
-    document.getElementById('tos-modal').style.display = 'none';
+    document.getElementById('tos-modal').classList.remove('active');
+    
+    // Close sidebar on mobile
+    if (window.innerWidth <= 992) {
+      const sidebar = document.getElementById('sidebar');
+      if (sidebar.classList.contains('active')) {
+        toggleSidebar();
+      }
+    }
   }
 });
 
@@ -594,19 +1331,49 @@ document.addEventListener('keydown', function(e) {
 window.onclick = function(event) {
   if (event.target === menu) {
     iframe.src = '';
-    menu.style.display = 'none';
+    menu.classList.remove('active');
     document.body.style.overflow = 'auto';
   }
   if (event.target === document.getElementById('tos-modal')) {
-    document.getElementById('tos-modal').style.display = 'none';
+    document.getElementById('tos-modal').classList.remove('active');
   }
 };
 
-// Add Font Awesome icons
-const fa = document.createElement('link');
-fa.rel = 'stylesheet';
-fa.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
-document.head.appendChild(fa);
+// Toggle sidebar event listener
+document.getElementById('sidebar-toggle').addEventListener('click', toggleSidebar);
+
+// Initialize
+initGenres();
+
+// Responsive sidebar handling
+window.addEventListener('resize', function() {
+  if (window.innerWidth > 992) {
+    // On larger screens, ensure sidebar is visible
+    const sidebar = document.getElementById('sidebar');
+    const content = document.getElementById('content');
+    const toggleBtn = document.getElementById('sidebar-toggle');
+    
+    if (!sidebar.classList.contains('active')) {
+      sidebar.classList.add('active');
+      content.classList.add('shifted');
+      toggleBtn.querySelector('i').className = 'fas fa-bars';
+    }
+  } else {
+    // On smaller screens, ensure sidebar is hidden by default
+    const sidebar = document.getElementById('sidebar');
+    const content = document.getElementById('content');
+    const toggleBtn = document.getElementById('sidebar-toggle');
+    
+    if (sidebar.classList.contains('active')) {
+      sidebar.classList.remove('active');
+      content.classList.remove('shifted');
+      toggleBtn.querySelector('i').className = 'fas fa-bars';
+    }
+  }
+});
+
+// Trigger initial resize to set correct state
+window.dispatchEvent(new Event('resize'));
 </script>
 </body>
 </html>
