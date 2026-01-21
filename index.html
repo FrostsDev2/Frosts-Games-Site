@@ -2694,8 +2694,9 @@ document.getElementById('fullscreen-btn').onclick = function() {
   }
 };
 
+// MODIFIED: New Tab button now opens about:blank
 document.getElementById('newtab-btn').onclick = function() {
-  window.open(iframe.src, '_blank');
+  window.open('about:blank', '_blank');
 };
 
 document.getElementById('fav-btn').onclick = function() {
@@ -2733,9 +2734,9 @@ document.getElementById('tos-agree').addEventListener('click', function() {
   localStorage.setItem('tosAgreed', 'true');
 });
 
+// MODIFIED: ToS Disagree button now redirects to Google.com
 document.getElementById('tos-disagree').addEventListener('click', function() {
-  document.getElementById('tos-modal').classList.remove('active');
-  showNotification("⚠️ Terms Required", "You must agree to the Terms of Service to use this platform.");
+  window.location.href = 'https://google.com';
 });
 
 // Check if TOS was already agreed
