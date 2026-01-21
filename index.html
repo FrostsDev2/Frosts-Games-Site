@@ -7,36 +7,104 @@
 <link rel="icon" id="favicon" href="icons/IMG_4366.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-/* ===== CSS Variables with Responsive Sizes ===== */
+/* ===== CSS Variables with Compact Design ===== */
 :root {
+  --primary: #4dabf7;
+  --primary-dark: #339af0;
+  --secondary: #da77f2;
+  --secondary-dark: #cc5de8;
+  --dark: #141432;
+  --dark-card: #1e1e40;
+  --light: #f2f2f2;
+  --card-bg: rgba(20, 20, 30, 0.8);
+  --text: #e9ecef;
+  --text-secondary: #adb5bd;
+  --accent: #ff6b6b;
+  --accent-dark: #fa5252;
+  --success: #00ff88;
+  --warning: #FFD700;
+  --info: #00aaff;
+  
+  /* Compact sizing for more ads */
+  --sidebar-width: clamp(220px, 22vw, 280px);
+  --header-height: clamp(70px, 10vh, 90px);
+  --game-card-width: clamp(160px, 18vw, 200px);
+  --font-size-base: clamp(13px, 1.4vw, 15px);
+  --font-size-title: clamp(1.5rem, 3.5vw, 2.5rem);
+  --font-size-heading: clamp(1.1rem, 2vw, 1.5rem);
+  --font-size-button: clamp(0.8rem, 1vw, 0.9rem);
+  --font-size-small: clamp(0.75rem, 1vw, 0.85rem);
+  
+  --transition: all 0.3s ease;
+  --shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  --shadow-light: 0 3px 10px rgba(77, 171, 247, 0.1);
+  --radius: 10px;
+  --radius-small: 6px;
+}
+
+/* ===== Theme Variables ===== */
+[data-theme="dark"] {
   --primary: #00ffff;
   --primary-dark: #00cccc;
   --secondary: #8000ff;
   --secondary-dark: #6000cc;
   --dark: #050505;
   --dark-card: #0a0a14;
-  --light: #f2f2f2;
-  --card-bg: rgba(20, 20, 30, 0.8);
   --text: #ffffff;
   --text-secondary: #a0a0c0;
   --accent: #ff0044;
-  --accent-dark: #cc0033;
-  --success: #00ff88;
-  
-  /* Dynamic sizing based on screen */
-  --sidebar-width: clamp(240px, 25vw, 320px);
-  --header-height: clamp(80px, 12vh, 120px);
-  --game-card-width: clamp(250px, 30vw, 320px);
-  --font-size-base: clamp(14px, 1.5vw, 16px);
-  --font-size-title: clamp(1.8rem, 4vw, 3.2rem);
-  --font-size-heading: clamp(1.3rem, 2.5vw, 1.8rem);
-  --font-size-button: clamp(0.9rem, 1.2vw, 1rem);
-  
-  --transition: all 0.3s ease;
-  --shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-  --shadow-light: 0 5px 15px rgba(0, 255, 255, 0.1);
-  --radius: 12px;
-  --radius-small: 8px;
+}
+
+[data-theme="light"] {
+  --primary: #0066cc;
+  --primary-dark: #004499;
+  --secondary: #9933ff;
+  --secondary-dark: #7a29cc;
+  --dark: #f5f5f5;
+  --dark-card: #ffffff;
+  --text: #222222;
+  --text-secondary: #666666;
+  --accent: #cc0033;
+  --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  --shadow-light: 0 3px 10px rgba(0, 102, 204, 0.1);
+}
+
+[data-theme="neon"] {
+  --primary: #00ff88;
+  --primary-dark: #00cc66;
+  --secondary: #ff00ff;
+  --secondary-dark: #cc00cc;
+  --dark: #0a0a1a;
+  --dark-card: #111122;
+  --text: #ffffff;
+  --text-secondary: #88ffaa;
+  --accent: #ffff00;
+  --shadow: 0 8px 20px rgba(0, 255, 136, 0.2);
+  --shadow-light: 0 3px 10px rgba(255, 0, 255, 0.2);
+}
+
+[data-theme="midnight"] {
+  --primary: #4dabf7;
+  --primary-dark: #339af0;
+  --secondary: #da77f2;
+  --secondary-dark: #cc5de8;
+  --dark: #141432;
+  --dark-card: #1e1e40;
+  --text: #e9ecef;
+  --text-secondary: #adb5bd;
+  --accent: #ff6b6b;
+}
+
+[data-theme="ocean"] {
+  --primary: #20c997;
+  --primary-dark: #12b886;
+  --secondary: #748ffc;
+  --secondary-dark: #5c7cfa;
+  --dark: #0c1a2d;
+  --dark-card: #14213d;
+  --text: #e9ecef;
+  --text-secondary: #adb5bd;
+  --accent: #ff922b;
 }
 
 /* ===== Base Styles ===== */
@@ -59,7 +127,8 @@ body {
   overflow-x: hidden;
   min-height: 100vh;
   width: 100%;
-  line-height: 1.5;
+  line-height: 1.4;
+  transition: background 0.5s ease, color 0.5s ease;
 }
 
 /* ===== Loading Screen ===== */
@@ -76,26 +145,26 @@ body {
 }
 
 .loader {
-  width: clamp(50px, 10vw, 70px);
-  height: clamp(50px, 10vw, 70px);
-  border: 4px solid transparent;
-  border-top: 4px solid var(--primary);
-  border-right: 4px solid var(--secondary);
+  width: clamp(40px, 8vw, 60px);
+  height: clamp(40px, 8vw, 60px);
+  border: 3px solid transparent;
+  border-top: 3px solid var(--primary);
+  border-right: 3px solid var(--secondary);
   border-radius: 50%;
   animation: spin 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
-  margin-bottom: clamp(15px, 3vh, 25px);
+  margin-bottom: clamp(12px, 2vh, 20px);
   position: relative;
 }
 
 .loader:after {
   content: '';
   position: absolute;
-  top: 5px;
-  left: 5px;
-  right: 5px;
-  bottom: 5px;
-  border: 3px solid transparent;
-  border-bottom: 3px solid rgba(255, 0, 255, 0.7);
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  border: 2px solid transparent;
+  border-bottom: 2px solid rgba(255, 0, 255, 0.7);
   border-radius: 50%;
   animation: spinReverse 1s linear infinite;
 }
@@ -110,7 +179,416 @@ body {
   100% { transform: rotate(-360deg); }
 }
 
-/* ===== Layout ===== */
+/* ===== Settings Modal ===== */
+#settings-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 9997;
+  padding: clamp(12px, 2.5vw, 15px);
+  overflow: auto;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+#settings-modal.active {
+  display: flex;
+  animation: modalFadeIn 0.3s forwards;
+}
+
+.settings-content {
+  background: linear-gradient(135deg, rgba(25,25,35,0.95), rgba(15,15,25,0.98));
+  padding: clamp(25px, 4vw, 40px);
+  border-radius: var(--radius);
+  max-width: min(700px, 95vw);
+  margin: auto;
+  color: var(--text);
+  border: 1px solid rgba(77, 171, 247, 0.2);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+  transform: translateY(20px);
+  animation: tosSlideUp 0.4s forwards;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.settings-content h2 {
+  color: var(--primary);
+  margin-bottom: clamp(15px, 3vh, 25px);
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  text-align: center;
+  border-bottom: 2px solid rgba(77, 171, 247, 0.2);
+  padding-bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.settings-section {
+  margin-bottom: clamp(20px, 3vh, 30px);
+  background: rgba(30, 30, 40, 0.6);
+  padding: clamp(15px, 2vw, 20px);
+  border-radius: var(--radius);
+}
+
+.settings-section h3 {
+  color: var(--secondary);
+  margin-bottom: clamp(10px, 1.5vh, 15px);
+  font-size: clamp(1.1rem, 1.8vw, 1.3rem);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: clamp(12px, 2vh, 16px);
+  padding-bottom: clamp(10px, 1.5vh, 12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.setting-label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.setting-name {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.setting-desc {
+  font-size: clamp(0.8rem, 1.1vw, 0.9rem);
+  color: var(--text-secondary);
+}
+
+.setting-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: var(--transition);
+  border-radius: 34px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: var(--transition);
+  border-radius: 50%;
+}
+
+input:checked + .toggle-slider {
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+}
+
+input:checked + .toggle-slider:before {
+  transform: translateX(26px);
+}
+
+/* Cloaking Options */
+.cloaking-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.cloaking-option {
+  background: rgba(40, 40, 60, 0.6);
+  padding: 15px;
+  border-radius: var(--radius-small);
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: center;
+  border: 2px solid transparent;
+}
+
+.cloaking-option:hover {
+  background: rgba(60, 60, 80, 0.8);
+}
+
+.cloaking-option.active {
+  border-color: var(--primary);
+  background: rgba(77, 171, 247, 0.1);
+}
+
+.cloaking-icon {
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+  color: var(--primary);
+}
+
+.cloaking-title {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.cloaking-desc {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+/* Tag Management */
+.tag-management {
+  background: rgba(30, 30, 40, 0.8);
+  padding: 15px;
+  border-radius: var(--radius-small);
+  margin-top: 15px;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 15px 0;
+}
+
+.tag-item {
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tag-remove {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.tag-remove:hover {
+  opacity: 1;
+}
+
+.tag-input-container {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.tag-input {
+  flex: 1;
+  padding: 10px 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-small);
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.tag-input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.tag-add-btn {
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--radius-small);
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.tag-add-btn:hover {
+  transform: translateY(-2px);
+}
+
+/* Settings Buttons */
+.settings-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.settings-btn {
+  padding: clamp(10px, 2vh, 12px) clamp(20px, 3vw, 30px);
+  border-radius: var(--radius-small);
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transition);
+  font-size: clamp(0.9rem, 1.2vw, 1rem);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.settings-btn.save {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+}
+
+.settings-btn.reset {
+  background: rgba(255, 107, 107, 0.2);
+  color: var(--accent);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+}
+
+.settings-btn.close {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+}
+
+.settings-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* ===== Update Popup ===== */
+#update-popup {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  padding: clamp(15px, 2vw, 20px);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  z-index: 9997;
+  max-width: min(400px, 90vw);
+  transform: translateX(150%);
+  transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  border-left: 5px solid var(--accent);
+}
+
+#update-popup.active {
+  transform: translateX(0);
+}
+
+.update-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+  font-weight: 700;
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+}
+
+.update-header i {
+  color: var(--warning);
+  font-size: 1.3em;
+}
+
+.update-content {
+  font-size: clamp(0.85rem, 1.2vw, 0.95rem);
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+.update-close {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  padding: 8px 15px;
+  border-radius: var(--radius-small);
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transition);
+  width: 100%;
+}
+
+.update-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+/* ===== Banner Ads ===== */
+.banner-ad {
+  background: rgba(15, 15, 30, 0.9);
+  border-radius: var(--radius);
+  padding: 12px;
+  margin: 20px auto;
+  text-align: center;
+  border: 1px dashed rgba(77, 171, 247, 0.2);
+  transition: var(--transition);
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.banner-ad:hover {
+  border: 1px dashed var(--primary);
+  box-shadow: 0 0 15px rgba(77, 171, 247, 0.1);
+}
+
+.banner-label {
+  display: inline-block;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: clamp(0.7rem, 1vw, 0.8rem);
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.banner-placeholder {
+  color: var(--text-secondary);
+  font-size: clamp(0.8rem, 1.2vw, 0.9rem);
+  padding: 25px 10px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: var(--radius-small);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 90px;
+}
+
+.banner-placeholder i {
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  margin-bottom: 8px;
+  color: var(--primary);
+  opacity: 0.5;
+}
+
+/* Layout */
 .main-container {
   display: flex;
   min-height: 100vh;
@@ -123,13 +601,13 @@ body {
   width: var(--sidebar-width);
   background: rgba(10, 10, 20, 0.95);
   backdrop-filter: blur(10px);
-  padding: clamp(15px, 2vh, 25px) clamp(10px, 1.5vw, 15px);
+  padding: clamp(12px, 1.5vh, 20px) clamp(8px, 1vw, 12px);
   position: fixed;
   left: 0;
   top: var(--header-height);
   height: calc(100vh - var(--header-height));
   overflow-y: auto;
-  border-right: 1px solid rgba(0, 255, 255, 0.1);
+  border-right: 1px solid rgba(77, 171, 247, 0.1);
   z-index: 90;
   transform: translateX(-100%);
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -142,17 +620,17 @@ body {
 
 .sidebar-toggle {
   position: fixed;
-  left: clamp(10px, 2vw, 20px);
-  top: calc(var(--header-height) + clamp(10px, 2vh, 20px));
+  left: clamp(8px, 1.5vw, 15px);
+  top: calc(var(--header-height) + clamp(8px, 1.5vh, 15px));
   background: linear-gradient(135deg, var(--primary), var(--secondary));
   color: white;
   border: none;
-  width: clamp(40px, 8vw, 50px);
-  height: clamp(40px, 8vw, 50px);
+  width: clamp(35px, 6vw, 45px);
+  height: clamp(35px, 6vw, 45px);
   border-radius: 50%;
   cursor: pointer;
   z-index: 95;
-  font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+  font-size: clamp(1rem, 2vw, 1.3rem);
   box-shadow: var(--shadow);
   transition: var(--transition);
   display: flex;
@@ -165,12 +643,12 @@ body {
 }
 
 .sidebar-title {
-  font-size: clamp(1.2rem, 2vw, 1.4rem);
-  margin-bottom: clamp(15px, 3vh, 25px);
+  font-size: clamp(1rem, 1.8vw, 1.2rem);
+  margin-bottom: clamp(12px, 2vh, 20px);
   color: var(--primary);
   text-align: center;
-  padding-bottom: clamp(10px, 2vh, 15px);
-  border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+  padding-bottom: clamp(8px, 1.5vh, 12px);
+  border-bottom: 1px solid rgba(77, 171, 247, 0.2);
   position: relative;
 }
 
@@ -186,39 +664,48 @@ body {
 
 .genre-list {
   list-style: none;
-  margin-bottom: clamp(20px, 4vh, 30px);
+  margin-bottom: clamp(15px, 3vh, 25px);
 }
 
 .genre-item {
-  padding: clamp(10px, 2vh, 14px) clamp(12px, 1.5vw, 18px);
-  margin-bottom: clamp(8px, 1.5vh, 10px);
+  padding: clamp(8px, 1.5vh, 12px) clamp(10px, 1.2vw, 15px);
+  margin-bottom: clamp(6px, 1vh, 8px);
   background: rgba(20, 20, 35, 0.6);
   border-radius: var(--radius-small);
   cursor: pointer;
   transition: var(--transition);
   display: flex;
   align-items: center;
-  gap: clamp(8px, 1vw, 12px);
-  border-left: 3px solid transparent;
-  font-size: clamp(0.85rem, 1.5vw, 0.95rem);
+  gap: clamp(6px, 0.8vw, 10px);
+  border-left: 2px solid transparent;
+  font-size: clamp(0.8rem, 1.2vw, 0.9rem);
 }
 
 .genre-item:hover {
-  background: rgba(0, 255, 255, 0.1);
-  transform: translateX(5px);
-  border-left: 3px solid var(--primary);
+  background: rgba(77, 171, 247, 0.1);
+  transform: translateX(3px);
+  border-left: 2px solid var(--primary);
 }
 
 .genre-item.active {
-  background: rgba(128, 0, 255, 0.2);
-  border-left: 3px solid var(--secondary);
-  box-shadow: 0 0 15px rgba(128, 0, 255, 0.3);
+  background: rgba(218, 119, 242, 0.2);
+  border-left: 2px solid var(--secondary);
+  box-shadow: 0 0 10px rgba(218, 119, 242, 0.3);
+}
+
+.genre-item.new {
+  border-left: 2px solid var(--accent);
+}
+
+.genre-item.new.active {
+  background: rgba(255, 107, 107, 0.2);
+  box-shadow: 0 0 10px rgba(255, 107, 107, 0.3);
 }
 
 .genre-icon {
   color: var(--primary);
-  font-size: clamp(1rem, 1.5vw, 1.1rem);
-  width: clamp(20px, 3vw, 24px);
+  font-size: clamp(0.9rem, 1.3vw, 1rem);
+  width: clamp(18px, 2.5vw, 22px);
   text-align: center;
 }
 
@@ -229,50 +716,55 @@ body {
 
 .genre-count {
   background: rgba(255, 255, 255, 0.1);
-  padding: clamp(2px, 0.5vh, 3px) clamp(6px, 1vw, 8px);
+  padding: clamp(2px, 0.3vh, 3px) clamp(4px, 0.8vw, 6px);
   border-radius: 10px;
-  font-size: clamp(0.7rem, 1.2vw, 0.8rem);
+  font-size: clamp(0.65rem, 1vw, 0.75rem);
   color: var(--text-secondary);
 }
 
-/* ===== Ad Containers ===== */
-.ad-container {
+/* ===== Sidebar Ads ===== */
+.sidebar-ad {
   background: rgba(15, 15, 30, 0.8);
   border-radius: var(--radius);
-  padding: clamp(15px, 2vh, 20px);
-  margin: clamp(15px, 3vh, 25px) 0;
+  padding: clamp(10px, 1.5vh, 15px);
+  margin: clamp(12px, 2vh, 20px) 0;
   text-align: center;
-  border: 1px dashed rgba(0, 255, 255, 0.2);
+  border: 1px dashed rgba(77, 171, 247, 0.2);
   transition: var(--transition);
 }
 
-.ad-container:hover {
+.sidebar-ad:hover {
   border: 1px dashed var(--primary);
-  box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+  box-shadow: 0 0 15px rgba(77, 171, 247, 0.1);
 }
 
-.ad-label {
+.sidebar-ad-label {
   display: inline-block;
   background: linear-gradient(90deg, var(--primary), var(--secondary));
   color: white;
-  padding: clamp(4px, 0.8vh, 5px) clamp(12px, 2vw, 15px);
+  padding: 3px 10px;
   border-radius: 20px;
-  font-size: clamp(0.7rem, 1.2vw, 0.8rem);
-  margin-bottom: clamp(10px, 2vh, 15px);
+  font-size: clamp(0.65rem, 1vw, 0.75rem);
+  margin-bottom: 8px;
   font-weight: 600;
 }
 
-.ad-placeholder {
+.sidebar-ad-placeholder {
   color: var(--text-secondary);
-  font-size: clamp(0.8rem, 1.5vw, 0.9rem);
-  padding: clamp(20px, 4vh, 30px) clamp(8px, 1.5vw, 10px);
+  font-size: clamp(0.75rem, 1.1vw, 0.85rem);
+  padding: clamp(15px, 3vh, 25px) clamp(6px, 1vw, 8px);
   background: rgba(0, 0, 0, 0.3);
   border-radius: var(--radius-small);
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
-.ad-placeholder i {
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  margin-bottom: clamp(8px, 1.5vh, 10px);
+.sidebar-ad-placeholder i {
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  margin-bottom: 8px;
   color: var(--primary);
   opacity: 0.5;
 }
@@ -280,7 +772,7 @@ body {
 /* ===== Main Content ===== */
 .content {
   flex: 1;
-  padding: clamp(15px, 3vw, 30px);
+  padding: clamp(12px, 2vw, 25px);
   margin-left: 0;
   transition: var(--transition);
   width: 100%;
@@ -300,16 +792,17 @@ body {
   left: 0;
   right: 0;
   height: var(--header-height);
-  background: rgba(5, 5, 10, 0.95);
+  background: rgba(20, 20, 50, 0.95);
   backdrop-filter: blur(10px);
   z-index: 100;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: clamp(5px, 1vh, 10px) clamp(15px, 3vw, 20px);
-  border-bottom: 1px solid rgba(0, 255, 255, 0.1);
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+  padding: clamp(4px, 0.8vh, 8px) clamp(12px, 2vw, 18px);
+  border-bottom: 1px solid rgba(77, 171, 247, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+  transition: var(--transition);
 }
 
 .title {
@@ -318,40 +811,40 @@ body {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  margin-bottom: clamp(5px, 1vh, 10px);
+  margin-bottom: clamp(4px, 0.8vh, 8px);
   font-weight: 800;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
   text-align: center;
   animation: titleGlow 3s infinite alternate;
   line-height: 1.2;
 }
 
 @keyframes titleGlow {
-  0% { filter: drop-shadow(0 0 5px rgba(0, 255, 255, 0.5)); }
-  100% { filter: drop-shadow(0 0 15px rgba(128, 0, 255, 0.7)); }
+  0% { filter: drop-shadow(0 0 3px rgba(77, 171, 247, 0.5)); }
+  100% { filter: drop-shadow(0 0 10px rgba(218, 119, 242, 0.7)); }
 }
 
 .header-buttons {
   display: flex;
   justify-content: center;
-  gap: clamp(10px, 2vw, 20px);
+  gap: clamp(8px, 1.5vw, 15px);
   flex-wrap: wrap;
-  margin-top: clamp(5px, 1vh, 10px);
+  margin-top: clamp(4px, 0.8vh, 8px);
   width: 100%;
 }
 
 .btn {
-  padding: clamp(10px, 2vh, 12px) clamp(15px, 3vw, 24px);
+  padding: clamp(8px, 1.5vh, 10px) clamp(12px, 2vw, 20px);
   border-radius: var(--radius-small);
   border: none;
-  background: linear-gradient(135deg, rgba(128,0,255,0.25), rgba(0,255,255,0.15));
+  background: linear-gradient(135deg, rgba(218,119,242,0.25), rgba(77,171,247,0.15));
   color: white;
   cursor: pointer;
   transition: var(--transition);
   font-weight: 600;
   display: flex;
   align-items: center;
-  gap: clamp(6px, 1vw, 10px);
+  gap: clamp(4px, 0.8vw, 6px);
   position: relative;
   overflow: hidden;
   font-size: var(--font-size-button);
@@ -374,15 +867,87 @@ body {
 }
 
 .btn:hover {
-  transform: translateY(-3px);
+  transform: translateY(-2px);
   box-shadow: var(--shadow-light);
-  background: linear-gradient(135deg, rgba(128,0,255,0.4), rgba(0,255,255,0.25));
+  background: linear-gradient(135deg, rgba(218,119,242,0.4), rgba(77,171,247,0.25));
+}
+
+/* ===== Theme Selector ===== */
+.theme-selector {
+  position: relative;
+  display: inline-block;
+}
+
+.theme-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: rgba(15, 15, 25, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius);
+  padding: 10px;
+  margin-top: 5px;
+  min-width: 200px;
+  box-shadow: var(--shadow);
+  z-index: 101;
+  display: none;
+  border: 1px solid rgba(77, 171, 247, 0.2);
+}
+
+.theme-options.active {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.theme-option {
+  padding: 10px 15px;
+  border-radius: var(--radius-small);
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.theme-option:hover {
+  background: rgba(77, 171, 247, 0.1);
+}
+
+.theme-option.active {
+  background: rgba(218, 119, 242, 0.2);
+  border-left: 3px solid var(--secondary);
+}
+
+.theme-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.theme-color.dark { background: linear-gradient(135deg, #00ffff, #8000ff); }
+.theme-color.light { background: linear-gradient(135deg, #0066cc, #9933ff); }
+.theme-color.neon { background: linear-gradient(135deg, #00ff88, #ff00ff); }
+.theme-color.midnight { background: linear-gradient(135deg, #4dabf7, #da77f2); }
+.theme-color.ocean { background: linear-gradient(135deg, #20c997, #748ffc); }
+
+/* ===== Top Banner Ad ===== */
+.top-banner-ad {
+  margin: 0 auto clamp(15px, 3vh, 25px);
+  width: 100%;
+  max-width: min(970px, 95vw);
 }
 
 /* ===== Search ===== */
 .games-header {
   text-align: center;
-  margin-bottom: clamp(25px, 5vh, 40px);
+  margin-bottom: clamp(15px, 3vh, 25px);
   position: relative;
 }
 
@@ -390,69 +955,69 @@ body {
   position: relative;
   display: inline-block;
   width: 100%;
-  max-width: min(500px, 90vw);
-  margin-bottom: clamp(15px, 3vh, 20px);
+  max-width: min(400px, 85vw);
+  margin-bottom: clamp(10px, 2vh, 15px);
 }
 
 .search-container i {
   position: absolute;
-  left: clamp(15px, 3vw, 20px);
+  left: clamp(12px, 2vw, 18px);
   top: 50%;
   transform: translateY(-50%);
   color: var(--primary);
   z-index: 1;
-  font-size: clamp(1rem, 2vw, 1.2rem);
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
 }
 
 #gameSearch {
-  padding: clamp(12px, 2.5vh, 16px) clamp(15px, 3vw, 20px) clamp(12px, 2.5vh, 16px) clamp(45px, 8vw, 55px);
+  padding: clamp(10px, 2vh, 14px) clamp(12px, 2vw, 18px) clamp(10px, 2vh, 14px) clamp(40px, 7vw, 50px);
   border-radius: var(--radius);
   border: 2px solid transparent;
-  background: rgba(20,20,30,0.9);
+  background: rgba(30,30,40,0.9);
   color: var(--text);
   outline: none;
   width: 100%;
-  font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
   transition: var(--transition);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 #gameSearch:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+  box-shadow: 0 0 15px rgba(77, 171, 247, 0.3);
 }
 
 #totalGames {
-  margin-top: clamp(10px, 2vh, 15px);
-  font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+  margin-top: clamp(8px, 1.5vh, 12px);
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
   color: var(--primary);
   background: rgba(0,0,0,0.3);
   display: inline-block;
-  padding: clamp(6px, 1.5vh, 8px) clamp(15px, 3vw, 20px);
-  border-radius: 30px;
-  border: 1px solid rgba(0, 255, 255, 0.2);
+  padding: clamp(5px, 1vh, 7px) clamp(12px, 2vw, 18px);
+  border-radius: 20px;
+  border: 1px solid rgba(77, 171, 247, 0.2);
   font-weight: 600;
   animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0.4); }
-  70% { box-shadow: 0 0 0 10px rgba(0, 255, 255, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(0, 255, 255, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(77, 171, 247, 0.4); }
+  70% { box-shadow: 0 0 0 8px rgba(77, 171, 247, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(77, 171, 247, 0); }
 }
 
 /* ===== Games Grid ===== */
 .games-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(var(--game-card-width), 100%), 1fr));
-  gap: clamp(15px, 3vw, 25px);
-  padding: clamp(5px, 1vw, 10px);
+  gap: clamp(12px, 2vw, 20px);
+  padding: clamp(5px, 1vw, 8px);
   max-width: 100%;
   margin: 0 auto;
 }
 
 .game-card {
-  background: linear-gradient(145deg, rgba(25,25,40,0.9), rgba(15,15,25,0.95));
+  background: linear-gradient(145deg, rgba(30,30,50,0.9), rgba(20,20,35,0.95));
   border-radius: var(--radius);
   overflow: hidden;
   text-decoration: none;
@@ -462,9 +1027,38 @@ body {
   border: 1px solid rgba(255,255,255,0.05);
   position: relative;
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(15px);
   animation: cardAppear 0.5s forwards;
   max-width: 100%;
+}
+
+.game-card.new-game {
+  border: 2px solid var(--accent);
+}
+
+.game-card.new-game:before {
+  content: 'NEW';
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: var(--accent);
+  color: white;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: clamp(0.65rem, 1vw, 0.75rem);
+  font-weight: 700;
+  z-index: 2;
+  box-shadow: 0 3px 8px rgba(255, 107, 107, 0.3);
+}
+
+.game-card.favorited:after {
+  content: '❤️';
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: clamp(0.8rem, 1.2vw, 1rem);
+  z-index: 2;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
 }
 
 .game-card:nth-child(odd) {
@@ -483,9 +1077,9 @@ body {
 }
 
 .game-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
-  border-color: rgba(0, 255, 255, 0.3);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.5);
+  border-color: rgba(77, 171, 247, 0.3);
 }
 
 .game-card:before {
@@ -494,7 +1088,7 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  height: 4px;
+  height: 3px;
   background: linear-gradient(90deg, var(--primary), var(--secondary));
   transform: scaleX(0);
   transition: transform 0.3s;
@@ -507,7 +1101,7 @@ body {
 .card-image-container {
   position: relative;
   width: 100%;
-  height: clamp(140px, 25vw, 180px);
+  height: clamp(100px, 20vw, 130px);
   overflow: hidden;
 }
 
@@ -515,7 +1109,7 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s;
+  transition: transform 0.4s;
 }
 
 .game-card:hover .card-image {
@@ -523,26 +1117,26 @@ body {
 }
 
 .card-content {
-  padding: clamp(12px, 2.5vw, 20px);
+  padding: clamp(10px, 1.5vw, 15px);
 }
 
 .game-title {
-  font-size: clamp(1.1rem, 2vw, 1.3rem);
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
   color: var(--primary);
-  margin-bottom: clamp(6px, 1.5vh, 10px);
+  margin-bottom: clamp(4px, 0.8vh, 6px);
   font-weight: 700;
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  line-height: 1.3;
+  line-height: 1.2;
 }
 
 .game-description {
-  font-size: clamp(0.85rem, 1.5vw, 0.95rem);
+  font-size: clamp(0.75rem, 1.2vw, 0.85rem);
   color: var(--text-secondary);
-  line-height: 1.5;
-  margin-bottom: clamp(12px, 2.5vh, 20px);
+  line-height: 1.3;
+  margin-bottom: clamp(8px, 1.5vh, 12px);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -552,16 +1146,16 @@ body {
 .genre-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: clamp(3px, 0.8vw, 5px);
-  margin-bottom: clamp(10px, 2.5vh, 15px);
+  gap: clamp(2px, 0.5vw, 4px);
+  margin-bottom: clamp(8px, 1.5vh, 12px);
 }
 
 .genre-tag {
-  background: rgba(0,255,255,0.1);
+  background: rgba(77,171,247,0.1);
   color: var(--primary);
-  padding: clamp(2px, 0.5vh, 3px) clamp(6px, 1.5vw, 8px);
-  border-radius: 12px;
-  font-size: clamp(0.7rem, 1.2vw, 0.75rem);
+  padding: clamp(1px, 0.3vh, 2px) clamp(4px, 1vw, 6px);
+  border-radius: 10px;
+  font-size: clamp(0.65rem, 1vw, 0.7rem);
   white-space: nowrap;
 }
 
@@ -569,8 +1163,8 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: clamp(6px, 1vw, 10px);
-  padding: clamp(10px, 2vh, 12px) clamp(15px, 3vw, 20px);
+  gap: clamp(4px, 0.8vw, 6px);
+  padding: clamp(8px, 1.5vh, 10px) clamp(12px, 2vw, 16px);
   background: linear-gradient(90deg, var(--primary), var(--secondary));
   color: white;
   border-radius: var(--radius-small);
@@ -600,8 +1194,95 @@ body {
 }
 
 .play-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 7px 15px rgba(128, 0, 255, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(218, 119, 242, 0.4);
+}
+
+
+
+/* ===== Update Logs Section ===== */
+.update-logs-section {
+  background: rgba(15, 15, 30, 0.8);
+  border-radius: var(--radius);
+  padding: clamp(20px, 3vw, 30px);
+  margin: clamp(25px, 5vh, 40px) auto;
+  max-width: min(900px, 95vw);
+  border: 1px solid rgba(77, 171, 247, 0.1);
+}
+
+.update-logs-title {
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
+  color: var(--primary);
+  margin-bottom: clamp(15px, 3vh, 25px);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.update-log {
+  background: rgba(30, 30, 50, 0.6);
+  border-radius: var(--radius);
+  padding: clamp(15px, 2.5vw, 20px);
+  margin-bottom: clamp(12px, 2vh, 18px);
+  border-left: 4px solid var(--primary);
+}
+
+.update-log-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: clamp(10px, 1.5vh, 15px);
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.update-date {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: clamp(0.9rem, 1.3vw, 1.1rem);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.update-count {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: clamp(0.8rem, 1.1vw, 0.9rem);
+  font-weight: 600;
+}
+
+.update-games {
+  color: var(--text);
+  font-size: clamp(0.85rem, 1.2vw, 0.95rem);
+  line-height: 1.5;
+  margin-bottom: clamp(10px, 1.5vh, 15px);
+}
+
+.update-games strong {
+  color: var(--primary);
+}
+
+.update-highlight {
+  background: rgba(77, 171, 247, 0.1);
+  padding: clamp(10px, 1.5vw, 15px);
+  border-radius: var(--radius-small);
+  margin-top: clamp(10px, 1.5vh, 15px);
+  border-left: 3px solid var(--accent);
+}
+
+.update-highlight-title {
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: clamp(0.9rem, 1.2vw, 1rem);
 }
 
 /* ===== Game Menu ===== */
@@ -614,7 +1295,7 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: clamp(10px, 3vw, 20px);
+  padding: clamp(10px, 2vw, 15px);
   opacity: 0;
   transition: opacity 0.3s;
 }
@@ -630,27 +1311,27 @@ body {
 }
 
 #game-frame {
-  width: min(95vw, 1300px);
-  height: min(70vh, 600px);
+  width: min(95vw, 1200px);
+  height: min(70vh, 500px);
   max-width: 100%;
   border: none;
   border-radius: var(--radius);
   background: #000;
-  box-shadow: 0 0 40px rgba(0, 255, 255, 0.2);
+  box-shadow: 0 0 30px rgba(77, 171, 247, 0.2);
 }
 
 .menu-buttons {
-  margin-top: clamp(20px, 4vh, 30px);
+  margin-top: clamp(15px, 3vh, 25px);
   display: flex;
   justify-content: center;
-  gap: clamp(10px, 2vw, 15px);
+  gap: clamp(8px, 1.5vw, 12px);
   flex-wrap: wrap;
   width: 95%;
-  max-width: min(95vw, 1300px);
+  max-width: min(95vw, 1200px);
 }
 
 .menu-btn {
-  padding: clamp(10px, 2.5vh, 14px) clamp(15px, 3vw, 25px);
+  padding: clamp(8px, 2vh, 12px) clamp(12px, 2.5vw, 20px);
   border-radius: var(--radius-small);
   border: none;
   cursor: pointer;
@@ -658,17 +1339,17 @@ body {
   transition: var(--transition);
   display: flex;
   align-items: center;
-  gap: clamp(6px, 1vw, 10px);
-  min-width: min(140px, 30vw);
+  gap: clamp(4px, 0.8vw, 6px);
+  min-width: min(120px, 25vw);
   justify-content: center;
   position: relative;
   overflow: hidden;
-  font-size: clamp(0.85rem, 1.5vw, 1rem);
+  font-size: clamp(0.8rem, 1.2vw, 0.9rem);
 }
 
 .menu-btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 7px 15px rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.4);
 }
 
 .menu-btn:before {
@@ -703,30 +1384,37 @@ body {
   color: #fff;
 }
 
+/* ===== Footer Banner Ad ===== */
+.footer-banner-ad {
+  margin: clamp(15px, 3vh, 30px) auto;
+  width: 100%;
+  max-width: min(970px, 95vw);
+}
+
 /* ===== Footer ===== */
 footer {
   text-align: center;
-  padding: clamp(20px, 4vh, 30px) clamp(15px, 3vw, 20px);
-  margin-top: clamp(40px, 8vh, 60px);
+  padding: clamp(15px, 3vh, 25px) clamp(12px, 2vw, 18px);
+  margin-top: clamp(20px, 4vh, 40px);
   border-top: 1px solid rgba(255,255,255,0.1);
   color: var(--text-secondary);
-  font-size: clamp(0.85rem, 1.5vw, 0.95rem);
-  background: rgba(5, 5, 10, 0.8);
+  font-size: clamp(0.8rem, 1.2vw, 0.9rem);
+  background: rgba(20, 20, 50, 0.8);
   backdrop-filter: blur(5px);
 }
 
 footer p {
-  margin-bottom: clamp(8px, 1.5vh, 10px);
+  margin-bottom: clamp(6px, 1.2vh, 8px);
 }
 
-/* ===== TOS Modal ===== */
+/* ===== Enhanced TOS Modal ===== */
 #tos-modal {
   display: none;
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.95);
   z-index: 9998;
-  padding: clamp(15px, 3vw, 20px);
+  padding: clamp(12px, 2.5vw, 15px);
   overflow: auto;
   opacity: 0;
   transition: opacity 0.3s;
@@ -737,22 +1425,19 @@ footer p {
   animation: modalFadeIn 0.3s forwards;
 }
 
-@keyframes modalFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
 .tos-content {
   background: linear-gradient(135deg, rgba(25,25,35,0.95), rgba(15,15,25,0.98));
-  padding: clamp(25px, 5vw, 40px);
+  padding: clamp(25px, 4vw, 40px);
   border-radius: var(--radius);
-  max-width: min(800px, 90vw);
+  max-width: min(900px, 95vw);
   margin: auto;
   color: #ccc;
-  border: 1px solid rgba(0, 255, 255, 0.1);
+  border: 1px solid rgba(77, 171, 247, 0.1);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
   transform: translateY(20px);
   animation: tosSlideUp 0.4s forwards;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
 @keyframes tosSlideUp {
@@ -764,49 +1449,108 @@ footer p {
 .tos-content h2 {
   color: var(--accent);
   margin-bottom: clamp(15px, 3vh, 25px);
-  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  text-align: center;
+  border-bottom: 2px solid rgba(77, 171, 247, 0.2);
+  padding-bottom: 15px;
 }
 
-.tos-content ul {
-  margin: clamp(15px, 3vh, 20px) 0 clamp(20px, 4vh, 30px) clamp(20px, 4vw, 25px);
+.tos-section {
+  margin-bottom: clamp(20px, 3vh, 30px);
 }
 
-.tos-content li {
-  margin-bottom: clamp(8px, 1.5vh, 12px);
-  padding-left: clamp(8px, 1.5vw, 10px);
+.tos-section h3 {
+  color: var(--primary);
+  margin-bottom: clamp(10px, 1.5vh, 15px);
+  font-size: clamp(1.1rem, 1.8vw, 1.3rem);
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.tos-content button {
-  padding: clamp(10px, 2.5vh, 12px) clamp(20px, 4vw, 30px);
-  background: var(--accent);
-  color: white;
-  border: none;
+.tos-section p {
+  margin-bottom: clamp(10px, 1.5vh, 15px);
+  line-height: 1.6;
+  font-size: clamp(0.9rem, 1.2vw, 1rem);
+}
+
+.tos-section ul {
+  margin: clamp(10px, 1.5vh, 15px) 0 clamp(15px, 2.5vh, 20px) clamp(20px, 3vw, 30px);
+}
+
+.tos-section li {
+  margin-bottom: clamp(8px, 1.2vh, 12px);
+  padding-left: clamp(8px, 1.2vw, 10px);
+  line-height: 1.5;
+  font-size: clamp(0.85rem, 1.1vw, 0.95rem);
+}
+
+.tos-warning {
+  background: rgba(255, 107, 107, 0.1);
+  border-left: 4px solid var(--accent);
+  padding: clamp(15px, 2.5vw, 20px);
   border-radius: var(--radius-small);
+  margin: clamp(20px, 3vh, 30px) 0;
+}
+
+.tos-warning h4 {
+  color: var(--accent);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tos-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.tos-button {
+  padding: clamp(10px, 2vh, 12px) clamp(20px, 3vw, 30px);
+  border-radius: var(--radius-small);
+  border: none;
   cursor: pointer;
   font-weight: 600;
   transition: var(--transition);
-  font-size: clamp(0.9rem, 1.5vw, 1rem);
+  font-size: clamp(0.9rem, 1.2vw, 1rem);
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.tos-content button:hover {
-  background: var(--accent-dark);
+.tos-button.agree {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+}
+
+.tos-button.disagree {
+  background: rgba(255, 107, 107, 0.2);
+  color: var(--accent);
+  border: 1px solid rgba(255, 107, 107, 0.3);
+}
+
+.tos-button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 7px 15px rgba(255, 0, 68, 0.3);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
 /* ===== Scrollbar ===== */
 ::-webkit-scrollbar {
-  width: clamp(8px, 1.5vw, 10px);
+  width: clamp(6px, 1.2vw, 8px);
 }
 
 ::-webkit-scrollbar-track {
   background: rgba(0,0,0,0.3);
-  border-radius: 5px;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, var(--primary), var(--secondary));
-  border-radius: 5px;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -814,146 +1558,40 @@ footer p {
 }
 
 /* ===== Responsive Breakpoints ===== */
-
-/* Medium screens (tablets, small laptops) */
-@media (max-width: 1200px) {
-  :root {
-    --sidebar-width: clamp(200px, 25vw, 250px);
-    --game-card-width: clamp(220px, 28vw, 280px);
-  }
-  
-  .games-container {
-    gap: clamp(12px, 2vw, 20px);
-  }
-}
-
-/* Small screens (tablets, large phones) */
-@media (max-width: 992px) {
-  .sidebar {
-    width: min(300px, 85vw);
-  }
-  
-  .content {
-    margin-left: 0 !important;
-    padding: clamp(12px, 2.5vw, 20px);
-  }
-  
-  .sidebar-toggle {
-    display: flex;
-  }
-  
-  .games-container {
-    grid-template-columns: repeat(auto-fill, minmax(min(220px, 45vw), 1fr));
-  }
-  
-  .header-buttons {
-    gap: clamp(8px, 1.5vw, 12px);
-  }
-}
-
-/* Very small screens (phones) */
 @media (max-width: 768px) {
-  :root {
-    --header-height: clamp(70px, 15vh, 90px);
-    --game-card-width: min(200px, 90vw);
-  }
-  
-  .games-container {
-    grid-template-columns: repeat(auto-fill, minmax(min(180px, 45vw), 1fr));
-    gap: clamp(10px, 2vw, 15px);
-  }
-  
   .header-buttons {
     flex-direction: row;
     justify-content: center;
   }
   
-  .btn {
-    padding: clamp(8px, 1.5vh, 10px) clamp(12px, 2.5vw, 16px);
-    font-size: clamp(0.8rem, 1.2vw, 0.9rem);
+  .theme-options {
+    left: 50%;
+    transform: translateX(-50%);
   }
   
-  .menu-buttons {
-    flex-direction: row;
-    gap: clamp(8px, 1.5vw, 10px);
+  .tos-buttons, .settings-buttons {
+    flex-direction: column;
   }
   
-  .menu-btn {
-    min-width: min(120px, 28vw);
-    padding: clamp(8px, 2vh, 10px) clamp(12px, 2.5vw, 16px);
+  .tos-button, .settings-btn {
+    width: 100%;
+    justify-content: center;
   }
   
-  .sidebar {
-    width: min(280px, 90vw);
-  }
-}
-
-/* Extra small screens */
-@media (max-width: 576px) {
-  :root {
-    --header-height: clamp(60px, 12vh, 75px);
+  .update-log-header {
+    flex-direction: column;
+    align-items: flex-start;
   }
   
-  .games-container {
+  .cloaking-grid {
     grid-template-columns: 1fr;
-    padding: 5px;
-  }
-  
-  .content {
-    padding: clamp(10px, 2vw, 15px);
-  }
-  
-  .title {
-    font-size: clamp(1.5rem, 6vw, 2rem);
-  }
-  
-  #gameSearch {
-    padding: clamp(10px, 2vh, 12px) clamp(12px, 2.5vw, 15px) clamp(10px, 2vh, 12px) clamp(40px, 8vw, 45px);
-    font-size: clamp(0.9rem, 1.5vw, 1rem);
-  }
-  
-  .menu-buttons {
-    flex-direction: column;
-    gap: clamp(8px, 1.5vh, 10px);
-  }
-  
-  .menu-btn {
-    width: 100%;
-    min-width: auto;
-  }
-  
-  .sidebar {
-    width: 100%;
-    padding: clamp(12px, 2.5vw, 15px);
   }
 }
 
-/* Ultra small screens */
-@media (max-width: 400px) {
-  :root {
-    --header-height: clamp(55px, 10vh, 65px);
-  }
-  
-  .btn {
+@media (max-width: 576px) {
+  .theme-selector .btn {
     width: 100%;
-    max-width: 250px;
     justify-content: center;
-  }
-  
-  .header-buttons {
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .game-card {
-    max-width: 100%;
-  }
-}
-
-/* High DPI screens (Retina) */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-  .game-card, .btn, .menu-btn {
-    border-width: 0.5px;
   }
 }
 
@@ -973,34 +1611,11 @@ footer p {
   
   /* Increase touch target sizes */
   .btn, .menu-btn, .play-btn, .genre-item {
-    min-height: 44px;
+    min-height: 40px;
   }
 }
 
-/* Print styles */
-@media print {
-  .sidebar, .sidebar-toggle, .ad-container, #game-menu, .menu-buttons, .btn {
-    display: none !important;
-  }
-  
-  .content {
-    margin-left: 0 !important;
-    padding: 0;
-  }
-  
-  body {
-    background: white;
-    color: black;
-  }
-  
-  .game-card {
-    break-inside: avoid;
-    box-shadow: none;
-    border: 1px solid #ddd;
-  }
-}
-
-/* ===== Utility Classes ===== */
+/* Utility Classes */
 .hidden {
   display: none !important;
 }
@@ -1014,20 +1629,6 @@ footer p {
   to { opacity: 1; }
 }
 
-.pulse {
-  animation: pulse 2s infinite;
-}
-
-.shake {
-  animation: shake 0.5s;
-}
-
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-  20%, 40%, 60%, 80% { transform: translateX(5px); }
-}
-
 /* Performance optimizations */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -1036,48 +1637,172 @@ footer p {
     transition-duration: 0.01ms !important;
   }
 }
-
-/* Dark mode support (if user prefers) */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --dark: #0a0a0a;
-    --dark-card: #111122;
-  }
-}
-
-/* Light mode support */
-@media (prefers-color-scheme: light) {
-  :root {
-    --dark: #f0f0f0;
-    --dark-card: #ffffff;
-    --text: #000000;
-    --text-secondary: #555555;
-    --card-bg: rgba(240, 240, 255, 0.9);
-  }
-  
-  body {
-    background: linear-gradient(135deg, #f0f0f0 0%, #e0e0ff 100%);
-  }
-  
-  .game-card {
-    background: linear-gradient(145deg, rgba(255,255,255,0.9), rgba(240,240,255,0.95));
-    color: #000;
-    border: 1px solid rgba(0,0,0,0.1);
-  }
-  
-  .game-description {
-    color: #666;
-  }
-}
 </style>
 </head>
-<body>
+<body data-theme="midnight">
+
+<!-- Update Popup -->
+<div id="update-popup">
+  <div class="update-header">
+    <i class="fas fa-rocket"></i>
+    <span>New Update Available!</span>
+  </div>
+  <div class="update-content" id="update-content">
+    <!-- Update content will be inserted here -->
+  </div>
+  <button class="update-close" id="update-close">
+    <i class="fas fa-times"></i> Close
+  </button>
+</div>
 
 <!-- Loading Screen -->
 <div id="loading-screen">
   <div class="loader"></div>
-  <div style="margin-top: clamp(15px, 3vh, 20px); font-size: clamp(1rem, 2vw, 1.2rem); color: var(--primary);">Loading Game Portal...</div>
-  <div style="margin-top: clamp(8px, 1.5vh, 10px); color: var(--text-secondary); font-size: clamp(0.8rem, 1.5vw, 0.9rem);">Powered by Frosts Inc</div>
+  <div style="margin-top: clamp(12px, 2vh, 15px); font-size: clamp(0.9rem, 1.8vw, 1.1rem); color: var(--primary);">Loading Game Portal...</div>
+  <div style="margin-top: clamp(6px, 1.2vh, 8px); color: var(--text-secondary); font-size: clamp(0.75rem, 1.2vw, 0.85rem);">Powered by Frosts Inc</div>
+</div>
+
+<!-- Settings Modal -->
+<div id="settings-modal">
+  <div class="settings-content">
+    <h2>
+      <i class="fas fa-cog"></i> Settings
+    </h2>
+    
+    <div class="settings-section">
+      <h3><i class="fas fa-eye"></i> Cloaking Settings</h3>
+      <div class="setting-item">
+        <div class="setting-label">
+          <span class="setting-name">Enable Cloaking</span>
+          <span class="setting-desc">Disguise the game portal with a different appearance</span>
+        </div>
+        <div class="setting-control">
+          <label class="toggle-switch">
+            <input type="checkbox" id="cloaking-enabled">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      
+      <div class="cloaking-options" id="cloaking-options">
+        <div class="setting-item">
+          <div class="setting-label">
+            <span class="setting-name">Cloaking Mode</span>
+            <span class="setting-desc">Choose how to disguise the portal</span>
+          </div>
+        </div>
+        
+        <div class="cloaking-grid">
+          <div class="cloaking-option" data-mode="calculator">
+            <div class="cloaking-icon">
+              <i class="fas fa-calculator"></i>
+            </div>
+            <div class="cloaking-title">Calculator</div>
+            <div class="cloaking-desc">Disguise as a calculator app</div>
+          </div>
+          
+          <div class="cloaking-option" data-mode="docs">
+            <div class="cloaking-icon">
+              <i class="fas fa-file-alt"></i>
+            </div>
+            <div class="cloaking-title">Document</div>
+            <div class="cloaking-desc">Looks like a document editor</div>
+          </div>
+          
+          <div class="cloaking-option" data-mode="research">
+            <div class="cloaking-icon">
+              <i class="fas fa-search"></i>
+            </div>
+            <div class="cloaking-title">Research</div>
+            <div class="cloaking-desc">Appears as research website</div>
+          </div>
+          
+          <div class="cloaking-option active" data-mode="none">
+            <div class="cloaking-icon">
+              <i class="fas fa-times"></i>
+            </div>
+            <div class="cloaking-title">No Cloak</div>
+            <div class="cloaking-desc">Normal game portal view</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="settings-section">
+      <h3><i class="fas fa-tags"></i> Game Tagging</h3>
+      <div class="setting-item">
+        <div class="setting-label">
+          <span class="setting-name">Reset New Games</span>
+          <span class="setting-desc">Remove "NEW" tags from all games</span>
+        </div>
+        <div class="setting-control">
+          <button class="btn" id="reset-new-games">
+            <i class="fas fa-undo"></i> Reset
+          </button>
+        </div>
+      </div>
+      
+      <div class="tag-management">
+        <div class="setting-item">
+          <div class="setting-label">
+            <span class="setting-name">Custom Tags</span>
+            <span class="setting-desc">Add custom tags to games for organization</span>
+          </div>
+        </div>
+        
+        <div class="tag-list" id="tag-list">
+          <!-- Tags will be added here -->
+        </div>
+        
+        <div class="tag-input-container">
+          <input type="text" id="tag-input" class="tag-input" placeholder="Enter a new tag...">
+          <button class="tag-add-btn" id="tag-add-btn">
+            <i class="fas fa-plus"></i> Add Tag
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="settings-section">
+      <h3><i class="fas fa-heart"></i> Favorites</h3>
+      <div class="setting-item">
+        <div class="setting-label">
+          <span class="setting-name">Auto-save Favorites</span>
+          <span class="setting-desc">Automatically save favorite games</span>
+        </div>
+        <div class="setting-control">
+          <label class="toggle-switch">
+            <input type="checkbox" id="auto-save-favorites" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      
+      <div class="setting-item">
+        <div class="setting-label">
+          <span class="setting-name">Clear All Favorites</span>
+          <span class="setting-desc">Remove all games from favorites</span>
+        </div>
+        <div class="setting-control">
+          <button class="btn" id="clear-favorites">
+            <i class="fas fa-trash"></i> Clear
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="settings-buttons">
+      <button class="settings-btn save" id="save-settings">
+        <i class="fas fa-save"></i> Save Settings
+      </button>
+      <button class="settings-btn reset" id="reset-settings">
+        <i class="fas fa-redo"></i> Reset to Defaults
+      </button>
+      <button class="settings-btn close" id="close-settings">
+        <i class="fas fa-times"></i> Close
+      </button>
+    </div>
+  </div>
 </div>
 
 <!-- Sidebar Toggle -->
@@ -1095,29 +1820,29 @@ footer p {
     <!-- Genre items will be dynamically inserted here -->
   </ul>
   
-  <div class="ad-container">
-    <div class="ad-label">Advertisement</div>
-    <div class="ad-placeholder">
+  <div class="sidebar-ad">
+    <div class="sidebar-ad-label">Advertisement</div>
+    <div class="sidebar-ad-placeholder">
       <i class="fas fa-ad"></i>
       <div>Ad Space (300x250)</div>
-      <div style="font-size: clamp(0.7rem, 1.2vw, 0.8rem); margin-top: 5px;">Your ad could be here</div>
+      <div style="font-size: clamp(0.65rem, 1vw, 0.75rem); margin-top: 5px;">Your ad could be here</div>
     </div>
   </div>
   
-  <div class="ad-container">
-    <div class="ad-label">Sponsored</div>
-    <div class="ad-placeholder">
+  <div class="sidebar-ad">
+    <div class="sidebar-ad-label">Sponsored</div>
+    <div class="sidebar-ad-placeholder">
       <i class="fas fa-star"></i>
       <div>Featured Game</div>
-      <div style="font-size: clamp(0.7rem, 1.2vw, 0.8rem); margin-top: 5px;">Promote your game</div>
+      <div style="font-size: clamp(0.65rem, 1vw, 0.75rem); margin-top: 5px;">Promote your game</div>
     </div>
   </div>
   
-  <div style="text-align: center; margin-top: clamp(20px, 4vh, 30px); padding: clamp(10px, 2vh, 15px); background: rgba(0,0,0,0.3); border-radius: var(--radius-small);">
-    <div style="color: var(--primary); margin-bottom: clamp(8px, 1.5vh, 10px); font-weight: 600; font-size: clamp(0.9rem, 1.5vw, 1rem);">
+  <div style="text-align: center; margin-top: clamp(15px, 3vh, 25px); padding: clamp(8px, 1.5vh, 12px); background: rgba(0,0,0,0.3); border-radius: var(--radius-small);">
+    <div style="color: var(--primary); margin-bottom: clamp(6px, 1.2vh, 8px); font-weight: 600; font-size: clamp(0.8rem, 1.2vw, 0.9rem);">
       <i class="fas fa-fire"></i> Trending Now
     </div>
-    <div style="color: var(--text-secondary); font-size: clamp(0.8rem, 1.2vw, 0.9rem);">
+    <div style="color: var(--text-secondary); font-size: clamp(0.75rem, 1.1vw, 0.85rem);">
       Slope, Drift Hunters, Run 3
     </div>
   </div>
@@ -1130,23 +1855,60 @@ footer p {
     <div class="title">FROSTS INC GAMES</div>
     <div class="header-buttons">
       <button class="btn discord-btn" onclick="window.open('https://discord.gg/mCUHppWjv7')" aria-label="Join our Discord server">
-        <i class="fab fa-discord"></i> Join Discord
+        <i class="fab fa-discord"></i> Discord
       </button>
       <button class="btn tos-btn" id="tos-btn" aria-label="View Terms of Service">
         <i class="fas fa-file-contract"></i> Terms
       </button>
-      <button class="btn" id="theme-toggle" aria-label="Change theme">
-        <i class="fas fa-palette"></i> Theme
+      <button class="btn settings-btn" id="settings-btn" aria-label="Open settings">
+        <i class="fas fa-cog"></i> Settings
       </button>
+      <div class="theme-selector">
+        <button class="btn" id="theme-toggle" aria-label="Change theme">
+          <i class="fas fa-palette"></i> Theme
+        </button>
+        <div class="theme-options" id="theme-options">
+          <div class="theme-option" data-theme="dark">
+            <div class="theme-color dark"></div>
+            <span>Dark</span>
+          </div>
+          <div class="theme-option" data-theme="light">
+            <div class="theme-color light"></div>
+            <span>Light</span>
+          </div>
+          <div class="theme-option" data-theme="neon">
+            <div class="theme-color neon"></div>
+            <span>Neon</span>
+          </div>
+          <div class="theme-option active" data-theme="midnight">
+            <div class="theme-color midnight"></div>
+            <span>Midnight</span>
+          </div>
+          <div class="theme-option" data-theme="ocean">
+            <div class="theme-color ocean"></div>
+            <span>Ocean</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   
   <!-- Main Content Area -->
   <div class="content" id="content">
+    <!-- Top Banner Ad (970x90) -->
+    <div class="top-banner-ad banner-ad">
+      <div class="banner-label">Top Banner Ad</div>
+      <div class="banner-placeholder">
+        <i class="fas fa-chart-line"></i>
+        <div>Ad Space (970x90)</div>
+        <div style="font-size: clamp(0.65rem, 1vw, 0.75rem); margin-top: 5px;">Premium top banner placement</div>
+      </div>
+    </div>
+    
     <div class="games-header">
       <div class="search-container">
         <i class="fas fa-search"></i>
-        <input type="text" id="gameSearch" placeholder="Search games by name or genre..." aria-label="Search games">
+        <input type="text" id="gameSearch" placeholder="Search games..." aria-label="Search games">
       </div>
       <div id="totalGames"></div>
     </div>
@@ -1155,12 +1917,80 @@ footer p {
       <!-- Games will be dynamically inserted here -->
     </div>
     
-    <div class="ad-container" style="max-width: min(728px, 90vw); margin: clamp(25px, 5vh, 40px) auto;">
-      <div class="ad-label">Leaderboard Ad</div>
-      <div class="ad-placeholder" style="padding: clamp(25px, 5vh, 40px) clamp(8px, 1.5vw, 10px);">
+        
+    <!-- More Games (Row 2) -->
+    <div class="games-container" id="games-container-2">
+      <!-- More games will be inserted here after first row -->
+    </div>
+    
+    <!-- Update Logs Section -->
+    <section class="update-logs-section">
+      <h2 class="update-logs-title">
+        <i class="fas fa-history"></i> Update Logs
+      </h2>
+      
+      <div class="update-log">
+        <div class="update-log-header">
+          <div class="update-date">
+            <i class="fas fa-calendar-alt"></i> December 15, 2023
+          </div>
+          <div class="update-count">+8 New Games</div>
+        </div>
+        <div class="update-games">
+          <strong>Added Games:</strong> Geometry Dash, Retro Bowl COLLEGE, OvO, Drift Hunters, Fire boy And Water Girl, Paper.io, Basketball Legends 2020, Basketball Stars
+        </div>
+        <div class="update-highlight">
+          <div class="update-highlight-title">
+            <i class="fas fa-star"></i> Highlight: Geometry Dash
+          </div>
+          Rhythm-based action platformer with challenging levels and epic music!
+        </div>
+      </div>
+      
+      <div class="update-log">
+        <div class="update-log-header">
+          <div class="update-date">
+            <i class="fas fa-calendar-alt"></i> November 28, 2023
+          </div>
+          <div class="update-count">+6 New Games</div>
+        </div>
+        <div class="update-games">
+          <strong>Added Games:</strong> Cluster Rush, Bit Life, Stack, Crossy Roads, Poly Track, House Of Hazards
+        </div>
+        <div class="update-highlight">
+          <div class="update-highlight-title">
+            <i class="fas fa-star"></i> Highlight: Bit Life
+          </div>
+          Live a virtual life and make important decisions in this life simulation game!
+        </div>
+      </div>
+      
+      <div class="update-log">
+        <div class="update-log-header">
+          <div class="update-date">
+            <i class="fas fa-calendar-alt"></i> November 10, 2023
+          </div>
+          <div class="update-count">+12 New Games</div>
+        </div>
+        <div class="update-games">
+          <strong>Added Games:</strong> CSGO Clicker, Doodle Jump, Nut Simulator, Tiny Fishing, and 8 more classic games!
+        </div>
+        <div class="update-highlight">
+          <div class="update-highlight-title">
+            <i class="fas fa-tools"></i> Platform Update
+          </div>
+          Added new theme system with 5 different color schemes and improved mobile responsiveness.
+        </div>
+      </div>
+    </section>
+    
+    <!-- Footer Banner Ad (970x90) -->
+    <div class="footer-banner-ad banner-ad">
+      <div class="banner-label">Footer Banner Ad</div>
+      <div class="banner-placeholder">
         <i class="fas fa-chart-line"></i>
-        <div>Ad Space (728x90)</div>
-        <div style="font-size: clamp(0.7rem, 1.2vw, 0.8rem); margin-top: 5px;">Premium advertising spot</div>
+        <div>Ad Space (970x90)</div>
+        <div style="font-size: clamp(0.65rem, 1vw, 0.75rem); margin-top: 5px;">Bottom placement</div>
       </div>
     </div>
   </div>
@@ -1170,7 +2000,7 @@ footer p {
 <footer>
   <p>Frosts Inc Game Portal &copy; <span id="currentYear"></span></p>
   <p>For entertainment purposes only | All games belong to their respective owners</p>
-  <p style="margin-top: clamp(10px, 2vh, 15px); font-size: clamp(0.8rem, 1.2vw, 0.85rem);">
+  <p style="margin-top: clamp(8px, 1.5vh, 12px); font-size: clamp(0.75rem, 1.1vw, 0.8rem);">
     <i class="fas fa-heart" style="color: var(--accent);"></i> Made with passion for gamers worldwide
   </p>
 </footer>
@@ -1195,92 +2025,181 @@ footer p {
   </div>
 </div>
 
-<!-- TOS Modal -->
+<!-- Enhanced TOS Modal -->
 <div id="tos-modal">
   <div class="tos-content">
-    <h2>Terms of Service</h2>
-    <p>By using Frosts Inc Game Portal, you acknowledge and agree to the following:</p>
-    <ul>
-      <li>All games hosted on this portal are the property of their respective owners.</li>
-      <li>We do not claim ownership of any game available on this platform.</li>
-      <li>This portal is not affiliated with any educational institutions.</li>
-      <li>Games should not be used during school instructional time without permission.</li>
-      <li>Use of this portal is at your own responsibility and discretion.</li>
-      <li>We are not responsible for any content within the hosted games.</li>
-      <li>By continuing to use this portal, you agree to these terms.</li>
-    </ul>
-    <button id="tos-agree">
-      <i class="fas fa-check"></i> I Understand & Agree
-    </button>
+    <h2>Terms of Service & Privacy Policy</h2>
+    
+    <div class="tos-section">
+      <h3><i class="fas fa-exclamation-triangle"></i> Important Notice</h3>
+      <p>Welcome to Frosts Inc Game Portal. By accessing and using this website, you acknowledge that you have read, understood, and agree to be bound by the following Terms of Service. If you do not agree with these terms, please discontinue use immediately.</p>
+    </div>
+    
+    <div class="tos-section">
+      <h3><i class="fas fa-gavel"></i> Legal Disclaimer</h3>
+      <p>Frosts Inc Game Portal ("we", "our", or "us") operates as an independent gaming platform. We want to make clear that:</p>
+      <ul>
+        <li>We do not claim ownership of any games hosted on this platform</li>
+        <li>All games are the intellectual property of their respective copyright holders</li>
+        <li>This portal is not affiliated with, endorsed by, or connected to any educational institutions</li>
+        <li>We do not host any illegal content and comply with DMCA takedown requests</li>
+      </ul>
+    </div>
+    
+    <div class="tos-section">
+      <h3><i class="fas fa-user"></i> User Responsibilities</h3>
+      <p>By using this service, you agree to:</p>
+      <ul>
+        <li>Use the platform responsibly and legally</li>
+        <li>Not use the service during school instructional time without proper authorization</li>
+        <li>Respect the intellectual property rights of game developers</li>
+        <li>Not attempt to bypass security measures or hack the platform</li>
+        <li>Not upload or distribute malicious content</li>
+        <li>Be at least 13 years of age (COPPA compliance)</li>
+      </ul>
+    </div>
+    
+    <div class="tos-section">
+      <h3><i class="fas fa-shield-alt"></i> Privacy & Data Collection</h3>
+      <p>We value your privacy. Our data practices include:</p>
+      <ul>
+        <li>We do not collect personal information without consent</li>
+        <li>Basic analytics are collected anonymously for service improvement</li>
+        <li>Cookies may be used for functionality and preferences</li>
+        <li>We do not sell or share user data with third parties</li>
+        <li>External games may have their own privacy policies</li>
+      </ul>
+    </div>
+    
+    <div class="tos-section">
+      <h3><i class="fas fa-gamepad"></i> Game Content Disclaimer</h3>
+      <p>Regarding the games available on this platform:</p>
+      <ul>
+        <li>Games are provided "as is" without warranty of any kind</li>
+        <li>We are not responsible for game content, ads, or external links</li>
+        <li>Some games may contain advertisements from third parties</li>
+        <li>Game availability may change without notice</li>
+        <li>We do not guarantee game functionality or compatibility</li>
+      </ul>
+    </div>
+    
+    <div class="tos-warning">
+      <h4><i class="fas fa-ban"></i> Prohibited Activities</h4>
+      <p>Users are strictly prohibited from:</p>
+      <ul>
+        <li>Using automated scripts or bots to access the service</li>
+        <li>Attempting to disrupt service availability (DDoS attacks)</li>
+        <li>Reverse engineering or decompiling platform code</li>
+        <li>Using the platform for any illegal activities</li>
+        <li>Sharing inappropriate or harmful content</li>
+      </ul>
+    </div>
+    
+    <div class="tos-section">
+      <h3><i class="fas fa-balance-scale"></i> Limitation of Liability</h3>
+      <p>To the fullest extent permitted by law, Frosts Inc Game Portal shall not be liable for:</p>
+      <ul>
+        <li>Any direct, indirect, incidental, or consequential damages</li>
+        <li>Loss of data, profits, or business opportunities</li>
+        <li>Game malfunctions or compatibility issues</li>
+        <li>Content provided by third-party game developers</li>
+        <li>Unauthorized access to user information</li>
+      </ul>
+    </div>
+    
+    <div class="tos-section">
+      <h3><i class="fas fa-sync-alt"></i> Changes to Terms</h3>
+      <p>We reserve the right to modify these Terms of Service at any time. Users will be notified of significant changes. Continued use of the platform constitutes acceptance of updated terms.</p>
+    </div>
+    
+    <div class="tos-section">
+      <h3><i class="fas fa-question-circle"></i> Contact & Support</h3>
+      <p>For questions, concerns, or takedown requests:</p>
+      <ul>
+        <li>Discord: <a href="https://discord.gg/mCUHppWjv7" style="color: var(--primary);">Join our community</a></li>
+        <li>Report Issues: Use the in-platform reporting system</li>
+        <li>DMCA: Contact for copyright infringement claims</li>
+      </ul>
+    </div>
+    
+    <div class="tos-buttons">
+      <button class="tos-button agree" id="tos-agree">
+        <i class="fas fa-check-circle"></i> I Understand & Agree
+      </button>
+      <button class="tos-button disagree" id="tos-disagree">
+        <i class="fas fa-times-circle"></i> I Disagree
+      </button>
+    </div>
   </div>
 </div>
 
 <script>
-// Game data with genres
+// Game data - RESET all "new" flags to false
 const GAMES = [
-  {title: "Snow Rider 3D", description: "Snow Rider", image: "thumbnails/snowrider3d.jpg", link: "games/snowrider3d/index.html", genre: ["Racing", "Sports"]},
-  {title: "Portal 2D", description: "USING FLASH/Ruffle!", image: "thumbnails/portal2d.jpg", link: "games/ruffle/index.html?game=Portal_wcs2", genre: ["Puzzle", "Adventure"]},
-  {title: "Jack Smith", description: "USING FLASH/Ruffle!", image: "thumbnails/jacksmith.jpg", link: "games/ruffle/index.html?game=jacksmith", genre: ["Adventure", "Crafting"]},
-  {title: "Run 2", description: "USING FLASH/Ruffle!", image: "thumbnails/run2.jpg", link: "games/ruffle/index.html?game=run2", genre: ["Platformer", "Arcade"]},
-  {title: "Run 3", description: "USING FLASH/Ruffle!", image: "thumbnails/run3.jpg", link: "games/ruffle/index.html?game=run3-new", genre: ["Platformer", "Arcade"]},
-  {title: "Awesome Tanks 2", description: "USING FLASH/Ruffle!", image: "thumbnails/at2.jpg", link: "games/ruffle/index.html?game=awesome_tanks_2", genre: ["Action", "Shooter"]},
-  {title: "Ballons Tower Defense 5", description: "USING FLASH/Ruffle!", image: "thumbnails/btd5.jpg", link: "games/ruffle/index.html?game=bloonstd5", genre: ["Strategy", "Tower Defense"]},
-  {title: "Cut The Rope", description: "cut the rope", image: "thumbnails/cuttherope.jpg", link: "games/cuttherope/index.html", genre: ["Puzzle", "Casual"]},
-  {title: "RaftWars", description: "USING FLASH/Ruffle!", image: "thumbnails/raftwars1.jpg", link: "games/ruffle/index.html?game=raftwars", genre: ["Action", "Shooter"]},
-  {title: "Bloxorz", description: "USING FLASH/Ruffle!", image: "thumbnails/bloxorz.jpg", link: "games/ruffle/index.html?game=bloxorz", genre: ["Puzzle", "Strategy"]},
-  {title: "Cut The Rope HOLIDAY", description: "cut the rope", image: "thumbnails/cuttheropeh.jpg", link: "games/cuttheropeholiday/index.html", genre: ["Puzzle", "Casual"]},
-  {title: "Baseball Bros", description: "Baseball :)", image: "thumbnails/baseballbros.jpg", link: "games/baseballbros/index.html", genre: ["Sports", "Multiplayer"]},
-  {title: "Free Rider 3", description: "FLASH/Ruffle!", image: "thumbnails/freerider3.jpg", link: "games/ruffle/index.html?game=freerider-3", genre: ["Racing", "Sports"]},
-  {title: "Monkey Mart", description: "Monkey Works", image: "thumbnails/monkeymart.jpg", link: "games/monkeymart/index.html", genre: ["Simulation", "Strategy"]},
-  {title: "Drive Mad", description: "Drive Truck :)", image: "thumbnails/drivemad.jpg", link: "games/drivemad/index.html", genre: ["Racing", "Arcade"]},
-  {title: "Temple Run", description: "Run From Moneky", image: "thumbnails/templerun.jpg", link: "games/templerun/index.html", genre: ["Arcade", "Platformer"]},
-  {title: "Flappy Bird", description: "Flappy Bird", image: "thumbnails/flappybird.jpg", link: "games/flappybird/index.html", genre: ["Arcade", "Casual"]},
-  {title: "Football Bros", description: "Football :)", image: "thumbnails/footballbros.jpg", link: "games/footballbros/index.html", genre: ["Sports", "Multiplayer"]},
-  {title: "Duck Clicker", description: "Ducks :)", image: "thumbnails/duckclicker.jpg", link: "games/duckclicker/index.html", genre: ["Clicker", "Casual"]},
-  {title: "Basketrandom", description: "Basketrandom", image: "thumbnails/basketrandom.jpg", link: "games/basketrandom/index.html", genre: ["Sports", "Arcade"]},
-  {title: "Raft Wars 2", description: "RAFT WARS!", image: "thumbnails/raftwars2.jpg", link: "games/raftwars/index.html", genre: ["Action", "Shooter"]},
-  {title: "Vex3", description: "vex3", image: "thumbnails/vex3.jpg", link: "games/vex3/index.html", genre: ["Platformer", "Arcade"]},
-  {title: "Vex4", description: "vex4", image: "thumbnails/vex4.jpg", link: "games/vex4/index.html", genre: ["Platformer", "Arcade"]},
-  {title: "Vex5", description: "vex5", image: "thumbnails/vex5.jpg", link: "games/vex5/index.html", genre: ["Platformer", "Arcade"]},
-  {title: "Vex6", description: "vex6", image: "thumbnails/vex6.jpg", link: "games/vex6/index.html", genre: ["Platformer", "Arcade"]},
-  {title: "Ducklife", description: "Ducklife", image: "thumbnails/ducklife.jpg", link: "games/ducklife/index.html", genre: ["Simulation", "Sports"]},
-  {title: "Ducklife 2", description: "Ducklife 2", image: "thumbnails/ducklife2.jpg", link: "games/ducklife2/index.html", genre: ["Simulation", "Sports"]},
-  {title: "Ducklife 3", description: "Ducklife 3", image: "thumbnails/ducklife3.jpg", link: "games/ducklife3/index.html", genre: ["Simulation", "Sports"]},
-  {title: "Ducklife 4", description: "Ducklife 4", image: "thumbnails/ducklife4.jpg", link: "games/ducklife4/index.html", genre: ["Simulation", "Sports"]},
-  {title: "Tunnel Rush", description: "Tunnel Rush", image: "thumbnails/tunnelrush.jpg", link: "games/tunnelrush/index.html", genre: ["Racing", "Arcade"]},
-  {title: "Slope", description: "Slope 1", image: "thumbnails/slope.jpg", link: "games/slope/index.html", genre: ["Racing", "Arcade"]},
-  {title: "Slope 2", description: "Slope 2", image: "thumbnails/slope2.jpg", link: "games/slope2/index.html", genre: ["Racing", "Arcade"]},
-  {title: "The Impossiable Quiz", description: "Hard Quiz", image: "thumbnails/theimpossiablequiz.jpg", link: "games/theimpossiablequiz/index.html", genre: ["Puzzle", "Trivia"]},
-  {title: "Line Rider", description: "Line Rider", image: "thumbnails/linerider.jpg", link: "games/linerider/index.html", genre: ["Physics", "Casual"]},
-  {title: "CSGO Clicker", description: "Click your way to victory in this CSGO-themed clicker game!", image: "thumbnails/csgo.png", link: "games/csgoclicker/index.html", genre: ["Clicker", "Action"]},
-  {title: "Doodle Jump", description: "Doodle Jump", image: "thumbnails/doodlejump.jpg", link: "games/doodlejump/index.html", genre: ["Platformer", "Arcade"]},
-  {title: "Nut Simulator", description: "Collect nuts in this hilarious simulation game", image: "thumbnails/nut.png", link: "games/nut-simulator/index.html", genre: ["Simulation", "Clicker"]},
-  {title: "Tiny Fishing", description: "Relaxing fishing game with cute graphics 🎣", image: "thumbnails/tiny-fishing.jpg", link: "games/tinyfishing/index.html", genre: ["Simulation", "Casual"]},
-  {title: "Cluster Rush", description: "Navigate through challenging obstacle courses", image: "thumbnails/clusterrush.jpg", link: "games/clusterrush/index.html", genre: ["Arcade", "Platformer"]},
-  {title: "Bit Life", description: "Live a virtual life and make important decisions", image: "thumbnails/bitlife.jpg", link: "games/bitlife/index.html", genre: ["Simulation", "Life"]},
-  {title: "Stack", description: "Stack blocks as high as you can without falling", image: "thumbnails/stack.jpg", link: "games/stack/game.html", genre: ["Puzzle", "Arcade"]},
-  {title: "Crossy Roads", description: "Help the chicken cross the road safely 🐔🚙", image: "thumbnails/crossyroads.jpg", link: "games/crossyroads/index.html", genre: ["Arcade", "Casual"]},
-  {title: "Poly Track", description: "🏎️", image: "thumbnails/pollytrack.jpg", link: "games/polytrack/index.html", genre: ["Racing", "Arcade"]},
-  {title: "House Of Hazards", description: "🏎️", image: "thumbnails/hoh.jpg", link: "games/hoh/index.html", genre: ["Arcade", "Multiplayer"]},
-  {title: "Geometry Dash", description: "Rhythm-based action platformer", image: "thumbnails/geodash.jpg", link: "games/geometrydash/index.html", genre: ["Music", "Platformer"]},
-  {title: "Retro Bowl COLLEGE", description: "🏈", image: "thumbnails/rrbc.jpg", link: "games/rrbc/index.html", genre: ["Sports", "Simulation"]},
-  {title: "OvO", description: "Platformer", image: "thumbnails/ovo.jpg", link: "games/ovo/index.html", genre: ["Platformer", "Arcade"]},
-  {title: "Drift Hunters", description: "Realistic drifting simulation with tuning options", image: "thumbnails/drifthunters.jpg", link: "games/drifthunters/index.html", genre: ["Racing", "Simulation"]},
-  {title: "Fire boy And Water Girl", description: "Cool Game", image: "thumbnails/fireboyandwatergirl.jpg", link: "games/fireboyandwatergirlforesttemple/index.html", genre: ["Puzzle", "Co-op"]},
-  {title: "Paper.io", description: "Cool Game 👍", image: "thumbnails/paperio.jpg", link: "games/paperio/index.html", genre: ["Strategy", "Multiplayer"]},
-  {title: "Basketball Legends 2020", description: "Epic basketball duels with special powers", image: "thumbnails/basketball1.jpg", link: "games/basketballlegends/index.html", genre: ["Sports", "Fighting"]},
-  {title: "Basketball Stars", description: "One-on-one basketball with slick moves", image: "thumbnails/basketball2.jpg", link: "games/basketballstars/index.html", genre: ["Sports", "Arcade"]},
-  {title: "Basketball Bros IO", description: "Multiplayer basketball madness", image: "thumbnails/basketball3.jpg", link: "games/basketbrosio/index.html", genre: ["Sports", "Multiplayer"]},
-  {title: "Cookie Clicker", description: "The classic clicker game - bake cookies!", image: "thumbnails/cookieclicker.jpg", link: "games/cookieclicker/index.html", genre: ["Clicker", "Incremental"]},
-  {title: "Retro Bowl", description: "Classic football management game 🏈", image: "thumbnails/retrobowl.jpg", link: "games/retrobowl/index.html", genre: ["Sports", "Simulation"]},
-  {title: "Clicker Heroes", description: "Defeat monsters and upgrade your heroes", image: "thumbnails/clickerheros.jpg", link: "games/clickerheroes/index.html", genre: ["Clicker", "RPG"]},
-  {title: "PacMan", description: "The classic arcade maze chase game", image: "thumbnails/pacman.jpg", link: "games/pacman/index.html", genre: ["Arcade", "Classic"]},
-  {title: "Coming Soon", description: "More exciting games are on the way...", image: "thumbnails/comingsoon.png", link: "#", genre: ["All"]}
+  {title: "Snow Rider 3D", description: "Snow Rider", image: "thumbnails/snowrider3d.jpg", link: "games/snowrider3d/index.html", genre: ["Racing", "Sports"], new: false},
+  {title: "Portal 2D", description: "USING FLASH/Ruffle!", image: "thumbnails/portal2d.jpg", link: "games/ruffle/index.html?game=Portal_wcs2", genre: ["Puzzle", "Adventure"], new: false},
+  {title: "Jack Smith", description: "USING FLASH/Ruffle!", image: "thumbnails/jacksmith.jpg", link: "games/ruffle/index.html?game=jacksmith", genre: ["Adventure", "Crafting"], new: false},
+  {title: "Run 2", description: "USING FLASH/Ruffle!", image: "thumbnails/run2.jpg", link: "games/ruffle/index.html?game=run2", genre: ["Platformer", "Arcade"], new: false},
+  {title: "Run 3", description: "USING FLASH/Ruffle!", image: "thumbnails/run3.jpg", link: "games/ruffle/index.html?game=run3-new", genre: ["Platformer", "Arcade"], new: false},
+  {title: "Awesome Tanks 2", description: "USING FLASH/Ruffle!", image: "thumbnails/at2.jpg", link: "games/ruffle/index.html?game=awesome_tanks_2", genre: ["Action", "Shooter"], new: false},
+  {title: "Ballons Tower Defense 5", description: "USING FLASH/Ruffle!", image: "thumbnails/btd5.jpg", link: "games/ruffle/index.html?game=bloonstd5", genre: ["Strategy", "Tower Defense"], new: false},
+  {title: "Cut The Rope", description: "cut the rope", image: "thumbnails/cuttherope.jpg", link: "games/cuttherope/index.html", genre: ["Puzzle", "Casual"], new: false},
+  {title: "RaftWars", description: "USING FLASH/Ruffle!", image: "thumbnails/raftwars1.jpg", link: "games/ruffle/index.html?game=raftwars", genre: ["Action", "Shooter"], new: false},
+  {title: "Bloxorz", description: "USING FLASH/Ruffle!", image: "thumbnails/bloxorz.jpg", link: "games/ruffle/index.html?game=bloxorz", genre: ["Puzzle", "Strategy"], new: false},
+  {title: "Cut The Rope HOLIDAY", description: "cut the rope", image: "thumbnails/cuttheropeh.jpg", link: "games/cuttheropeholiday/index.html", genre: ["Puzzle", "Casual"], new: false},
+  {title: "Baseball Bros", description: "Baseball :)", image: "thumbnails/baseballbros.jpg", link: "games/baseballbros/index.html", genre: ["Sports", "Multiplayer"], new: false},
+  {title: "Free Rider 3", description: "FLASH/Ruffle!", image: "thumbnails/freerider3.jpg", link: "games/ruffle/index.html?game=freerider-3", genre: ["Racing", "Sports"], new: false},
+  {title: "Monkey Mart", description: "Monkey Works", image: "thumbnails/monkeymart.jpg", link: "games/monkeymart/index.html", genre: ["Simulation", "Strategy"], new: false},
+  {title: "Drive Mad", description: "Drive Truck :)", image: "thumbnails/drivemad.jpg", link: "games/drivemad/index.html", genre: ["Racing", "Arcade"], new: false},
+  {title: "Temple Run", description: "Run From Moneky", image: "thumbnails/templerun.jpg", link: "games/templerun/index.html", genre: ["Arcade", "Platformer"], new: false},
+  {title: "Flappy Bird", description: "Flappy Bird", image: "thumbnails/flappybird.jpg", link: "games/flappybird/index.html", genre: ["Arcade", "Casual"], new: false},
+  {title: "Football Bros", description: "Football :)", image: "thumbnails/footballbros.jpg", link: "games/footballbros/index.html", genre: ["Sports", "Multiplayer"], new: false},
+  {title: "Duck Clicker", description: "Ducks :)", image: "thumbnails/duckclicker.jpg", link: "games/duckclicker/index.html", genre: ["Clicker", "Casual"], new: false},
+  {title: "Basketrandom", description: "Basketrandom", image: "thumbnails/basketrandom.jpg", link: "games/basketrandom/index.html", genre: ["Sports", "Arcade"], new: false},
+  {title: "Raft Wars 2", description: "RAFT WARS!", image: "thumbnails/raftwars2.jpg", link: "games/raftwars/index.html", genre: ["Action", "Shooter"], new: false},
+  {title: "Vex3", description: "vex3", image: "thumbnails/vex3.jpg", link: "games/vex3/index.html", genre: ["Platformer", "Arcade"], new: false},
+  {title: "Vex4", description: "vex4", image: "thumbnails/vex4.jpg", link: "games/vex4/index.html", genre: ["Platformer", "Arcade"], new: false},
+  {title: "Vex5", description: "vex5", image: "thumbnails/vex5.jpg", link: "games/vex5/index.html", genre: ["Platformer", "Arcade"], new: false},
+  {title: "Vex6", description: "vex6", image: "thumbnails/vex6.jpg", link: "games/vex6/index.html", genre: ["Platformer", "Arcade"], new: false},
+  {title: "Ducklife", description: "Ducklife", image: "thumbnails/ducklife.jpg", link: "games/ducklife/index.html", genre: ["Simulation", "Sports"], new: false},
+  {title: "Ducklife 2", description: "Ducklife 2", image: "thumbnails/ducklife2.jpg", link: "games/ducklife2/index.html", genre: ["Simulation", "Sports"], new: false},
+  {title: "Ducklife 3", description: "Ducklife 3", image: "thumbnails/ducklife3.jpg", link: "games/ducklife3/index.html", genre: ["Simulation", "Sports"], new: false},
+  {title: "Ducklife 4", description: "Ducklife 4", image: "thumbnails/ducklife4.jpg", link: "games/ducklife4/index.html", genre: ["Simulation", "Sports"], new: false},
+  {title: "Tunnel Rush", description: "Tunnel Rush", image: "thumbnails/tunnelrush.jpg", link: "games/tunnelrush/index.html", genre: ["Racing", "Arcade"], new: false},
+  {title: "Slope", description: "Slope 1", image: "thumbnails/slope.jpg", link: "games/slope/index.html", genre: ["Racing", "Arcade"], new: false},
+  {title: "Slope 2", description: "Slope 2", image: "thumbnails/slope2.jpg", link: "games/slope2/index.html", genre: ["Racing", "Arcade"], new: false},
+  {title: "The Impossiable Quiz", description: "Hard Quiz", image: "thumbnails/theimpossiablequiz.jpg", link: "games/theimpossiablequiz/index.html", genre: ["Puzzle", "Trivia"], new: false},
+  {title: "Line Rider", description: "Line Rider", image: "thumbnails/linerider.jpg", link: "games/linerider/index.html", genre: ["Physics", "Casual"], new: false},
+  {title: "CSGO Clicker", description: "Click your way to victory in this CSGO-themed clicker game!", image: "thumbnails/csgo.png", link: "games/csgoclicker/index.html", genre: ["Clicker", "Action"], new: false},
+  {title: "Doodle Jump", description: "Doodle Jump", image: "thumbnails/doodlejump.jpg", link: "games/doodlejump/index.html", genre: ["Platformer", "Arcade"], new: false},
+  {title: "Nut Simulator", description: "Collect nuts in this hilarious simulation game", image: "thumbnails/nut.png", link: "games/nut-simulator/index.html", genre: ["Simulation", "Clicker"], new: false},
+  {title: "Tiny Fishing", description: "Relaxing fishing game with cute graphics 🎣", image: "thumbnails/tiny-fishing.jpg", link: "games/tinyfishing/index.html", genre: ["Simulation", "Casual"], new: false},
+  {title: "Cluster Rush", description: "Navigate through challenging obstacle courses", image: "thumbnails/clusterrush.jpg", link: "games/clusterrush/index.html", genre: ["Arcade", "Platformer"], new: false},
+  {title: "Bit Life", description: "Live a virtual life and make important decisions", image: "thumbnails/bitlife.jpg", link: "games/bitlife/index.html", genre: ["Simulation", "Life"], new: false},
+  {title: "Stack", description: "Stack blocks as high as you can without falling", image: "thumbnails/stack.jpg", link: "games/stack/game.html", genre: ["Puzzle", "Arcade"], new: false},
+  {title: "Crossy Roads", description: "Help the chicken cross the road safely 🐔🚙", image: "thumbnails/crossyroads.jpg", link: "games/crossyroads/index.html", genre: ["Arcade", "Casual"], new: false},
+  {title: "Poly Track", description: "🏎️", image: "thumbnails/pollytrack.jpg", link: "games/polytrack/index.html", genre: ["Racing", "Arcade"], new: false},
+  {title: "House Of Hazards", description: "🏎️", image: "thumbnails/hoh.jpg", link: "games/hoh/index.html", genre: ["Arcade", "Multiplayer"], new: false},
+  {title: "Geometry Dash", description: "Rhythm-based action platformer", image: "thumbnails/geodash.jpg", link: "games/geometrydash/index.html", genre: ["Music", "Platformer"], new: false},
+  {title: "Retro Bowl COLLEGE", description: "🏈", image: "thumbnails/rrbc.jpg", link: "games/rrbc/index.html", genre: ["Sports", "Simulation"], new: false},
+  {title: "OvO", description: "Platformer", image: "thumbnails/ovo.jpg", link: "games/ovo/index.html", genre: ["Platformer", "Arcade"], new: false},
+  {title: "Drift Hunters", description: "Realistic drifting simulation with tuning options", image: "thumbnails/drifthunters.jpg", link: "games/drifthunters/index.html", genre: ["Racing", "Simulation"], new: false},
+  {title: "Fire boy And Water Girl", description: "Cool Game", image: "thumbnails/fireboyandwatergirl.jpg", link: "games/fireboyandwatergirlforesttemple/index.html", genre: ["Puzzle", "Co-op"], new: false},
+  {title: "Paper.io", description: "Cool Game 👍", image: "thumbnails/paperio.jpg", link: "games/paperio/index.html", genre: ["Strategy", "Multiplayer"], new: false},
+  {title: "Basketball Legends 2020", description: "Epic basketball duels with special powers", image: "thumbnails/basketball1.jpg", link: "games/basketballlegends/index.html", genre: ["Sports", "Fighting"], new: false},
+  {title: "Basketball Stars", description: "One-on-one basketball with slick moves", image: "thumbnails/basketball2.jpg", link: "games/basketballstars/index.html", genre: ["Sports", "Arcade"], new: false},
+  {title: "Basketball Bros IO", description: "Multiplayer basketball madness", image: "thumbnails/basketball3.jpg", link: "games/basketbrosio/index.html", genre: ["Sports", "Multiplayer"], new: false},
+  {title: "Cookie Clicker", description: "The classic clicker game - bake cookies!", image: "thumbnails/cookieclicker.jpg", link: "games/cookieclicker/index.html", genre: ["Clicker", "Incremental"], new: false},
+  {title: "Retro Bowl", description: "Classic football management game 🏈", image: "thumbnails/retrobowl.jpg", link: "games/retrobowl/index.html", genre: ["Sports", "Simulation"], new: false},
+  {title: "Clicker Heroes", description: "Defeat monsters and upgrade your heroes", image: "thumbnails/clickerheros.jpg", link: "games/clickerheroes/index.html", genre: ["Clicker", "RPG"], new: false},
+  {title: "PacMan", description: "The classic arcade maze chase game", image: "thumbnails/pacman.jpg", link: "games/pacman/index.html", genre: ["Arcade", "Classic"], new: false},
+  {title: "Coming Soon", description: "More exciting games are on the way...", image: "thumbnails/comingsoon.png", link: "#", genre: ["All"], new: false}
 ];
 
 // Define genres with icons
 const GENRES = [
   {id: "all", name: "All Games", icon: "fa-gamepad", count: GAMES.length},
+  {id: "new", name: "New Games", icon: "fa-rocket", count: 0},
   {id: "arcade", name: "Arcade", icon: "fa-joystick", count: GAMES.filter(g => g.genre.includes("Arcade")).length},
   {id: "racing", name: "Racing", icon: "fa-car", count: GAMES.filter(g => g.genre.includes("Racing")).length},
   {id: "sports", name: "Sports", icon: "fa-football-ball", count: GAMES.filter(g => g.genre.includes("Sports")).length},
@@ -1295,39 +2214,264 @@ const GENRES = [
   {id: "multiplayer", name: "Multiplayer", icon: "fa-users", count: GAMES.filter(g => g.genre.includes("Multiplayer")).length}
 ];
 
-// DOM Elements
+// Update logs data
+const UPDATE_LOGS = [
+  {
+    date: "December 15, 2023",
+    newGamesCount: 8,
+    gamesAdded: "Geometry Dash, Retro Bowl COLLEGE, OvO, Drift Hunters, Fire boy And Water Girl, Paper.io, Basketball Legends 2020, Basketball Stars",
+    highlight: {
+      title: "Geometry Dash",
+      description: "Rhythm-based action platformer with challenging levels and epic music!"
+    }
+  },
+  {
+    date: "November 28, 2023",
+    newGamesCount: 6,
+    gamesAdded: "Cluster Rush, Bit Life, Stack, Crossy Roads, Poly Track, House Of Hazards",
+    highlight: {
+      title: "Bit Life",
+      description: "Live a virtual life and make important decisions in this life simulation game!"
+    }
+  },
+  {
+    date: "November 10, 2023",
+    newGamesCount: 12,
+    gamesAdded: "CSGO Clicker, Doodle Jump, Nut Simulator, Tiny Fishing, and 8 more classic games!",
+    highlight: {
+      title: "Platform Update",
+      description: "Added new theme system with 5 different color schemes and improved mobile responsiveness."
+    }
+  }
+];
+
+// App State
 let currentGenre = "all";
 let currentSearch = "";
+let favorites = new Set();
+let userTags = [];
+let cloakingEnabled = false;
+let cloakingMode = "none";
+let settings = {
+  theme: "midnight",
+  autoSaveFavorites: true
+};
 
-// Loading screen
-window.addEventListener('load', function() {
-  setTimeout(() => {
-    document.getElementById('loading-screen').style.opacity = '0';
-    setTimeout(() => {
-      document.getElementById('loading-screen').style.display = 'none';
-      document.getElementById('currentYear').textContent = new Date().getFullYear();
-      document.getElementById('totalGames').textContent = `${GAMES.length} Games Available`;
-      initGenres();
-      renderGames();
-      
-      // Initialize sidebar based on screen size
-      if (window.innerWidth > 992) {
-        toggleSidebar(); // Open sidebar on larger screens
+// Cookie Functions
+function setCookie(name, value, days = 365) {
+  const d = new Date();
+  d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+  const expires = "expires=" + d.toUTCString();
+  document.cookie = name + "=" + JSON.stringify(value) + ";" + expires + ";path=/;SameSite=Strict";
+}
+
+function getCookie(name) {
+  const nameEQ = name + "=";
+  const ca = document.cookie.split(';');
+  for(let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) === ' ') c = c.substring(1);
+    if (c.indexOf(nameEQ) === 0) {
+      try {
+        return JSON.parse(c.substring(nameEQ.length));
+      } catch(e) {
+        return c.substring(nameEQ.length);
       }
-    }, 300);
-  }, 800);
-});
+    }
+  }
+  return null;
+}
+
+function deleteCookie(name) {
+  document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+}
+
+// Load saved data from cookies
+function loadSavedData() {
+  // Load favorites
+  const savedFavorites = getCookie('gamePortalFavorites');
+  if (savedFavorites && Array.isArray(savedFavorites)) {
+    favorites = new Set(savedFavorites);
+  }
+  
+  // Load tags
+  const savedTags = getCookie('gamePortalTags');
+  if (savedTags && Array.isArray(savedTags)) {
+    userTags = savedTags;
+  }
+  
+  // Load settings
+  const savedSettings = getCookie('gamePortalSettings');
+  if (savedSettings) {
+    settings = { ...settings, ...savedSettings };
+    
+    // Apply settings
+    if (settings.theme) {
+      applyTheme(settings.theme);
+    }
+    
+    // Update UI elements
+    if (document.getElementById('auto-save-favorites')) {
+      document.getElementById('auto-save-favorites').checked = settings.autoSaveFavorites !== false;
+    }
+  }
+  
+  // Load cloaking settings
+  const savedCloaking = getCookie('gamePortalCloaking');
+  if (savedCloaking) {
+    cloakingEnabled = savedCloaking.enabled || false;
+    cloakingMode = savedCloaking.mode || "none";
+    
+    if (document.getElementById('cloaking-enabled')) {
+      document.getElementById('cloaking-enabled').checked = cloakingEnabled;
+    }
+    
+    updateCloakingUI();
+    
+    if (cloakingEnabled && cloakingMode !== "none") {
+      applyCloaking(cloakingMode);
+    }
+  }
+}
+
+// Save data to cookies
+function saveData() {
+  // Save favorites
+  if (settings.autoSaveFavorites) {
+    setCookie('gamePortalFavorites', Array.from(favorites));
+  }
+  
+  // Save tags
+  setCookie('gamePortalTags', userTags);
+  
+  // Save settings
+  setCookie('gamePortalSettings', settings);
+  
+  // Save cloaking settings
+  setCookie('gamePortalCloaking', {
+    enabled: cloakingEnabled,
+    mode: cloakingMode
+  });
+}
+
+// Apply theme
+function applyTheme(theme) {
+  document.body.setAttribute('data-theme', theme);
+  settings.theme = theme;
+  
+  // Update active theme option
+  document.querySelectorAll('.theme-option').forEach(option => {
+    if (option.dataset.theme === theme) {
+      option.classList.add('active');
+    } else {
+      option.classList.remove('active');
+    }
+  });
+}
+
+// Apply cloaking
+function applyCloaking(mode) {
+  const titleElement = document.querySelector('.title');
+  const headerContainer = document.querySelector('.header-container');
+  
+  if (mode === "calculator") {
+    titleElement.textContent = "CALCULATOR PRO";
+    document.title = "Calculator Pro | Math Tools";
+    headerContainer.style.background = 'rgba(30, 30, 60, 0.95)';
+  } else if (mode === "docs") {
+    titleElement.textContent = "DOCUMENT EDITOR";
+    document.title = "Document Editor | Text Tools";
+    headerContainer.style.background = 'rgba(40, 40, 80, 0.95)';
+  } else if (mode === "research") {
+    titleElement.textContent = "RESEARCH PORTAL";
+    document.title = "Research Portal | Information Hub";
+    headerContainer.style.background = 'rgba(50, 30, 60, 0.95)';
+  } else {
+    titleElement.textContent = "FROSTS INC GAMES";
+    document.title = "IXL | Game Portal";
+    headerContainer.style.background = 'rgba(20, 20, 50, 0.95)';
+  }
+}
+
+// Update cloaking UI
+function updateCloakingUI() {
+  document.querySelectorAll('.cloaking-option').forEach(option => {
+    if (option.dataset.mode === cloakingMode) {
+      option.classList.add('active');
+    } else {
+      option.classList.remove('active');
+    }
+  });
+}
+
+// Update tag list display
+function updateTagList() {
+  const tagList = document.getElementById('tag-list');
+  tagList.innerHTML = userTags.map(tag => `
+    <div class="tag-item">
+      ${tag}
+      <button class="tag-remove" data-tag="${tag}">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  `).join('');
+  
+  // Add event listeners to remove buttons
+  document.querySelectorAll('.tag-remove').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const tagToRemove = this.dataset.tag;
+      userTags = userTags.filter(t => t !== tagToRemove);
+      updateTagList();
+      saveData();
+    });
+  });
+}
+
+// Show update popup
+function showUpdatePopup() {
+  const updatePopup = document.getElementById('update-popup');
+  const updateContent = document.getElementById('update-content');
+  
+  const lastUpdate = localStorage.getItem('lastUpdateDate');
+  const today = new Date().toDateString();
+  
+  // Show popup if it's a new day or first visit
+  if (!lastUpdate || lastUpdate !== today) {
+    updateContent.innerHTML = `
+      <p><strong>🎉 Settings Updated!</strong></p>
+      <p>New features added:</p>
+      <ul style="margin: 10px 0 10px 20px;">
+        <li>Custom Game Tagging System</li>
+        <li>Cloaking Options</li>
+        <li>Cookie-based Save System</li>
+        <li>Reset New Games Function</li>
+      </ul>
+      <p>Check out the Settings menu to explore new features!</p>
+    `;
+    
+    setTimeout(() => {
+      updatePopup.classList.add('active');
+    }, 1500);
+    
+    // Store today's date
+    localStorage.setItem('lastUpdateDate', today);
+  }
+}
 
 // Initialize genres sidebar
 function initGenres() {
   const genreList = document.getElementById('genre-list');
   genreList.innerHTML = GENRES.map(genre => `
-    <li class="genre-item ${genre.id === 'all' ? 'active' : ''}" data-genre="${genre.id}">
+    <li class="genre-item ${genre.id === 'all' ? 'active' : ''} ${genre.id === 'new' ? 'new' : ''}" data-genre="${genre.id}">
       <i class="fas ${genre.icon} genre-icon"></i>
       <span class="genre-name">${genre.name}</span>
       <span class="genre-count">${genre.count}</span>
     </li>
   `).join('');
+  
+  // Update new games count
+  const newGamesCount = GAMES.filter(g => g.new).length;
+  document.querySelector('.genre-item[data-genre="new"] .genre-count').textContent = newGamesCount;
   
   // Add event listeners to genre items
   document.querySelectorAll('.genre-item').forEach(item => {
@@ -1354,7 +2498,9 @@ function filterGames() {
   let filteredGames = GAMES;
   
   // Filter by genre
-  if (currentGenre !== "all") {
+  if (currentGenre === "new") {
+    filteredGames = filteredGames.filter(game => game.new);
+  } else if (currentGenre !== "all") {
     filteredGames = filteredGames.filter(game => 
       game.genre.some(g => g.toLowerCase() === currentGenre.toLowerCase())
     );
@@ -1380,9 +2526,20 @@ function filterGames() {
 // Render games to the container
 function renderGames(gamesArray = GAMES) {
   const container = document.getElementById('games-container');
+  const container2 = document.getElementById('games-container-2');
   
-  container.innerHTML = gamesArray.map(game => `
-    <div class="game-card" data-genres="${game.genre.join(',')}">
+  // Clear containers
+  container.innerHTML = '';
+  container2.innerHTML = '';
+  
+  // Split games into two rows
+  const half = Math.ceil(gamesArray.length / 2);
+  const firstRowGames = gamesArray.slice(0, half);
+  const secondRowGames = gamesArray.slice(half);
+  
+  // Render first row
+  container.innerHTML = firstRowGames.map(game => `
+    <div class="game-card ${game.new ? 'new-game' : ''} ${favorites.has(game.title) ? 'favorited' : ''}" data-genres="${game.genre.join(',')}">
       <div class="card-image-container">
         <img class="card-image" src="${game.image}" alt="${game.title}" loading="lazy" onerror="this.src='thumbnails/comingsoon.png'">
       </div>
@@ -1393,11 +2550,34 @@ function renderGames(gamesArray = GAMES) {
           ${game.genre.map(g => `<span class="genre-tag">${g}</span>`).join('')}
         </div>
         <button class="play-btn" onclick="openGame('${game.link}', '${game.title}')">
-          <i class="fas fa-play"></i> PLAY NOW
+          <i class="fas fa-play"></i> PLAY
         </button>
       </div>
     </div>
   `).join('');
+  
+  // Render second row (if there are games)
+  if (secondRowGames.length > 0) {
+    container2.innerHTML = secondRowGames.map(game => `
+      <div class="game-card ${game.new ? 'new-game' : ''} ${favorites.has(game.title) ? 'favorited' : ''}" data-genres="${game.genre.join(',')}">
+        <div class="card-image-container">
+          <img class="card-image" src="${game.image}" alt="${game.title}" loading="lazy" onerror="this.src='thumbnails/comingsoon.png'">
+        </div>
+        <div class="card-content">
+          <div class="game-title">${game.title}</div>
+          <div class="game-description">${game.description}</div>
+          <div class="genre-tags">
+            ${game.genre.map(g => `<span class="genre-tag">${g}</span>`).join('')}
+          </div>
+          <button class="play-btn" onclick="openGame('${game.link}', '${game.title}')">
+            <i class="fas fa-play"></i> PLAY
+          </button>
+        </div>
+      </div>
+    `).join('');
+  } else {
+    container2.style.display = 'none';
+  }
 }
 
 // Search functionality
@@ -1428,11 +2608,172 @@ function toggleSidebar() {
   }
 }
 
+// Theme functionality
+document.getElementById('theme-toggle').addEventListener('click', function() {
+  const themeOptions = document.getElementById('theme-options');
+  themeOptions.classList.toggle('active');
+});
+
+// Close theme options when clicking outside
+document.addEventListener('click', function(event) {
+  const themeOptions = document.getElementById('theme-options');
+  const themeToggle = document.getElementById('theme-toggle');
+  
+  if (!themeToggle.contains(event.target) && !themeOptions.contains(event.target)) {
+    themeOptions.classList.remove('active');
+  }
+});
+
+// Set theme
+document.querySelectorAll('.theme-option').forEach(option => {
+  option.addEventListener('click', function() {
+    const theme = this.dataset.theme;
+    applyTheme(theme);
+    
+    // Close theme options
+    document.getElementById('theme-options').classList.remove('active');
+  });
+});
+
+// Settings functionality
+document.getElementById('settings-btn').addEventListener('click', function() {
+  document.getElementById('settings-modal').classList.add('active');
+});
+
+document.getElementById('close-settings').addEventListener('click', function() {
+  document.getElementById('settings-modal').classList.remove('active');
+});
+
+document.getElementById('save-settings').addEventListener('click', function() {
+  saveData();
+  alert('Settings saved successfully!');
+  document.getElementById('settings-modal').classList.remove('active');
+});
+
+document.getElementById('reset-settings').addEventListener('click', function() {
+  if (confirm('Are you sure you want to reset all settings to defaults?')) {
+    // Clear cookies
+    deleteCookie('gamePortalFavorites');
+    deleteCookie('gamePortalTags');
+    deleteCookie('gamePortalSettings');
+    deleteCookie('gamePortalCloaking');
+    
+    // Reset state
+    favorites.clear();
+    userTags = [];
+    settings = {
+      theme: "midnight",
+      autoSaveFavorites: true
+    };
+    cloakingEnabled = false;
+    cloakingMode = "none";
+    
+    // Reset UI
+    document.getElementById('auto-save-favorites').checked = true;
+    document.getElementById('cloaking-enabled').checked = false;
+    updateCloakingUI();
+    updateTagList();
+    renderGames();
+    
+    // Reset cloaking
+    applyCloaking("none");
+    
+    alert('All settings have been reset to defaults.');
+  }
+});
+
+// Cloaking functionality
+document.getElementById('cloaking-enabled').addEventListener('change', function() {
+  cloakingEnabled = this.checked;
+  const cloakingOptions = document.getElementById('cloaking-options');
+  
+  if (cloakingEnabled) {
+    cloakingOptions.style.display = 'block';
+    if (cloakingMode !== "none") {
+      applyCloaking(cloakingMode);
+    }
+  } else {
+    cloakingOptions.style.display = 'none';
+    applyCloaking("none");
+  }
+});
+
+document.querySelectorAll('.cloaking-option').forEach(option => {
+  option.addEventListener('click', function() {
+    cloakingMode = this.dataset.mode;
+    updateCloakingUI();
+    
+    if (cloakingEnabled) {
+      applyCloaking(cloakingMode);
+    }
+  });
+});
+
+// Reset new games
+document.getElementById('reset-new-games').addEventListener('click', function() {
+  if (confirm('Remove "NEW" tags from all games?')) {
+    // Reset all new flags
+    GAMES.forEach(game => game.new = false);
+    
+    // Update new games count
+    const newGamesCount = 0;
+    document.querySelector('.genre-item[data-genre="new"] .genre-count').textContent = newGamesCount;
+    
+    // Re-render games
+    renderGames();
+    filterGames();
+    
+    alert('All "NEW" tags have been removed.');
+  }
+});
+
+// Tag management
+document.getElementById('tag-add-btn').addEventListener('click', function() {
+  const tagInput = document.getElementById('tag-input');
+  const newTag = tagInput.value.trim();
+  
+  if (newTag && !userTags.includes(newTag)) {
+    userTags.push(newTag);
+    updateTagList();
+    tagInput.value = '';
+    saveData();
+  }
+});
+
+document.getElementById('tag-input').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') {
+    document.getElementById('tag-add-btn').click();
+  }
+});
+
+// Clear favorites
+document.getElementById('clear-favorites').addEventListener('click', function() {
+  if (confirm('Remove all games from favorites?')) {
+    favorites.clear();
+    renderGames();
+    saveData();
+    alert('All favorites have been cleared.');
+  }
+});
+
+// Auto-save favorites toggle
+document.getElementById('auto-save-favorites').addEventListener('change', function() {
+  settings.autoSaveFavorites = this.checked;
+});
+
+// Update popup close
+document.getElementById('update-close').addEventListener('click', function() {
+  document.getElementById('update-popup').classList.remove('active');
+});
+
 // Game menu
 const menu = document.getElementById('game-menu');
 const iframe = document.getElementById('game-frame');
+let currentGameTitle = '';
 
 function openGame(link, title) {
+  currentGameTitle = title;
+  
   // Check if it's a Ruffle game by looking at the URL pattern
   if (link.includes('games/ruffle/index.html')) {
     // Extract game name from URL parameter or use title
@@ -1478,15 +2819,25 @@ document.getElementById('newtab-btn').onclick = function() {
 };
 
 document.getElementById('fav-btn').onclick = function() {
-  // Animate the button
-  const btn = this;
-  btn.innerHTML = '<i class="fas fa-heart"></i> Favorited!';
-  btn.style.background = 'linear-gradient(135deg, #ff0066, #ff0044)';
-  
-  setTimeout(() => {
-    btn.innerHTML = '<i class="fas fa-heart"></i> Favorite';
-    btn.style.background = 'linear-gradient(135deg, #FFD700, #FFAA00)';
-  }, 1500);
+  if (currentGameTitle) {
+    if (favorites.has(currentGameTitle)) {
+      favorites.delete(currentGameTitle);
+      this.innerHTML = '<i class="fas fa-heart"></i> Favorite';
+      this.style.background = 'linear-gradient(135deg, #FFD700, #FFAA00)';
+    } else {
+      favorites.add(currentGameTitle);
+      this.innerHTML = '<i class="fas fa-heart"></i> Favorited!';
+      this.style.background = 'linear-gradient(135deg, #ff0066, #ff0044)';
+    }
+    
+    // Update the game card
+    renderGames();
+    
+    // Save favorites
+    if (settings.autoSaveFavorites) {
+      saveData();
+    }
+  }
 };
 
 // TOS modal
@@ -1496,18 +2847,25 @@ document.getElementById('tos-btn').onclick = function() {
 
 document.getElementById('tos-agree').onclick = function() {
   document.getElementById('tos-modal').classList.remove('active');
+  localStorage.setItem('tosAgreed', 'true');
 };
 
-// Theme toggle (placeholder)
-document.getElementById('theme-toggle').onclick = function() {
-  // In a real implementation, this would toggle between themes
-  const themes = ['dark', 'light', 'neon'];
-  const currentTheme = document.body.getAttribute('data-theme') || 'dark';
-  const nextTheme = themes[(themes.indexOf(currentTheme) + 1) % themes.length];
-  
-  document.body.setAttribute('data-theme', nextTheme);
-  this.innerHTML = `<i class="fas fa-palette"></i> ${nextTheme.charAt(0).toUpperCase() + nextTheme.slice(1)}`;
+document.getElementById('tos-disagree').onclick = function() {
+  document.getElementById('tos-modal').classList.remove('active');
+  alert('You must agree to the Terms of Service to use this platform.');
+  window.location.href = 'about:blank';
 };
+
+// Check if TOS was already agreed
+window.addEventListener('load', function() {
+  const tosAgreed = localStorage.getItem('tosAgreed');
+  if (!tosAgreed) {
+    // Show TOS after a delay
+    setTimeout(() => {
+      document.getElementById('tos-modal').classList.add('active');
+    }, 2000);
+  }
+});
 
 // Close modals on escape
 document.addEventListener('keydown', function(e) {
@@ -1518,6 +2876,9 @@ document.addEventListener('keydown', function(e) {
       document.body.style.overflow = 'auto';
     }
     document.getElementById('tos-modal').classList.remove('active');
+    document.getElementById('settings-modal').classList.remove('active');
+    document.getElementById('update-popup').classList.remove('active');
+    document.getElementById('theme-options').classList.remove('active');
     
     // Close sidebar on mobile
     if (window.innerWidth <= 992) {
@@ -1539,13 +2900,49 @@ window.onclick = function(event) {
   if (event.target === document.getElementById('tos-modal')) {
     document.getElementById('tos-modal').classList.remove('active');
   }
+  if (event.target === document.getElementById('settings-modal')) {
+    document.getElementById('settings-modal').classList.remove('active');
+  }
 };
 
 // Toggle sidebar event listener
 document.getElementById('sidebar-toggle').addEventListener('click', toggleSidebar);
 
-// Initialize
-initGenres();
+// Initialize everything when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+  // Set current year
+  document.getElementById('currentYear').textContent = new Date().getFullYear();
+  document.getElementById('totalGames').textContent = `${GAMES.length} Games Available`;
+  
+  // Load saved data
+  loadSavedData();
+  
+  // Initialize genres
+  initGenres();
+  
+  // Render games
+  renderGames();
+  
+  // Show update popup
+  showUpdatePopup();
+  
+  // Update tag list
+  updateTagList();
+  
+  // Initialize sidebar based on screen size
+  if (window.innerWidth > 992) {
+    toggleSidebar(); // Open sidebar on larger screens
+  }
+  
+  // Hide loading screen
+  setTimeout(() => {
+    const loadingScreen = document.getElementById('loading-screen');
+    loadingScreen.style.opacity = '0';
+    setTimeout(() => {
+      loadingScreen.style.display = 'none';
+    }, 300);
+  }, 1000);
+});
 
 // Responsive sidebar handling
 function handleResize() {
@@ -1593,7 +2990,7 @@ if ('ontouchstart' in window) {
   
   // Increase touch targets
   document.querySelectorAll('.btn, .menu-btn, .play-btn, .genre-item').forEach(el => {
-    el.style.minHeight = '44px';
+    el.style.minHeight = '40px';
   });
 }
 </script>
