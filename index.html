@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-<title>IXL | Game Portal</title>
+<title>IXL | Dashboard</title>
 <link rel="icon" id="favicon" href="icons/IMG_4366.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
@@ -25,7 +25,7 @@
   --warning: #FFD700;
   --info: #00aaff;
   
-  /* Compact sizing for more ads */
+  /* Compact sizing */
   --sidebar-width: clamp(220px, 22vw, 280px);
   --header-height: clamp(70px, 10vh, 90px);
   --game-card-width: clamp(160px, 18vw, 200px);
@@ -53,6 +53,7 @@
   --text: #ffffff;
   --text-secondary: #a0a0c0;
   --accent: #ff0044;
+  --dot-color: rgba(0, 255, 255, 0.1);
 }
 
 [data-theme="light"] {
@@ -67,6 +68,7 @@
   --accent: #cc0033;
   --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   --shadow-light: 0 3px 10px rgba(0, 102, 204, 0.1);
+  --dot-color: rgba(0, 102, 204, 0.1);
 }
 
 [data-theme="neon"] {
@@ -81,6 +83,7 @@
   --accent: #ffff00;
   --shadow: 0 8px 20px rgba(0, 255, 136, 0.2);
   --shadow-light: 0 3px 10px rgba(255, 0, 255, 0.2);
+  --dot-color: rgba(0, 255, 136, 0.1);
 }
 
 [data-theme="midnight"] {
@@ -93,6 +96,7 @@
   --text: #e9ecef;
   --text-secondary: #adb5bd;
   --accent: #ff6b6b;
+  --dot-color: rgba(77, 171, 247, 0.1);
 }
 
 [data-theme="ocean"] {
@@ -105,6 +109,7 @@
   --text: #e9ecef;
   --text-secondary: #adb5bd;
   --accent: #ff922b;
+  --dot-color: rgba(32, 201, 151, 0.1);
 }
 
 /* ===== Base Styles ===== */
@@ -129,6 +134,45 @@ body {
   width: 100%;
   line-height: 1.4;
   transition: background 0.5s ease, color 0.5s ease;
+  position: relative;
+}
+
+/* ===== Reactive Dots Background ===== */
+#dots-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.dot {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--dot-color);
+  transition: background 0.5s ease;
+  animation: float 20s infinite linear;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0) translateX(0);
+  }
+  25% {
+    transform: translateY(-20px) translateX(20px);
+  }
+  50% {
+    transform: translateY(0) translateX(40px);
+  }
+  75% {
+    transform: translateY(20px) translateX(20px);
+  }
+  100% {
+    transform: translateY(0) translateX(0);
+  }
 }
 
 /* ===== Loading Screen ===== */
@@ -197,6 +241,11 @@ body {
   animation: modalFadeIn 0.3s forwards;
 }
 
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
 .settings-content {
   background: linear-gradient(135deg, rgba(25,25,35,0.95), rgba(15,15,25,0.98));
   padding: clamp(25px, 4vw, 40px);
@@ -210,6 +259,12 @@ body {
   animation: tosSlideUp 0.4s forwards;
   max-height: 90vh;
   overflow-y: auto;
+}
+
+@keyframes tosSlideUp {
+  to {
+    transform: translateY(0);
+  }
 }
 
 .settings-content h2 {
@@ -361,67 +416,28 @@ input:checked + .toggle-slider:before {
   color: var(--text-secondary);
 }
 
-/* Tag Management */
-.tag-management {
-  background: rgba(30, 30, 40, 0.8);
-  padding: 15px;
-  border-radius: var(--radius-small);
+/* Custom Cloak Name Input */
+.custom-cloak-container {
   margin-top: 15px;
 }
 
-.tag-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 15px 0;
-}
-
-.tag-item {
-  background: linear-gradient(90deg, var(--primary), var(--secondary));
-  color: white;
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.tag-remove {
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-  font-size: 0.8rem;
-  opacity: 0.7;
-}
-
-.tag-remove:hover {
-  opacity: 1;
-}
-
-.tag-input-container {
-  display: flex;
-  gap: 10px;
-  margin-top: 15px;
-}
-
-.tag-input {
-  flex: 1;
-  padding: 10px 15px;
+.custom-cloak-input {
+  width: 100%;
+  padding: 12px 15px;
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: var(--radius-small);
   color: var(--text);
   font-size: 0.9rem;
+  margin-bottom: 10px;
 }
 
-.tag-input:focus {
+.custom-cloak-input:focus {
   outline: none;
   border-color: var(--primary);
 }
 
-.tag-add-btn {
+.custom-cloak-btn {
   background: linear-gradient(90deg, var(--primary), var(--secondary));
   color: white;
   border: none;
@@ -430,9 +446,10 @@ input:checked + .toggle-slider:before {
   cursor: pointer;
   font-weight: 600;
   transition: var(--transition);
+  width: 100%;
 }
 
-.tag-add-btn:hover {
+.custom-cloak-btn:hover {
   transform: translateY(-2px);
 }
 
@@ -479,8 +496,8 @@ input:checked + .toggle-slider:before {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
 }
 
-/* ===== Update Popup ===== */
-#update-popup {
+/* ===== Notification System ===== */
+.notification {
   position: fixed;
   top: 20px;
   right: 20px;
@@ -489,18 +506,20 @@ input:checked + .toggle-slider:before {
   padding: clamp(15px, 2vw, 20px);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  z-index: 9997;
+  z-index: 9996;
   max-width: min(400px, 90vw);
   transform: translateX(150%);
   transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
   border-left: 5px solid var(--accent);
+  display: none;
 }
 
-#update-popup.active {
+.notification.active {
+  display: block;
   transform: translateX(0);
 }
 
-.update-header {
+.notification-header {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -509,18 +528,18 @@ input:checked + .toggle-slider:before {
   font-size: clamp(1rem, 1.5vw, 1.2rem);
 }
 
-.update-header i {
+.notification-header i {
   color: var(--warning);
   font-size: 1.3em;
 }
 
-.update-content {
+.notification-content {
   font-size: clamp(0.85rem, 1.2vw, 0.95rem);
   margin-bottom: 15px;
   line-height: 1.5;
 }
 
-.update-close {
+.notification-close {
   background: rgba(255, 255, 255, 0.2);
   border: none;
   color: white;
@@ -532,60 +551,9 @@ input:checked + .toggle-slider:before {
   width: 100%;
 }
 
-.update-close:hover {
+.notification-close:hover {
   background: rgba(255, 255, 255, 0.3);
   transform: translateY(-2px);
-}
-
-/* ===== Banner Ads ===== */
-.banner-ad {
-  background: rgba(15, 15, 30, 0.9);
-  border-radius: var(--radius);
-  padding: 12px;
-  margin: 20px auto;
-  text-align: center;
-  border: 1px dashed rgba(77, 171, 247, 0.2);
-  transition: var(--transition);
-  width: 100%;
-  max-width: 100%;
-  overflow: hidden;
-}
-
-.banner-ad:hover {
-  border: 1px dashed var(--primary);
-  box-shadow: 0 0 15px rgba(77, 171, 247, 0.1);
-}
-
-.banner-label {
-  display: inline-block;
-  background: linear-gradient(90deg, var(--primary), var(--secondary));
-  color: white;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: clamp(0.7rem, 1vw, 0.8rem);
-  margin-bottom: 10px;
-  font-weight: 600;
-}
-
-.banner-placeholder {
-  color: var(--text-secondary);
-  font-size: clamp(0.8rem, 1.2vw, 0.9rem);
-  padding: 25px 10px;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: var(--radius-small);
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 90px;
-}
-
-.banner-placeholder i {
-  font-size: clamp(1.2rem, 2vw, 1.5rem);
-  margin-bottom: 8px;
-  color: var(--primary);
-  opacity: 0.5;
 }
 
 /* Layout */
@@ -722,51 +690,29 @@ input:checked + .toggle-slider:before {
   color: var(--text-secondary);
 }
 
-/* ===== Sidebar Ads ===== */
-.sidebar-ad {
-  background: rgba(15, 15, 30, 0.8);
-  border-radius: var(--radius);
-  padding: clamp(10px, 1.5vh, 15px);
-  margin: clamp(12px, 2vh, 20px) 0;
+/* ===== Sidebar Stats ===== */
+.sidebar-stats {
   text-align: center;
-  border: 1px dashed rgba(77, 171, 247, 0.2);
-  transition: var(--transition);
-}
-
-.sidebar-ad:hover {
-  border: 1px dashed var(--primary);
-  box-shadow: 0 0 15px rgba(77, 171, 247, 0.1);
-}
-
-.sidebar-ad-label {
-  display: inline-block;
-  background: linear-gradient(90deg, var(--primary), var(--secondary));
-  color: white;
-  padding: 3px 10px;
-  border-radius: 20px;
-  font-size: clamp(0.65rem, 1vw, 0.75rem);
-  margin-bottom: 8px;
-  font-weight: 600;
-}
-
-.sidebar-ad-placeholder {
-  color: var(--text-secondary);
-  font-size: clamp(0.75rem, 1.1vw, 0.85rem);
-  padding: clamp(15px, 3vh, 25px) clamp(6px, 1vw, 8px);
-  background: rgba(0, 0, 0, 0.3);
+  margin-top: clamp(15px, 3vh, 25px);
+  padding: clamp(8px, 1.5vh, 12px);
+  background: rgba(0,0,0,0.3);
   border-radius: var(--radius-small);
-  min-height: 120px;
+}
+
+.sidebar-stats .stat-label {
+  color: var(--primary);
+  margin-bottom: clamp(6px, 1.2vh, 8px);
+  font-weight: 600;
+  font-size: clamp(0.8rem, 1.2vw, 0.9rem);
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 8px;
 }
 
-.sidebar-ad-placeholder i {
-  font-size: clamp(1.2rem, 2vw, 1.5rem);
-  margin-bottom: 8px;
-  color: var(--primary);
-  opacity: 0.5;
+.sidebar-stats .stat-value {
+  color: var(--text-secondary);
+  font-size: clamp(0.75rem, 1.1vw, 0.85rem);
 }
 
 /* ===== Main Content ===== */
@@ -937,13 +883,6 @@ input:checked + .toggle-slider:before {
 .theme-color.midnight { background: linear-gradient(135deg, #4dabf7, #da77f2); }
 .theme-color.ocean { background: linear-gradient(135deg, #20c997, #748ffc); }
 
-/* ===== Top Banner Ad ===== */
-.top-banner-ad {
-  margin: 0 auto clamp(15px, 3vh, 25px);
-  width: 100%;
-  max-width: min(970px, 95vw);
-}
-
 /* ===== Search ===== */
 .games-header {
   text-align: center;
@@ -1011,7 +950,7 @@ input:checked + .toggle-slider:before {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(var(--game-card-width), 100%), 1fr));
   gap: clamp(12px, 2vw, 20px);
-  padding: clamp(5px, 1vw, 8px);
+  padding: 0;
   max-width: 100%;
   margin: 0 auto;
 }
@@ -1198,8 +1137,6 @@ input:checked + .toggle-slider:before {
   box-shadow: 0 5px 12px rgba(218, 119, 242, 0.4);
 }
 
-
-
 /* ===== Update Logs Section ===== */
 .update-logs-section {
   background: rgba(15, 15, 30, 0.8);
@@ -1384,13 +1321,6 @@ input:checked + .toggle-slider:before {
   color: #fff;
 }
 
-/* ===== Footer Banner Ad ===== */
-.footer-banner-ad {
-  margin: clamp(15px, 3vh, 30px) auto;
-  width: 100%;
-  max-width: min(970px, 95vw);
-}
-
 /* ===== Footer ===== */
 footer {
   text-align: center;
@@ -1438,12 +1368,6 @@ footer p {
   animation: tosSlideUp 0.4s forwards;
   max-height: 90vh;
   overflow-y: auto;
-}
-
-@keyframes tosSlideUp {
-  to {
-    transform: translateY(0);
-  }
 }
 
 .tos-content h2 {
@@ -1586,12 +1510,21 @@ footer p {
   .cloaking-grid {
     grid-template-columns: 1fr;
   }
+  
+  .games-container {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
 }
 
 @media (max-width: 576px) {
   .theme-selector .btn {
     width: 100%;
     justify-content: center;
+  }
+  
+  .games-container {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
   }
 }
 
@@ -1641,16 +1574,19 @@ footer p {
 </head>
 <body data-theme="midnight">
 
-<!-- Update Popup -->
-<div id="update-popup">
-  <div class="update-header">
-    <i class="fas fa-rocket"></i>
-    <span>New Update Available!</span>
+<!-- Reactive Dots Background -->
+<div id="dots-background"></div>
+
+<!-- Notification System -->
+<div class="notification" id="notification">
+  <div class="notification-header">
+    <i class="fas fa-info-circle"></i>
+    <span id="notification-title">Notification</span>
   </div>
-  <div class="update-content" id="update-content">
-    <!-- Update content will be inserted here -->
+  <div class="notification-content" id="notification-content">
+    <!-- Notification content will be inserted here -->
   </div>
-  <button class="update-close" id="update-close">
+  <button class="notification-close" id="notification-close">
     <i class="fas fa-times"></i> Close
   </button>
 </div>
@@ -1725,39 +1661,17 @@ footer p {
             <div class="cloaking-desc">Normal game portal view</div>
           </div>
         </div>
-      </div>
-    </div>
-    
-    <div class="settings-section">
-      <h3><i class="fas fa-tags"></i> Game Tagging</h3>
-      <div class="setting-item">
-        <div class="setting-label">
-          <span class="setting-name">Reset New Games</span>
-          <span class="setting-desc">Remove "NEW" tags from all games</span>
-        </div>
-        <div class="setting-control">
-          <button class="btn" id="reset-new-games">
-            <i class="fas fa-undo"></i> Reset
-          </button>
-        </div>
-      </div>
-      
-      <div class="tag-management">
-        <div class="setting-item">
-          <div class="setting-label">
-            <span class="setting-name">Custom Tags</span>
-            <span class="setting-desc">Add custom tags to games for organization</span>
+        
+        <div class="custom-cloak-container">
+          <div class="setting-item">
+            <div class="setting-label">
+              <span class="setting-name">Custom Cloak Name</span>
+              <span class="setting-desc">Set a custom name for the site</span>
+            </div>
           </div>
-        </div>
-        
-        <div class="tag-list" id="tag-list">
-          <!-- Tags will be added here -->
-        </div>
-        
-        <div class="tag-input-container">
-          <input type="text" id="tag-input" class="tag-input" placeholder="Enter a new tag...">
-          <button class="tag-add-btn" id="tag-add-btn">
-            <i class="fas fa-plus"></i> Add Tag
+          <input type="text" id="custom-cloak-input" class="custom-cloak-input" placeholder="Enter custom site name...">
+          <button class="custom-cloak-btn" id="custom-cloak-btn">
+            <i class="fas fa-magic"></i> Apply Custom Name
           </button>
         </div>
       </div>
@@ -1820,30 +1734,21 @@ footer p {
     <!-- Genre items will be dynamically inserted here -->
   </ul>
   
-  <div class="sidebar-ad">
-    <div class="sidebar-ad-label">Advertisement</div>
-    <div class="sidebar-ad-placeholder">
-      <i class="fas fa-ad"></i>
-      <div>Ad Space (300x250)</div>
-      <div style="font-size: clamp(0.65rem, 1vw, 0.75rem); margin-top: 5px;">Your ad could be here</div>
-    </div>
-  </div>
-  
-  <div class="sidebar-ad">
-    <div class="sidebar-ad-label">Sponsored</div>
-    <div class="sidebar-ad-placeholder">
-      <i class="fas fa-star"></i>
-      <div>Featured Game</div>
-      <div style="font-size: clamp(0.65rem, 1vw, 0.75rem); margin-top: 5px;">Promote your game</div>
-    </div>
-  </div>
-  
-  <div style="text-align: center; margin-top: clamp(15px, 3vh, 25px); padding: clamp(8px, 1.5vh, 12px); background: rgba(0,0,0,0.3); border-radius: var(--radius-small);">
-    <div style="color: var(--primary); margin-bottom: clamp(6px, 1.2vh, 8px); font-weight: 600; font-size: clamp(0.8rem, 1.2vw, 0.9rem);">
+  <div class="sidebar-stats">
+    <div class="stat-label">
       <i class="fas fa-fire"></i> Trending Now
     </div>
-    <div style="color: var(--text-secondary); font-size: clamp(0.75rem, 1.1vw, 0.85rem);">
+    <div class="stat-value">
       Slope, Drift Hunters, Run 3
+    </div>
+  </div>
+  
+  <div class="sidebar-stats">
+    <div class="stat-label">
+      <i class="fas fa-heart"></i> Favorites
+    </div>
+    <div class="stat-value" id="favorites-count">
+      0 Games
     </div>
   </div>
 </aside>
@@ -1895,16 +1800,6 @@ footer p {
   
   <!-- Main Content Area -->
   <div class="content" id="content">
-    <!-- Top Banner Ad (970x90) -->
-    <div class="top-banner-ad banner-ad">
-      <div class="banner-label">Top Banner Ad</div>
-      <div class="banner-placeholder">
-        <i class="fas fa-chart-line"></i>
-        <div>Ad Space (970x90)</div>
-        <div style="font-size: clamp(0.65rem, 1vw, 0.75rem); margin-top: 5px;">Premium top banner placement</div>
-      </div>
-    </div>
-    
     <div class="games-header">
       <div class="search-container">
         <i class="fas fa-search"></i>
@@ -1917,12 +1812,6 @@ footer p {
       <!-- Games will be dynamically inserted here -->
     </div>
     
-        
-    <!-- More Games (Row 2) -->
-    <div class="games-container" id="games-container-2">
-      <!-- More games will be inserted here after first row -->
-    </div>
-    
     <!-- Update Logs Section -->
     <section class="update-logs-section">
       <h2 class="update-logs-title">
@@ -1932,67 +1821,22 @@ footer p {
       <div class="update-log">
         <div class="update-log-header">
           <div class="update-date">
-            <i class="fas fa-calendar-alt"></i> December 15, 2023
+            <i class="fas fa-calendar-alt"></i> January 20, 2026
           </div>
-          <div class="update-count">+8 New Games</div>
+          <div class="update-count">New UI | NEW GAMES COME TMRW!</div>
         </div>
         <div class="update-games">
-          <strong>Added Games:</strong> Geometry Dash, Retro Bowl COLLEGE, OvO, Drift Hunters, Fire boy And Water Girl, Paper.io, Basketball Legends 2020, Basketball Stars
+          <strong>Added Games:</strong> Improved UI | Added: 
         </div>
         <div class="update-highlight">
           <div class="update-highlight-title">
-            <i class="fas fa-star"></i> Highlight: Geometry Dash
+            <i class="fas fa-star"></i> Highlight: New UI
           </div>
-          Rhythm-based action platformer with challenging levels and epic music!
+          Looks Much cleaner and will have reactive backgrounds soon.
         </div>
       </div>
-      
-      <div class="update-log">
-        <div class="update-log-header">
-          <div class="update-date">
-            <i class="fas fa-calendar-alt"></i> November 28, 2023
-          </div>
-          <div class="update-count">+6 New Games</div>
-        </div>
-        <div class="update-games">
-          <strong>Added Games:</strong> Cluster Rush, Bit Life, Stack, Crossy Roads, Poly Track, House Of Hazards
-        </div>
-        <div class="update-highlight">
-          <div class="update-highlight-title">
-            <i class="fas fa-star"></i> Highlight: Bit Life
-          </div>
-          Live a virtual life and make important decisions in this life simulation game!
-        </div>
-      </div>
-      
-      <div class="update-log">
-        <div class="update-log-header">
-          <div class="update-date">
-            <i class="fas fa-calendar-alt"></i> November 10, 2023
-          </div>
-          <div class="update-count">+12 New Games</div>
-        </div>
-        <div class="update-games">
-          <strong>Added Games:</strong> CSGO Clicker, Doodle Jump, Nut Simulator, Tiny Fishing, and 8 more classic games!
-        </div>
-        <div class="update-highlight">
-          <div class="update-highlight-title">
-            <i class="fas fa-tools"></i> Platform Update
-          </div>
-          Added new theme system with 5 different color schemes and improved mobile responsiveness.
-        </div>
       </div>
     </section>
-    
-    <!-- Footer Banner Ad (970x90) -->
-    <div class="footer-banner-ad banner-ad">
-      <div class="banner-label">Footer Banner Ad</div>
-      <div class="banner-placeholder">
-        <i class="fas fa-chart-line"></i>
-        <div>Ad Space (970x90)</div>
-        <div style="font-size: clamp(0.65rem, 1vw, 0.75rem); margin-top: 5px;">Bottom placement</div>
-      </div>
-    </div>
   </div>
 </div>
 
@@ -2199,7 +2043,8 @@ const GAMES = [
 // Define genres with icons
 const GENRES = [
   {id: "all", name: "All Games", icon: "fa-gamepad", count: GAMES.length},
-  {id: "new", name: "New Games", icon: "fa-rocket", count: 0},
+  {id: "favorites", name: "Favorites", icon: "fa-heart", count: 0},
+  {id: "new", name: "New Games", icon: "fa-rocket", count: GAMES.filter(g => g.new).length},
   {id: "arcade", name: "Arcade", icon: "fa-joystick", count: GAMES.filter(g => g.genre.includes("Arcade")).length},
   {id: "racing", name: "Racing", icon: "fa-car", count: GAMES.filter(g => g.genre.includes("Racing")).length},
   {id: "sports", name: "Sports", icon: "fa-football-ball", count: GAMES.filter(g => g.genre.includes("Sports")).length},
@@ -2249,13 +2094,70 @@ const UPDATE_LOGS = [
 let currentGenre = "all";
 let currentSearch = "";
 let favorites = new Set();
-let userTags = [];
 let cloakingEnabled = false;
 let cloakingMode = "none";
+let customCloakName = "";
 let settings = {
   theme: "midnight",
   autoSaveFavorites: true
 };
+
+// Reactive Dots Background
+function createDotsBackground() {
+  const container = document.getElementById('dots-background');
+  container.innerHTML = '';
+  
+  const dotCount = Math.floor((window.innerWidth * window.innerHeight) / 4000);
+  
+  for (let i = 0; i < dotCount; i++) {
+    const dot = document.createElement('div');
+    dot.className = 'dot';
+    
+    // Random properties for each dot
+    const size = Math.random() * 4 + 1;
+    const posX = Math.random() * 100;
+    const posY = Math.random() * 100;
+    const opacity = Math.random() * 0.4 + 0.1;
+    const duration = Math.random() * 20 + 10;
+    const delay = Math.random() * 5;
+    
+    dot.style.width = `${size}px`;
+    dot.style.height = `${size}px`;
+    dot.style.left = `${posX}%`;
+    dot.style.top = `${posY}%`;
+    dot.style.opacity = opacity;
+    dot.style.animationDuration = `${duration}s`;
+    dot.style.animationDelay = `${delay}s`;
+    dot.style.background = 'var(--dot-color)';
+    
+    container.appendChild(dot);
+  }
+}
+
+// Update dots on theme change
+function updateDotsTheme() {
+  const dots = document.querySelectorAll('.dot');
+  dots.forEach(dot => {
+    dot.style.background = 'var(--dot-color)';
+  });
+}
+
+// Notification System
+function showNotification(title, message, duration = 5000) {
+  const notification = document.getElementById('notification');
+  const notificationTitle = document.getElementById('notification-title');
+  const notificationContent = document.getElementById('notification-content');
+  
+  notificationTitle.textContent = title;
+  notificationContent.textContent = message;
+  
+  notification.classList.add('active');
+  
+  // Auto-hide after duration
+  setTimeout(() => {
+    notification.classList.remove('active');
+  }, duration);
+}
 
 // Cookie Functions
 function setCookie(name, value, days = 365) {
@@ -2292,12 +2194,7 @@ function loadSavedData() {
   const savedFavorites = getCookie('gamePortalFavorites');
   if (savedFavorites && Array.isArray(savedFavorites)) {
     favorites = new Set(savedFavorites);
-  }
-  
-  // Load tags
-  const savedTags = getCookie('gamePortalTags');
-  if (savedTags && Array.isArray(savedTags)) {
-    userTags = savedTags;
+    updateFavoritesCount();
   }
   
   // Load settings
@@ -2321,9 +2218,14 @@ function loadSavedData() {
   if (savedCloaking) {
     cloakingEnabled = savedCloaking.enabled || false;
     cloakingMode = savedCloaking.mode || "none";
+    customCloakName = savedCloaking.customName || "";
     
     if (document.getElementById('cloaking-enabled')) {
       document.getElementById('cloaking-enabled').checked = cloakingEnabled;
+    }
+    
+    if (document.getElementById('custom-cloak-input')) {
+      document.getElementById('custom-cloak-input').value = customCloakName;
     }
     
     updateCloakingUI();
@@ -2341,16 +2243,14 @@ function saveData() {
     setCookie('gamePortalFavorites', Array.from(favorites));
   }
   
-  // Save tags
-  setCookie('gamePortalTags', userTags);
-  
   // Save settings
   setCookie('gamePortalSettings', settings);
   
   // Save cloaking settings
   setCookie('gamePortalCloaking', {
     enabled: cloakingEnabled,
-    mode: cloakingMode
+    mode: cloakingMode,
+    customName: customCloakName
   });
 }
 
@@ -2358,6 +2258,9 @@ function saveData() {
 function applyTheme(theme) {
   document.body.setAttribute('data-theme', theme);
   settings.theme = theme;
+  
+  // Update dots theme
+  updateDotsTheme();
   
   // Update active theme option
   document.querySelectorAll('.theme-option').forEach(option => {
@@ -2374,23 +2277,24 @@ function applyCloaking(mode) {
   const titleElement = document.querySelector('.title');
   const headerContainer = document.querySelector('.header-container');
   
-  if (mode === "calculator") {
+  if (customCloakName && customCloakName.trim() !== "") {
+    titleElement.textContent = customCloakName;
+    document.title = customCloakName;
+  } else if (mode === "calculator") {
     titleElement.textContent = "CALCULATOR PRO";
     document.title = "Calculator Pro | Math Tools";
-    headerContainer.style.background = 'rgba(30, 30, 60, 0.95)';
   } else if (mode === "docs") {
     titleElement.textContent = "DOCUMENT EDITOR";
     document.title = "Document Editor | Text Tools";
-    headerContainer.style.background = 'rgba(40, 40, 80, 0.95)';
   } else if (mode === "research") {
     titleElement.textContent = "RESEARCH PORTAL";
     document.title = "Research Portal | Information Hub";
-    headerContainer.style.background = 'rgba(50, 30, 60, 0.95)';
   } else {
     titleElement.textContent = "FROSTS INC GAMES";
-    document.title = "IXL | Game Portal";
-    headerContainer.style.background = 'rgba(20, 20, 50, 0.95)';
+    document.title = "Frosts Inc | Game Portal";
   }
+  
+  headerContainer.style.background = 'rgba(20, 20, 50, 0.95)';
 }
 
 // Update cloaking UI
@@ -2404,54 +2308,38 @@ function updateCloakingUI() {
   });
 }
 
-// Update tag list display
-function updateTagList() {
-  const tagList = document.getElementById('tag-list');
-  tagList.innerHTML = userTags.map(tag => `
-    <div class="tag-item">
-      ${tag}
-      <button class="tag-remove" data-tag="${tag}">
-        <i class="fas fa-times"></i>
-      </button>
-    </div>
-  `).join('');
+// Update favorites count
+function updateFavoritesCount() {
+  const favoritesCount = document.getElementById('favorites-count');
+  const favoritesGenre = GENRES.find(g => g.id === "favorites");
   
-  // Add event listeners to remove buttons
-  document.querySelectorAll('.tag-remove').forEach(btn => {
-    btn.addEventListener('click', function() {
-      const tagToRemove = this.dataset.tag;
-      userTags = userTags.filter(t => t !== tagToRemove);
-      updateTagList();
-      saveData();
-    });
-  });
+  if (favoritesCount) {
+    favoritesCount.textContent = `${favorites.size} Games`;
+  }
+  
+  if (favoritesGenre) {
+    favoritesGenre.count = favorites.size;
+    const genreItem = document.querySelector('.genre-item[data-genre="favorites"] .genre-count');
+    if (genreItem) {
+      genreItem.textContent = favorites.size;
+    }
+  }
 }
 
-// Show update popup
-function showUpdatePopup() {
-  const updatePopup = document.getElementById('update-popup');
-  const updateContent = document.getElementById('update-content');
-  
+// Show update notification
+function showUpdateNotification() {
   const lastUpdate = localStorage.getItem('lastUpdateDate');
   const today = new Date().toDateString();
   
-  // Show popup if it's a new day or first visit
+  // Show notification if it's a new day or first visit
   if (!lastUpdate || lastUpdate !== today) {
-    updateContent.innerHTML = `
-      <p><strong>🎉 Settings Updated!</strong></p>
-      <p>New features added:</p>
-      <ul style="margin: 10px 0 10px 20px;">
-        <li>Custom Game Tagging System</li>
-        <li>Cloaking Options</li>
-        <li>Cookie-based Save System</li>
-        <li>Reset New Games Function</li>
-      </ul>
-      <p>Check out the Settings menu to explore new features!</p>
-    `;
-    
     setTimeout(() => {
-      updatePopup.classList.add('active');
-    }, 1500);
+      showNotification(
+        "🎉 Settings Updated!", 
+        "New features: Cloaking Options, Custom Site Names, and improved Favorites system!",
+        8000
+      );
+    }, 2000);
     
     // Store today's date
     localStorage.setItem('lastUpdateDate', today);
@@ -2465,7 +2353,7 @@ function initGenres() {
     <li class="genre-item ${genre.id === 'all' ? 'active' : ''} ${genre.id === 'new' ? 'new' : ''}" data-genre="${genre.id}">
       <i class="fas ${genre.icon} genre-icon"></i>
       <span class="genre-name">${genre.name}</span>
-      <span class="genre-count">${genre.count}</span>
+      <span class="genre-count">${genre.id === 'favorites' ? favorites.size : genre.count}</span>
     </li>
   `).join('');
   
@@ -2498,7 +2386,9 @@ function filterGames() {
   let filteredGames = GAMES;
   
   // Filter by genre
-  if (currentGenre === "new") {
+  if (currentGenre === "favorites") {
+    filteredGames = filteredGames.filter(game => favorites.has(game.title));
+  } else if (currentGenre === "new") {
     filteredGames = filteredGames.filter(game => game.new);
   } else if (currentGenre !== "all") {
     filteredGames = filteredGames.filter(game => 
@@ -2526,19 +2416,18 @@ function filterGames() {
 // Render games to the container
 function renderGames(gamesArray = GAMES) {
   const container = document.getElementById('games-container');
-  const container2 = document.getElementById('games-container-2');
   
-  // Clear containers
+  // Clear container
   container.innerHTML = '';
-  container2.innerHTML = '';
   
-  // Split games into two rows
-  const half = Math.ceil(gamesArray.length / 2);
-  const firstRowGames = gamesArray.slice(0, half);
-  const secondRowGames = gamesArray.slice(half);
+  // Remove the second games container element since we removed it from HTML
+  const container2 = document.getElementById('games-container-2');
+  if (container2) {
+    container2.remove();
+  }
   
-  // Render first row
-  container.innerHTML = firstRowGames.map(game => `
+  // Render all games in a single container
+  container.innerHTML = gamesArray.map(game => `
     <div class="game-card ${game.new ? 'new-game' : ''} ${favorites.has(game.title) ? 'favorited' : ''}" data-genres="${game.genre.join(',')}">
       <div class="card-image-container">
         <img class="card-image" src="${game.image}" alt="${game.title}" loading="lazy" onerror="this.src='thumbnails/comingsoon.png'">
@@ -2556,27 +2445,15 @@ function renderGames(gamesArray = GAMES) {
     </div>
   `).join('');
   
-  // Render second row (if there are games)
-  if (secondRowGames.length > 0) {
-    container2.innerHTML = secondRowGames.map(game => `
-      <div class="game-card ${game.new ? 'new-game' : ''} ${favorites.has(game.title) ? 'favorited' : ''}" data-genres="${game.genre.join(',')}">
-        <div class="card-image-container">
-          <img class="card-image" src="${game.image}" alt="${game.title}" loading="lazy" onerror="this.src='thumbnails/comingsoon.png'">
-        </div>
-        <div class="card-content">
-          <div class="game-title">${game.title}</div>
-          <div class="game-description">${game.description}</div>
-          <div class="genre-tags">
-            ${game.genre.map(g => `<span class="genre-tag">${g}</span>`).join('')}
-          </div>
-          <button class="play-btn" onclick="openGame('${game.link}', '${game.title}')">
-            <i class="fas fa-play"></i> PLAY
-          </button>
-        </div>
+  // If no games found, show message
+  if (gamesArray.length === 0) {
+    container.innerHTML = `
+      <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-secondary);">
+        <i class="fas fa-gamepad" style="font-size: 3rem; margin-bottom: 15px; opacity: 0.5;"></i>
+        <h3>No games found</h3>
+        <p>Try a different search or genre filter</p>
       </div>
-    `).join('');
-  } else {
-    container2.style.display = 'none';
+    `;
   }
 }
 
@@ -2646,39 +2523,41 @@ document.getElementById('close-settings').addEventListener('click', function() {
 
 document.getElementById('save-settings').addEventListener('click', function() {
   saveData();
-  alert('Settings saved successfully!');
-  document.getElementById('settings-modal').classList.remove('active');
+  showNotification("✅ Settings Saved", "Your settings have been saved successfully!");
+  setTimeout(() => {
+    document.getElementById('settings-modal').classList.remove('active');
+  }, 1000);
 });
 
 document.getElementById('reset-settings').addEventListener('click', function() {
   if (confirm('Are you sure you want to reset all settings to defaults?')) {
     // Clear cookies
     deleteCookie('gamePortalFavorites');
-    deleteCookie('gamePortalTags');
     deleteCookie('gamePortalSettings');
     deleteCookie('gamePortalCloaking');
     
     // Reset state
     favorites.clear();
-    userTags = [];
     settings = {
       theme: "midnight",
       autoSaveFavorites: true
     };
     cloakingEnabled = false;
     cloakingMode = "none";
+    customCloakName = "";
     
     // Reset UI
     document.getElementById('auto-save-favorites').checked = true;
     document.getElementById('cloaking-enabled').checked = false;
+    document.getElementById('custom-cloak-input').value = "";
     updateCloakingUI();
-    updateTagList();
     renderGames();
+    updateFavoritesCount();
     
     // Reset cloaking
     applyCloaking("none");
     
-    alert('All settings have been reset to defaults.');
+    showNotification("🔄 Settings Reset", "All settings have been reset to defaults.");
   }
 });
 
@@ -2689,7 +2568,7 @@ document.getElementById('cloaking-enabled').addEventListener('change', function(
   
   if (cloakingEnabled) {
     cloakingOptions.style.display = 'block';
-    if (cloakingMode !== "none") {
+    if (cloakingMode !== "none" || customCloakName) {
       applyCloaking(cloakingMode);
     }
   } else {
@@ -2709,40 +2588,19 @@ document.querySelectorAll('.cloaking-option').forEach(option => {
   });
 });
 
-// Reset new games
-document.getElementById('reset-new-games').addEventListener('click', function() {
-  if (confirm('Remove "NEW" tags from all games?')) {
-    // Reset all new flags
-    GAMES.forEach(game => game.new = false);
-    
-    // Update new games count
-    const newGamesCount = 0;
-    document.querySelector('.genre-item[data-genre="new"] .genre-count').textContent = newGamesCount;
-    
-    // Re-render games
-    renderGames();
-    filterGames();
-    
-    alert('All "NEW" tags have been removed.');
-  }
-});
-
-// Tag management
-document.getElementById('tag-add-btn').addEventListener('click', function() {
-  const tagInput = document.getElementById('tag-input');
-  const newTag = tagInput.value.trim();
+// Custom cloak name
+document.getElementById('custom-cloak-btn').addEventListener('click', function() {
+  const input = document.getElementById('custom-cloak-input');
+  customCloakName = input.value.trim();
   
-  if (newTag && !userTags.includes(newTag)) {
-    userTags.push(newTag);
-    updateTagList();
-    tagInput.value = '';
-    saveData();
-  }
-});
-
-document.getElementById('tag-input').addEventListener('keypress', function(e) {
-  if (e.key === 'Enter') {
-    document.getElementById('tag-add-btn').click();
+  if (customCloakName) {
+    cloakingMode = "custom";
+    updateCloakingUI();
+    
+    if (cloakingEnabled) {
+      applyCloaking("custom");
+      showNotification("🎭 Cloaking Applied", `Site now appears as: "${customCloakName}"`);
+    }
   }
 });
 
@@ -2751,8 +2609,9 @@ document.getElementById('clear-favorites').addEventListener('click', function() 
   if (confirm('Remove all games from favorites?')) {
     favorites.clear();
     renderGames();
+    updateFavoritesCount();
     saveData();
-    alert('All favorites have been cleared.');
+    showNotification("❤️ Favorites Cleared", "All favorites have been removed.");
   }
 });
 
@@ -2761,9 +2620,9 @@ document.getElementById('auto-save-favorites').addEventListener('change', functi
   settings.autoSaveFavorites = this.checked;
 });
 
-// Update popup close
-document.getElementById('update-close').addEventListener('click', function() {
-  document.getElementById('update-popup').classList.remove('active');
+// Notification close
+document.getElementById('notification-close').addEventListener('click', function() {
+  document.getElementById('notification').classList.remove('active');
 });
 
 // Game menu
@@ -2788,13 +2647,23 @@ function openGame(link, title) {
     iframe.src = link;
   } else {
     // Coming soon game
-    alert('This game is coming soon! Stay tuned for updates.');
+    showNotification("⏳ Coming Soon", "This game is coming soon! Stay tuned for updates.");
     return;
   }
   
   if (link !== '#') {
     menu.classList.add('active');
     document.body.style.overflow = 'hidden';
+    
+    // Update favorite button state
+    const favBtn = document.getElementById('fav-btn');
+    if (favorites.has(currentGameTitle)) {
+      favBtn.innerHTML = '<i class="fas fa-heart"></i> Favorited';
+      favBtn.style.background = 'linear-gradient(135deg, #ff0066, #ff0044)';
+    } else {
+      favBtn.innerHTML = '<i class="fas fa-heart"></i> Favorite';
+      favBtn.style.background = 'linear-gradient(135deg, #FFD700, #FFAA00)';
+    }
   }
 }
 
@@ -2824,14 +2693,17 @@ document.getElementById('fav-btn').onclick = function() {
       favorites.delete(currentGameTitle);
       this.innerHTML = '<i class="fas fa-heart"></i> Favorite';
       this.style.background = 'linear-gradient(135deg, #FFD700, #FFAA00)';
+      showNotification("❤️ Removed", `"${currentGameTitle}" removed from favorites`);
     } else {
       favorites.add(currentGameTitle);
       this.innerHTML = '<i class="fas fa-heart"></i> Favorited!';
       this.style.background = 'linear-gradient(135deg, #ff0066, #ff0044)';
+      showNotification("❤️ Added", `"${currentGameTitle}" added to favorites`);
     }
     
-    // Update the game card
+    // Update the game card and favorites count
     renderGames();
+    updateFavoritesCount();
     
     // Save favorites
     if (settings.autoSaveFavorites) {
@@ -2841,23 +2713,22 @@ document.getElementById('fav-btn').onclick = function() {
 };
 
 // TOS modal
-document.getElementById('tos-btn').onclick = function() {
+document.getElementById('tos-btn').addEventListener('click', function() {
   document.getElementById('tos-modal').classList.add('active');
-};
+});
 
-document.getElementById('tos-agree').onclick = function() {
+document.getElementById('tos-agree').addEventListener('click', function() {
   document.getElementById('tos-modal').classList.remove('active');
   localStorage.setItem('tosAgreed', 'true');
-};
+});
 
-document.getElementById('tos-disagree').onclick = function() {
+document.getElementById('tos-disagree').addEventListener('click', function() {
   document.getElementById('tos-modal').classList.remove('active');
-  alert('You must agree to the Terms of Service to use this platform.');
-  window.location.href = 'about:blank';
-};
+  showNotification("⚠️ Terms Required", "You must agree to the Terms of Service to use this platform.");
+});
 
 // Check if TOS was already agreed
-window.addEventListener('load', function() {
+function checkTOSAgreement() {
   const tosAgreed = localStorage.getItem('tosAgreed');
   if (!tosAgreed) {
     // Show TOS after a delay
@@ -2865,7 +2736,7 @@ window.addEventListener('load', function() {
       document.getElementById('tos-modal').classList.add('active');
     }, 2000);
   }
-});
+}
 
 // Close modals on escape
 document.addEventListener('keydown', function(e) {
@@ -2877,7 +2748,7 @@ document.addEventListener('keydown', function(e) {
     }
     document.getElementById('tos-modal').classList.remove('active');
     document.getElementById('settings-modal').classList.remove('active');
-    document.getElementById('update-popup').classList.remove('active');
+    document.getElementById('notification').classList.remove('active');
     document.getElementById('theme-options').classList.remove('active');
     
     // Close sidebar on mobile
@@ -2910,9 +2781,14 @@ document.getElementById('sidebar-toggle').addEventListener('click', toggleSideba
 
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
+  console.log('DOM loaded, initializing...');
+  
   // Set current year
   document.getElementById('currentYear').textContent = new Date().getFullYear();
   document.getElementById('totalGames').textContent = `${GAMES.length} Games Available`;
+  
+  // Create reactive dots background
+  createDotsBackground();
   
   // Load saved data
   loadSavedData();
@@ -2923,11 +2799,11 @@ document.addEventListener('DOMContentLoaded', function() {
   // Render games
   renderGames();
   
-  // Show update popup
-  showUpdatePopup();
+  // Show update notification
+  showUpdateNotification();
   
-  // Update tag list
-  updateTagList();
+  // Check TOS agreement
+  checkTOSAgreement();
   
   // Initialize sidebar based on screen size
   if (window.innerWidth > 992) {
@@ -2942,6 +2818,8 @@ document.addEventListener('DOMContentLoaded', function() {
       loadingScreen.style.display = 'none';
     }, 300);
   }, 1000);
+  
+  console.log('Initialization complete');
 });
 
 // Responsive sidebar handling
@@ -2969,6 +2847,9 @@ function handleResize() {
       }
     }
   }
+  
+  // Recreate dots background on resize
+  createDotsBackground();
 }
 
 // Listen for resize events
