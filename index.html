@@ -1817,6 +1817,22 @@ footer p {
       <h2 class="update-logs-title">
         <i class="fas fa-history"></i> Update Logs
       </h2>
+      <div class="update-log">
+        <div class="update-log-header">
+          <div class="update-date">
+            <i class="fas fa-calendar-alt"></i> Febuary 6, 2026
+          </div>
+          <div class="update-count">NEW GAMES!</div>
+        </div>
+        <div class="update-games">
+          <strong>Added Games:</strong> Level Devil, Boxing Random, Speed Stars, Ping Pong, Wrestle bros, Soccer Bros, Soccor Random, Vollyball Random.
+        </div>
+        <div class="update-highlight">
+          <div class="update-highlight-title">
+            <i class="fas fa-star"></i> Highlight: New games | 78 GAMES!
+          </div>
+          More Soon!.
+        </div>
       
       <div class="update-log">
         <div class="update-log-header">
@@ -1980,13 +1996,19 @@ footer p {
 <script>
 // Game data - RESET all "new" flags to false
 const GAMES = [
+  {title: "Soccer Bros", description: "Soccer", image: "thumbnails/soccerbros.jpg", link: "games/soccerbros/index.html", genre: ["Strategy", "Sports"], new: true},
+  {title: "Wrestle Bros", description: "Wrestling", image: "thumbnails/wrestlebros.jpg", link: "games/wrestlebros/index.html", genre: ["Strategy", "Sports"], new: true},
+  {title: "Speed Stars", description: "Track", image: "thumbnails/speedstars.jpg", link: "games/speedstars/index.html", genre: ["Strategy", "Sports"], new: true},
+  {title: "Ping Pong", description: "Ping Pong", image: "thumbnails/pingpongrandom.jpg", link: "games/pingpongrandom/index.html", genre: ["Strategy", "Sports"], new: true},
+  {title: "Soccer Random", description: "Soccer", image: "thumbnails/soccerrandom.jpg", link: "games/soccerrandom/index.html", genre: ["Strategy", "Sports"], new: true},
+  {title: "Volly Random", description: "VollyBall", image: "thumbnails/vollyrandom.jpg", link: "games/vollyrandom/index.html", genre: ["Strategy", "Sports"], new: true},
   {title: "Level Devil", description: "Hard/Fun game", image: "thumbnails/leveldevil.jpg", link: "games/leveldevil/index.html", genre: ["Strategy"], new: true},
   {title: "Boxing Random", description: "Boxing", image: "thumbnails/boxingrandom.jpg", link: "games/boxingrandom/index.html", genre: ["Strategy", "Racing"], new: true},
   {title: "Kart Bros", description: "Karts", image: "thumbnails/kartbros.jpg", link: "games/kartbros/index.html", genre: ["Strategy", "Racing"], new: false},
   {title: "8 Ball Pool", description: "8Ball", image: "thumbnails/8ballpool.jpg", link: "games/8ballpool/index.html", genre: ["Strategy", "Simulator"], new: false},
   {title: "Crazy Cattle 3D", description: "Cattle", image: "thumbnails/crazycattle3d.jpg", link: "games/crazycattle3d/index.html", genre: ["Strategy", "Simulator"], new: false},
   {title: "We Become What We Behold", description: "Dino Game", image: "thumbnails/wbwwb.jpg", link: "games/webecomewhatwebehold/index.html", genre: ["Strategy", "Simulator"], new: false},
-  {title: "Chrome Dino", description: "Dino Game", image: "thumbnails/chromedino.jpg", link: "games/chromedino/index.html", genre: ["Strategy", "Platformer"], new: true},
+  {title: "Chrome Dino", description: "Dino Game", image: "thumbnails/chromedino.jpg", link: "games/chromedino/index.html", genre: ["Strategy", "Platformer"], new: false},
   {title: "Stickman hook", description: "Stickman", image: "thumbnails/stickmanhook.jpg", link: "games/stickman-hook/index.html", genre: ["Puzzle", "Strategy", "Platformer"], new: false},
   {title: "Moto 3XM", description: "Motocycle", image: "thumbnails/moto3xm.jpg", link: "games/moto3xm/index.html", genre: ["Racing", "Sports"], new: false},
   {title: "Moto 3XM 2", description: "Motocycle", image: "thumbnails/moto3xm2.jpg", link: "games/moto3xm2/index.html", genre: ["Racing", "Sports"], new: false},
@@ -1994,8 +2016,8 @@ const GAMES = [
   {title: "Snow Rider 3D", description: "Snow Rider", image: "thumbnails/snowrider3d.jpg", link: "games/snowrider3d/index.html", genre: ["Racing", "Sports"], new: false},
   {title: "Mountain Bike Racer", description: "HTML", image: "thumbnails/mountainbikeracer.jpg", link: "games/mountainbikeracer/index.html", genre: ["Puzzle", "Adventure", "Racing"], new: false},
   {title: "Portal 2D", description: "USING FLASH/Ruffle!", image: "thumbnails/portal2d.jpg", link: "games/ruffle/index.html?game=Portal_wcs2", genre: ["Puzzle", "Adventure"], new: false},
-  {title: "Learn To Fly", description: "USING FLASH/Ruffle!", image: "thumbnails/l2f.jpg", link: "games/ruffle/index.html?game=learn-to-fly-3789", genre: ["Puzzle", "Adventure", "Arcade", "Action"], new: true},
-  {title: "Learn To Fly 2", description: "USING FLASH/Ruffle!", image: "thumbnails/l2f2.jpg", link: "games/ruffle/index.html?game=learn-to-fly-2-11967", genre: ["Puzzle", "Adventure", "Arcade", "Action"], new: true},
+  {title: "Learn To Fly", description: "USING FLASH/Ruffle!", image: "thumbnails/l2f.jpg", link: "games/ruffle/index.html?game=learn-to-fly-3789", genre: ["Puzzle", "Adventure", "Arcade", "Action"], new: false},
+  {title: "Learn To Fly 2", description: "USING FLASH/Ruffle!", image: "thumbnails/l2f2.jpg", link: "games/ruffle/index.html?game=learn-to-fly-2-11967", genre: ["Puzzle", "Adventure", "Arcade", "Action"], new: false},
   {title: "Jack Smith", description: "USING FLASH/Ruffle!", image: "thumbnails/jacksmith.jpg", link: "games/ruffle/index.html?game=jacksmith", genre: ["Adventure", "Crafting"], new: false},
   {title: "Run 2", description: "USING FLASH/Ruffle!", image: "thumbnails/run2.jpg", link: "games/ruffle/index.html?game=run2", genre: ["Platformer", "Arcade"], new: false},
   {title: "Run 3", description: "USING FLASH/Ruffle!", image: "thumbnails/run3.jpg", link: "games/ruffle/index.html?game=run3-new", genre: ["Platformer", "Arcade"], new: false},
