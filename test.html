@@ -31,8 +31,83 @@
     --radius-md: 16px;
     --radius-sm: 12px;
     --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    --animated-gradient-1: #0b0c15;
+    --animated-gradient-2: #1a1c2b;
+    --animated-speed: 15s;
   }
 
+  /* theme variants (only background changes, surface stays dark) */
+  body.theme-light {
+    --bg: #eef2f6;
+    --surface: #ffffff;
+    --surface-light: #f0f3f8;
+    --text-primary: #1a1e2b;
+    --text-secondary: #4a4f66;
+    --border: #d0d7e7;
+    --shadow-lg: 0 25px 50px -12px rgba(0,0,0,0.2);
+  }
+  body.theme-neon {
+    --bg: #0d0b1a;
+    --surface: #16112b;
+    --surface-light: #221b3a;
+    --primary: #00ff9f;
+    --primary-glow: rgba(0,255,159,0.3);
+    --secondary: #ff00c8;
+    --accent: #ffb347;
+    --border: #3f2e6b;
+  }
+  body.theme-midnight {
+    --bg: #0b0c15;
+    --surface: #14161f;
+    --surface-light: #1e212e;
+    --primary: #6366f1;
+    --border: #2a2e3f;
+  }
+  body.theme-ocean {
+    --bg: #0a1929;
+    --surface: #0f2744;
+    --surface-light: #1c3a5e;
+    --primary: #4ecdc4;
+    --primary-glow: rgba(78,205,196,0.4);
+    --secondary: #ff6b6b;
+    --accent: #ffe66d;
+    --border: #2b4b6f;
+  }
+  /* Animated backgrounds (only for themes with animation) */
+  body.theme-neon::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 30% 50%, #6b21a5, #0b0d1e 70%);
+    animation: drift 18s infinite alternate;
+    z-index: -2;
+  }
+  body.theme-ocean::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(125deg, #0b2b44, #1b506e, #0a3442);
+    background-size: 300% 300%;
+    animation: wave 20s ease infinite;
+    z-index: -2;
+  }
+  @keyframes drift {
+    0% { transform: scale(1) translate(0,0); opacity:0.7; }
+    100% { transform: scale(1.3) translate(3%,2%); opacity:1; }
+  }
+  @keyframes wave {
+    0% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+    100% { background-position: 0% 0%; }
+  }
+
+  /* rest same (I'll keep loading etc) */
   body {
     background: var(--bg);
     color: var(--text-primary);
@@ -40,6 +115,8 @@
     line-height: 1.5;
     min-height: 100vh;
     overflow-x: hidden;
+    position: relative;
+    transition: background-color 0.4s, color 0.2s;
   }
 
   /* ===== COOL LOADING ANIMATION ===== */
@@ -579,9 +656,50 @@
     border-radius: 40px;
     font-weight: 600;
   }
+
+  /* ----- MODAL TOS REDESIGN (clean) ----- */
+  #tos-modal .tos-content {
+    background: var(--surface);
+    color: var(--text-primary);
+    max-width: 750px;
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+  }
+  #tos-modal h2 { font-size: 2rem; margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
+  #tos-modal h3 { font-size: 1.3rem; margin: 1.2rem 0 0.8rem; display: flex; gap: 0.6rem; align-items: center; color: var(--primary); }
+  #tos-modal .tos-section { background: var(--surface-light); border-radius: var(--radius-md); padding: 1.2rem; margin-bottom: 1.5rem; border-left: 4px solid var(--primary); }
+  #tos-modal .tos-warning { background: rgba(244,63,94,0.1); border-left: 4px solid var(--accent); padding: 1.2rem; border-radius: var(--radius-md); margin-bottom: 1.5rem; }
+  #tos-modal ul { padding-left: 1.5rem; margin-top: 0.6rem; }
+  #tos-modal li { margin-bottom: 0.3rem; color: var(--text-secondary); }
+  #tos-modal .tos-buttons { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem; }
+  .tos-button { padding: 0.9rem 2rem; border-radius: 60px; border: none; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.6rem; transition: var(--transition); font-size: 1rem; }
+  .tos-button.agree { background: var(--primary); color: white; }
+  .tos-button.disagree { background: transparent; border: 1px solid var(--border); color: var(--text-primary); }
+  .tos-button.agree:hover { filter: brightness(1.1); transform: scale(1.02); }
+  .tos-button.disagree:hover { background: var(--accent); border-color: var(--accent); color: white; }
+
+  #notification {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--surface);
+    border-left: 4px solid var(--primary);
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+    box-shadow: var(--shadow-lg);
+    z-index: 3000;
+    display: none;
+    align-items: center;
+    gap: 16px;
+  }
 </style>
 </head>
-<body>
+<body class="theme-midnight">
   <!-- COOL LOADING SCREEN (SVG animation) -->
   <div id="loading-screen">
     <div class="loader-content">
@@ -616,11 +734,11 @@
       <div class="theme-selector" style="position:relative;">
         <button class="btn" id="theme-toggle"><i class="fas fa-palette"></i> Theme</button>
         <div id="theme-options" style="position:absolute; top:60px; right:0; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:8px; display:none; flex-direction:column; gap:4px; min-width:150px; z-index:200;">
-          <div class="theme-option" data-theme="dark" style="padding:8px 12px; border-radius:8px; cursor:pointer;">🌙 Dark</div>
-          <div class="theme-option" data-theme="light" style="padding:8px 12px; border-radius:8px; cursor:pointer;">☀️ Light</div>
-          <div class="theme-option" data-theme="neon" style="padding:8px 12px; border-radius:8px; cursor:pointer;">💡 Neon</div>
-          <div class="theme-option active" data-theme="midnight" style="padding:8px 12px; border-radius:8px; cursor:pointer;">🌃 Midnight</div>
-          <div class="theme-option" data-theme="ocean" style="padding:8px 12px; border-radius:8px; cursor:pointer;">🌊 Ocean</div>
+          <div class="theme-option" data-theme="dark" style="padding:8px 12px; border-radius:8px; cursor:pointer;">🌙 Dark (static)</div>
+          <div class="theme-option" data-theme="light" style="padding:8px 12px; border-radius:8px; cursor:pointer;">☀️ Light (static)</div>
+          <div class="theme-option" data-theme="neon" style="padding:8px 12px; border-radius:8px; cursor:pointer;">💡 Neon (animated)</div>
+          <div class="theme-option active" data-theme="midnight" style="padding:8px 12px; border-radius:8px; cursor:pointer;">🌃 Midnight (static)</div>
+          <div class="theme-option" data-theme="ocean" style="padding:8px 12px; border-radius:8px; cursor:pointer;">🌊 Ocean (animated)</div>
         </div>
       </div>
     </div>
@@ -659,6 +777,13 @@
         <h2 class="update-title"><i class="fas fa-history" style="color:var(--primary);"></i> What's New</h2>
         <div class="update-log">
           <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+            <span><i class="fas fa-calendar"></i> February 17, 2026</span>
+            <span class="badge-new" style="position:static;">MAJOR</span>
+          </div>
+          <p><strong>Website Redesign and Terms Update</strong> – Completely redesigned Terms of Service with detailed sections, new theme options with animated backgrounds, improved "Open in New Tab" functionality, and additional settings for cloaking and favorites.</p>
+        </div>
+        <div class="update-log">
+          <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
             <span><i class="fas fa-calendar"></i> February 6, 2026</span>
             <span class="badge-new" style="position:static;">+13 GAMES</span>
           </div>
@@ -682,14 +807,14 @@
     <p>Frosts Inc Game Portal © <span id="currentYear"></span> — curated with <i class="fas fa-heart" style="color:var(--accent);"></i></p>
   </footer>
 
-  <!-- MODALS / SETTINGS / TOS / GAME MENU (same structure, simplified) -->
+  <!-- MODALS / SETTINGS / TOS / GAME MENU -->
   <div id="settings-modal" class="modal">
     <div class="modal-content">
       <h2 style="margin-bottom:1rem;"><i class="fas fa-cog"></i> Settings</h2>
       <div class="settings-grid">
-        <div><label>Cloaking</label> <input type="checkbox" id="cloaking-enabled"></div>
-        <div><label>Auto-save Favorites</label> <input type="checkbox" id="auto-save-favorites" checked></div>
-        <div><button class="btn" id="clear-favorites"><i class="fas fa-trash"></i> Clear Favorites</button></div>
+        <div style="display:flex; align-items:center; gap:12px;"><label>Cloaking Enabled</label> <input type="checkbox" id="cloaking-enabled"></div>
+        <div style="display:flex; align-items:center; gap:12px;"><label>Auto-save Favorites</label> <input type="checkbox" id="auto-save-favorites" checked></div>
+        <div><button class="btn" id="clear-favorites" style="width:100%;"><i class="fas fa-trash"></i> Clear Favorites</button></div>
       </div>
       <h3>Cloaking presets</h3>
       <div class="settings-grid" id="cloaking-options">
@@ -706,110 +831,108 @@
     </div>
   </div>
 
-  <div class="tos-content">
-    <h2>Terms of Service & Privacy Policy</h2>
-    
-    <div class="tos-section">
-      <h3><i class="fas fa-exclamation-triangle"></i> Important Notice</h3>
-      <p>Welcome to Frosts Inc Game Portal. By accessing and using this website, you acknowledge that you have read, understood, and agree to be bound by the following Terms of Service. If you do not agree with these terms, please discontinue use immediately.</p>
-    </div>
-    
-    <div class="tos-section">
-      <h3><i class="fas fa-gavel"></i> Legal Disclaimer</h3>
-      <p>Frosts Inc Game Portal ("we", "our", or "us") operates as an independent gaming platform. We want to make clear that:</p>
-      <ul>
-        <li>We do not claim ownership of any games hosted on this platform</li>
-        <li>All games are the intellectual property of their respective copyright holders</li>
-        <li>This portal is not affiliated with, endorsed by, or connected to any educational institutions</li>
-        <li>We do not host any illegal content and comply with DMCA takedown requests</li>
-      </ul>
-    </div>
-    
-    <div class="tos-section">
-      <h3><i class="fas fa-user"></i> User Responsibilities</h3>
-      <p>By using this service, you agree to:</p>
-      <ul>
-        <li>Use the platform responsibly and legally</li>
-        <li>Not use the service during school instructional time without proper authorization</li>
-        <li>Respect the intellectual property rights of game developers</li>
-        <li>Not attempt to bypass security measures or hack the platform</li>
-        <li>Not upload or distribute malicious content</li>
-        <li>Be at least 13 years of age (COPPA compliance)</li>
-      </ul>
-    </div>
-    
-    <div class="tos-section">
-      <h3><i class="fas fa-shield-alt"></i> Privacy & Data Collection</h3>
-      <p>We value your privacy. Our data practices include:</p>
-      <ul>
-        <li>We do not collect personal information without consent</li>
-        <li>Basic analytics are collected anonymously for service improvement</li>
-        <li>Cookies may be used for functionality and preferences</li>
-        <li>We do not sell or share user data with third parties</li>
-        <li>External games may have their own privacy policies</li>
-      </ul>
-    </div>
-    
-    <div class="tos-section">
-      <h3><i class="fas fa-gamepad"></i> Game Content Disclaimer</h3>
-      <p>Regarding the games available on this platform:</p>
-      <ul>
-        <li>Games are provided "as is" without warranty of any kind</li>
-        <li>We are not responsible for game content, ads, or external links</li>
-        <li>Some games may contain advertisements from third parties</li>
-        <li>Game availability may change without notice</li>
-        <li>We do not guarantee game functionality or compatibility</li>
-      </ul>
-    </div>
-    
-    <div class="tos-warning">
-      <h4><i class="fas fa-ban"></i> Prohibited Activities</h4>
-      <p>Users are strictly prohibited from:</p>
-      <ul>
-        <li>Using automated scripts or bots to access the service</li>
-        <li>Attempting to disrupt service availability (DDoS attacks)</li>
-        <li>Reverse engineering or decompiling platform code</li>
-        <li>Using the platform for any illegal activities</li>
-        <li>Sharing inappropriate or harmful content</li>
-      </ul>
-    </div>
-    
-    <div class="tos-section">
-      <h3><i class="fas fa-balance-scale"></i> Limitation of Liability</h3>
-      <p>To the fullest extent permitted by law, Frosts Inc Game Portal shall not be liable for:</p>
-      <ul>
-        <li>Any direct, indirect, incidental, or consequential damages</li>
-        <li>Loss of data, profits, or business opportunities</li>
-        <li>Game malfunctions or compatibility issues</li>
-        <li>Content provided by third-party game developers</li>
-        <li>Unauthorized access to user information</li>
-      </ul>
-    </div>
-    
-    <div class="tos-section">
-      <h3><i class="fas fa-sync-alt"></i> Changes to Terms</h3>
-      <p>We reserve the right to modify these Terms of Service at any time. Users will be notified of significant changes. Continued use of the platform constitutes acceptance of updated terms.</p>
-    </div>
-    
-    <div class="tos-section">
-      <h3><i class="fas fa-question-circle"></i> Contact & Support</h3>
-      <p>For questions, concerns, or takedown requests:</p>
-      <ul>
-        <li>Report Issues: Use the in-platform reporting system</li>
-        <li>DMCA: Contact for copyright infringement claims</li>
-      </ul>
-    </div>
-    
-    <div class="tos-buttons">
-      <button class="tos-button agree" id="tos-agree">
-        <i class="fas fa-check-circle"></i> I Understand & Agree
-      </button>
-      <button class="tos-button disagree" id="tos-disagree">
-        <i class="fas fa-times-circle"></i> I Disagree
-      </button>
+  <!-- REDESIGNED TOS MODAL -->
+  <div id="tos-modal" class="modal">
+    <div class="tos-content">
+      <h2><i class="fas fa-file-contract"></i> Terms of Service & Privacy Policy</h2>
+      
+      <div class="tos-section">
+        <h3><i class="fas fa-exclamation-triangle"></i> Important Notice</h3>
+        <p>Welcome to Frosts Inc Game Portal. By accessing and using this website, you acknowledge that you have read, understood, and agree to be bound by the following Terms of Service. If you do not agree with these terms, please discontinue use immediately.</p>
+      </div>
+      
+      <div class="tos-section">
+        <h3><i class="fas fa-gavel"></i> Legal Disclaimer</h3>
+        <p>Frosts Inc Game Portal ("we", "our", or "us") operates as an independent gaming platform. We want to make clear that:</p>
+        <ul>
+          <li>We do not claim ownership of any games hosted on this platform</li>
+          <li>All games are the intellectual property of their respective copyright holders</li>
+          <li>This portal is not affiliated with, endorsed by, or connected to any educational institutions</li>
+          <li>We do not host any illegal content and comply with DMCA takedown requests</li>
+        </ul>
+      </div>
+      
+      <div class="tos-section">
+        <h3><i class="fas fa-user"></i> User Responsibilities</h3>
+        <p>By using this service, you agree to:</p>
+        <ul>
+          <li>Use the platform responsibly and legally</li>
+          <li>Not use the service during school instructional time without proper authorization</li>
+          <li>Respect the intellectual property rights of game developers</li>
+          <li>Not attempt to bypass security measures or hack the platform</li>
+          <li>Not upload or distribute malicious content</li>
+          <li>Be at least 13 years of age (COPPA compliance)</li>
+        </ul>
+      </div>
+      
+      <div class="tos-section">
+        <h3><i class="fas fa-shield-alt"></i> Privacy & Data Collection</h3>
+        <p>We value your privacy. Our data practices include:</p>
+        <ul>
+          <li>We do not collect personal information without consent</li>
+          <li>Basic analytics are collected anonymously for service improvement</li>
+          <li>Cookies may be used for functionality and preferences</li>
+          <li>We do not sell or share user data with third parties</li>
+          <li>External games may have their own privacy policies</li>
+        </ul>
+      </div>
+      
+      <div class="tos-section">
+        <h3><i class="fas fa-gamepad"></i> Game Content Disclaimer</h3>
+        <p>Regarding the games available on this platform:</p>
+        <ul>
+          <li>Games are provided "as is" without warranty of any kind</li>
+          <li>We are not responsible for game content, ads, or external links</li>
+          <li>Some games may contain advertisements from third parties</li>
+          <li>Game availability may change without notice</li>
+          <li>We do not guarantee game functionality or compatibility</li>
+        </ul>
+      </div>
+      
+      <div class="tos-warning">
+        <h4><i class="fas fa-ban"></i> Prohibited Activities</h4>
+        <p>Users are strictly prohibited from:</p>
+        <ul>
+          <li>Using automated scripts or bots to access the service</li>
+          <li>Attempting to disrupt service availability (DDoS attacks)</li>
+          <li>Reverse engineering or decompiling platform code</li>
+          <li>Using the platform for any illegal activities</li>
+          <li>Sharing inappropriate or harmful content</li>
+        </ul>
+      </div>
+      
+      <div class="tos-section">
+        <h3><i class="fas fa-balance-scale"></i> Limitation of Liability</h3>
+        <p>To the fullest extent permitted by law, Frosts Inc Game Portal shall not be liable for:</p>
+        <ul>
+          <li>Any direct, indirect, incidental, or consequential damages</li>
+          <li>Loss of data, profits, or business opportunities</li>
+          <li>Game malfunctions or compatibility issues</li>
+          <li>Content provided by third-party game developers</li>
+          <li>Unauthorized access to user information</li>
+        </ul>
+      </div>
+      
+      <div class="tos-section">
+        <h3><i class="fas fa-sync-alt"></i> Changes to Terms</h3>
+        <p>We reserve the right to modify these Terms of Service at any time. Users will be notified of significant changes. Continued use of the platform constitutes acceptance of updated terms.</p>
+      </div>
+      
+      <div class="tos-section">
+        <h3><i class="fas fa-question-circle"></i> Contact & Support</h3>
+        <p>For questions, concerns, or takedown requests:</p>
+        <ul>
+          <li>Report Issues: Use the in-platform reporting system</li>
+          <li>DMCA: Contact for copyright infringement claims</li>
+        </ul>
+      </div>
+      
+      <div class="tos-buttons">
+        <button class="tos-button agree" id="tos-agree"><i class="fas fa-check-circle"></i> I Understand & Agree</button>
+        <button class="tos-button disagree" id="tos-disagree"><i class="fas fa-times-circle"></i> I Disagree</button>
+      </div>
     </div>
   </div>
-</div>
 
   <div id="game-menu">
     <iframe id="game-frame" allowfullscreen></iframe>
@@ -822,101 +945,34 @@
   </div>
 
   <!-- NOTIFICATION (toast) -->
-  <div id="notification" style="position:fixed; bottom:24px; right:24px; background:var(--surface); border-left:4px solid var(--primary); border-radius:var(--radius-sm); padding:1rem; box-shadow:var(--shadow-lg); z-index:3000; display:none; align-items:center; gap:16px;">
-    <span id="notification-title" style="font-weight:600;">Hi</span>
+  <div id="notification">
+    <span id="notification-title" style="font-weight:600;"></span>
     <span id="notification-content"></span>
-    <button id="notification-close" style="background:none; border:none; color:white;">✕</button>
+    <button id="notification-close" style="background:none; border:none; color:var(--text-primary);">✕</button>
   </div>
 
   <script>
-    // --- GAME DATA (shortened for brevity, but functional) ---
+    // --- GAME DATA (full list) ---
     const GAMES = [
-  {title: "Block Blast", description: "Blocks", image: "thumbnails/IMG_4569.jpeg", link: "games/blockblast/index.html", genre: ["Strategy"], new: true},
-  {title: "Hill Climb Racer (Coming Soon)", description: "Race", image: "thumbnails/IMG_4570.jpeg", link: "games/hillclimb/index.html", genre: ["Strategy"], new: true},
-  {title: "Eggy Car", description: "Eggs", image: "thumbnails/IMG_4568.jpeg", link: "games/eggycar/index.html", genre: ["Strategy"], new: true},
-  {title: "Worlds Hardest Game", description: "hard", image: "thumbnails/IMG_4556.jpeg", link: "games/worldshardestgame/index.html", genre: ["Strategy"], new: true},
-  {title: "Golf Battel", description: "golf", image: "thumbnails/Golfbattel.jpg", link: "games/golfbattel/index.html", genre: ["Strategy", "Sports"], new: true},
-  {title: "Google Baseball", description: "baseball", image: "thumbnails/googlebaseball.jpg", link: "games/googlebaseball/index.html", genre: ["Strategy", "Sports"], new: true},
-  {title: "Geometry Dash SUB ZERO", description: "Sub Zero", image: "thumbnails/geometrydashsubzero.jpg", link: "games/geometrydashsubzero/index.html", genre: ["Strategy", "Sports"], new: true},
-  {title: "Slither.io", description: "Slither", image: "thumbnails/slitherio.jpg", link: "games/slitherio/index.html", genre: ["Strategy", "Sports"], new: true},
-  {title: "Sand Box City", description: "Sand Box", image: "thumbnails/sandboxcity.jpg", link: "games/Sandboxcity/index.html", genre: ["Strategy", "Sports"], new: true},
-  {title: "Soccer Bros", description: "Soccer", image: "thumbnails/Soccerbros.jpg", link: "games/soccerbros/index.html", genre: ["Strategy", "Sports"], new: true},
-  {title: "Wrestle Bros", description: "Wrestling", image: "thumbnails/wrestlebros.jpg", link: "games/wrestlebros/index.html", genre: ["Strategy", "Sports"], new: true},
-  {title: "Ping Pong", description: "Ping Pong", image: "thumbnails/pingpongrandom.jpg", link: "games/PingPongRandom/index.html", genre: ["Strategy", "Sports"], new: true},
-  {title: "Soccer Random", description: "Soccer", image: "thumbnails/Soccerrandom.jpg", link: "games/soccerrandom/index.html", genre: ["Strategy", "Sports"], new: true},
-  {title: "Volly Random", description: "VollyBall", image: "thumbnails/Vollyrandom.jpg", link: "games/VollyRandom/index.html", genre: ["Strategy", "Sports"], new: true},
-  {title: "Level Devil", description: "Hard/Fun game", image: "thumbnails/leveldevil.jpg", link: "games/leveldevil/index.html", genre: ["Strategy"], new: true},
-  {title: "Boxing Random", description: "Boxing", image: "thumbnails/boxingrandom.jpg", link: "games/boxingrandom/index.html", genre: ["Strategy", "Racing"], new: true},
-  {title: "Kart Bros", description: "Karts", image: "thumbnails/kartbros.jpg", link: "games/kartbros/index.html", genre: ["Strategy", "Racing"], new: false},
-  {title: "8 Ball Pool", description: "8Ball", image: "thumbnails/8ballpool.jpg", link: "games/8ballpool/index.html", genre: ["Strategy", "Simulator"], new: false},
-  {title: "Crazy Cattle 3D", description: "Cattle", image: "thumbnails/crazycattle3d.jpg", link: "games/crazycattle3d/index.html", genre: ["Strategy", "Simulator"], new: false},
-  {title: "We Become What We Behold", description: "Dino Game", image: "thumbnails/wbwwb.jpg", link: "games/webecomewhatwebehold/index.html", genre: ["Strategy", "Simulator"], new: false},
-  {title: "Chrome Dino", description: "Dino Game", image: "thumbnails/chromedino.jpg", link: "games/chromedino/index.html", genre: ["Strategy", "Platformer"], new: false},
-  {title: "Stickman hook", description: "Stickman", image: "thumbnails/stickmanhook.jpg", link: "games/stickman-hook/index.html", genre: ["Puzzle", "Strategy", "Platformer"], new: false},
-  {title: "Moto 3XM", description: "Motocycle", image: "thumbnails/moto3xm.jpg", link: "games/motox3m/index.html", genre: ["Racing", "Sports"], new: false},
-  {title: "Moto 3XM 2", description: "Motocycle", image: "thumbnails/moto3xm2.jpg", link: "games/moto3xm2/index.html", genre: ["Racing", "Sports"], new: false},
-  {title: "Moto 3XM 3", description: "Motocycle", image: "thumbnails/moto3xm3.jpg", link: "games/moto3xm3/index.html", genre: ["Racing", "Sports"], new: false},
-  {title: "Snow Rider 3D", description: "Snow Rider", image: "thumbnails/snowrider3d.jpg", link: "games/snowrider3d/index.html", genre: ["Racing", "Sports"], new: false},
-  {title: "Mountain Bike Racer", description: "HTML", image: "thumbnails/mountainbikeracer.jpg", link: "games/mountainbikeracer/index.html", genre: ["Puzzle", "Adventure", "Racing"], new: false},
-  {title: "Portal 2D", description: "USING FLASH/Ruffle!", image: "thumbnails/portal2d.jpg", link: "games/ruffle/index.html?game=Portal_wcs2", genre: ["Puzzle", "Adventure"], new: false},
-  {title: "Learn To Fly", description: "USING FLASH/Ruffle!", image: "thumbnails/l2f.jpg", link: "games/ruffle/index.html?game=learn-to-fly-3789", genre: ["Puzzle", "Adventure", "Arcade", "Action"], new: false},
-  {title: "Learn To Fly 2", description: "USING FLASH/Ruffle!", image: "thumbnails/l2f2.jpg", link: "games/ruffle/index.html?game=learn-to-fly-2-11967", genre: ["Puzzle", "Adventure", "Arcade", "Action"], new: false},
-  {title: "Jack Smith", description: "USING FLASH/Ruffle!", image: "thumbnails/jacksmith.jpg", link: "games/ruffle/index.html?game=jacksmith", genre: ["Adventure", "Crafting"], new: false},
-  {title: "Run 2", description: "USING FLASH/Ruffle!", image: "thumbnails/run2.jpg", link: "games/ruffle/index.html?game=run2", genre: ["Platformer", "Arcade"], new: false},
-  {title: "Run 3", description: "USING FLASH/Ruffle!", image: "thumbnails/run3.jpg", link: "games/ruffle/index.html?game=run3-new", genre: ["Platformer", "Arcade"], new: false},
-  {title: "Awesome Tanks 2", description: "USING FLASH/Ruffle!", image: "thumbnails/at2.jpg", link: "games/ruffle/index.html?game=awesome_tanks_2", genre: ["Action", "Shooter"], new: false},
-  {title: "Ballons Tower Defense 5", description: "USING FLASH/Ruffle!", image: "thumbnails/btd5.jpg", link: "games/ruffle/index.html?game=bloonstd5", genre: ["Strategy", "Tower Defense"], new: false},
-  {title: "Cut The Rope", description: "cut the rope", image: "thumbnails/cuttherope.jpg", link: "games/cuttherope/index.html", genre: ["Puzzle", "Casual"], new: false},
-  {title: "RaftWars", description: "USING FLASH/Ruffle!", image: "thumbnails/raftwars1.jpg", link: "games/ruffle/index.html?game=raftwars", genre: ["Action", "Shooter"], new: false},
-  {title: "Bloxorz", description: "USING FLASH/Ruffle!", image: "thumbnails/bloxorz.jpg", link: "games/ruffle/index.html?game=bloxorz", genre: ["Puzzle", "Strategy"], new: false},
-  {title: "Cut The Rope HOLIDAY", description: "cut the rope", image: "thumbnails/cuttheropeh.jpg", link: "games/cuttheropeholiday/index.html", genre: ["Puzzle", "Casual"], new: false},
-  {title: "Baseball Bros", description: "Baseball :)", image: "thumbnails/baseballbros.jpg", link: "games/baseballbros/index.html", genre: ["Sports", "Multiplayer"], new: false},
-  {title: "Free Rider 3", description: "FLASH/Ruffle!", image: "thumbnails/freerider3.jpg", link: "games/ruffle/index.html?game=freerider-3", genre: ["Racing", "Sports"], new: false},
-  {title: "Monkey Mart", description: "Monkey Works", image: "thumbnails/monkeymart.jpg", link: "games/monkeymart/index.html", genre: ["Simulation", "Strategy"], new: false},
-  {title: "Drive Mad", description: "Drive Truck :)", image: "thumbnails/drivemad.jpg", link: "games/drivemad/index.html", genre: ["Racing", "Arcade"], new: false},
-  {title: "Temple Run", description: "Run From Moneky", image: "thumbnails/templerun.jpg", link: "games/templerun/index.html", genre: ["Arcade", "Platformer"], new: false},
-  {title: "Flappy Bird", description: "Flappy Bird", image: "thumbnails/flappybird.jpg", link: "games/flappybird/index.html", genre: ["Arcade", "Casual"], new: false},
-  {title: "Football Bros", description: "Football :)", image: "thumbnails/footballbros.jpg", link: "games/footballbros/index.html", genre: ["Sports", "Multiplayer"], new: false},
-  {title: "Duck Clicker", description: "Ducks :)", image: "thumbnails/duckclicker.jpg", link: "games/duckclicker/index.html", genre: ["Clicker", "Casual"], new: false},
-  {title: "Basketrandom", description: "Basketrandom", image: "thumbnails/basketrandom.jpg", link: "games/basketrandom/index.html", genre: ["Sports", "Arcade"], new: false},
-  {title: "Raft Wars 2", description: "RAFT WARS!", image: "thumbnails/raftwars2.jpg", link: "games/raftwars/index.html", genre: ["Action", "Shooter"], new: false},
-  {title: "Vex3", description: "vex3", image: "thumbnails/vex3.jpg", link: "games/vex3/index.html", genre: ["Platformer", "Arcade"], new: false},
-  {title: "Vex4", description: "vex4", image: "thumbnails/vex4.jpg", link: "games/vex4/index.html", genre: ["Platformer", "Arcade"], new: false},
-  {title: "Vex5", description: "vex5", image: "thumbnails/vex5.jpg", link: "games/vex5/index.html", genre: ["Platformer", "Arcade"], new: false},
-  {title: "Vex6", description: "vex6", image: "thumbnails/vex6.jpg", link: "games/vex6/index.html", genre: ["Platformer", "Arcade"], new: false},
-  {title: "Ducklife", description: "Ducklife", image: "thumbnails/ducklife.jpg", link: "games/ducklife/index.html", genre: ["Simulation", "Sports"], new: false},
-  {title: "Ducklife 2", description: "Ducklife 2", image: "thumbnails/ducklife2.jpg", link: "games/ducklife2/index.html", genre: ["Simulation", "Sports"], new: false},
-  {title: "Ducklife 3", description: "Ducklife 3", image: "thumbnails/ducklife3.jpg", link: "games/ducklife3/index.html", genre: ["Simulation", "Sports"], new: false},
-  {title: "Ducklife 4", description: "Ducklife 4", image: "thumbnails/ducklife4.jpg", link: "games/ducklife4/index.html", genre: ["Simulation", "Sports"], new: false},
-  {title: "Tunnel Rush", description: "Tunnel Rush", image: "thumbnails/tunnelrush.jpg", link: "games/tunnelrush/index.html", genre: ["Racing", "Arcade"], new: false},
-  {title: "Slope", description: "Slope 1", image: "thumbnails/slope.jpg", link: "games/slope/index.html", genre: ["Racing", "Arcade"], new: false},
-  {title: "Slope 2", description: "Slope 2", image: "thumbnails/slope2.jpg", link: "games/slope2/index.html", genre: ["Racing", "Arcade"], new: false},
-  {title: "The Impossiable Quiz", description: "Hard Quiz", image: "thumbnails/theimpossiablequiz.jpg", link: "games/theimpossiablequiz/index.html", genre: ["Puzzle", "Trivia"], new: false},
-  {title: "Line Rider", description: "Line Rider", image: "thumbnails/linerider.jpg", link: "games/linerider/index.html", genre: ["Physics", "Casual"], new: false},
-  {title: "CSGO Clicker", description: "Click your way to victory in this CSGO-themed clicker game!", image: "thumbnails/csgo.png", link: "games/csgoclicker/index.html", genre: ["Clicker", "Action"], new: false},
-  {title: "Doodle Jump", description: "Doodle Jump", image: "thumbnails/doodlejump.jpg", link: "games/doodlejump/index.html", genre: ["Platformer", "Arcade"], new: false},
-  {title: "Nut Simulator", description: "Collect nuts in this hilarious simulation game", image: "thumbnails/nut.png", link: "games/nut-simulator/index.html", genre: ["Simulation", "Clicker"], new: false},
-  {title: "Tiny Fishing", description: "Relaxing fishing game with cute graphics 🎣", image: "thumbnails/tiny-fishing.jpg", link: "games/tinyfishing/index.html", genre: ["Simulation", "Casual"], new: false},
-  {title: "Cluster Rush", description: "Navigate through challenging obstacle courses", image: "thumbnails/clusterrush.jpg", link: "games/clusterrush/index.html", genre: ["Arcade", "Platformer"], new: false},
-  {title: "Bit Life", description: "Live a virtual life and make important decisions", image: "thumbnails/bitlife.jpg", link: "games/bitlife/index.html", genre: ["Simulation", "Life"], new: false},
-  {title: "Stack", description: "Stack blocks as high as you can without falling", image: "thumbnails/stack.jpg", link: "games/stack/game.html", genre: ["Puzzle", "Arcade"], new: false},
-  {title: "Crossy Roads", description: "Help the chicken cross the road safely 🐔🚙", image: "thumbnails/crossyroads.jpg", link: "games/crossyroad/index.html", genre: ["Arcade", "Casual"], new: false},
-  {title: "Poly Track", description: "🏎️", image: "thumbnails/pollytrack.jpg", link: "games/polytrack/index.html", genre: ["Racing", "Arcade"], new: false},
-  {title: "House Of Hazards", description: "🏎️", image: "thumbnails/hoh.jpg", link: "games/hoh/index.html", genre: ["Arcade", "Multiplayer"], new: false},
-  {title: "Geometry Dash", description: "Rhythm-based action platformer", image: "thumbnails/geodash.jpg", link: "games/geometrydash/index.html", genre: ["Music", "Platformer"], new: false},
-  {title: "Retro Bowl COLLEGE", description: "🏈", image: "thumbnails/rrbc.jpg", link: "games/rrbc/index.html", genre: ["Sports", "Simulation"], new: false},
-  {title: "OvO", description: "Platformer", image: "thumbnails/ovo.jpg", link: "games/ovo/index.html", genre: ["Platformer", "Arcade"], new: false},
-  {title: "Drift Hunters", description: "Realistic drifting simulation with tuning options", image: "thumbnails/drifthunters.jpg", link: "games/drifthunters/index.html", genre: ["Racing", "Simulation"], new: false},
-  {title: "Fire boy And Water Girl", description: "Cool Game", image: "thumbnails/fireboyandwatergirl.jpg", link: "games/fireboyandwatergirlforesttemple/index.html", genre: ["Puzzle", "Co-op"], new: false},
-  {title: "Paper.io", description: "Cool Game 👍", image: "thumbnails/paperio.jpg", link: "games/paperio/index.html", genre: ["Strategy", "Multiplayer"], new: false},
-  {title: "Basketball Legends 2020", description: "Epic basketball duels with special powers", image: "thumbnails/basketball1.jpg", link: "games/basketballlegends/index.html", genre: ["Sports", "Fighting"], new: false},
-  {title: "Basketball Stars", description: "One-on-one basketball with slick moves", image: "thumbnails/basketball2.jpg", link: "games/basketballstars/index.html", genre: ["Sports", "Arcade"], new: false},
-  {title: "Basketball Bros IO", description: "Multiplayer basketball madness", image: "thumbnails/basketball3.jpg", link: "games/basketbrosio/index.html", genre: ["Sports", "Multiplayer"], new: false},
-  {title: "Cookie Clicker", description: "The classic clicker game - bake cookies!", image: "thumbnails/cookieclicker.jpg", link: "games/cookieclicker/index.html", genre: ["Clicker", "Incremental"], new: false},
-  {title: "Retro Bowl", description: "Classic football management game 🏈", image: "thumbnails/retrobowl.jpg", link: "games/retrobowl/index.html", genre: ["Sports", "Simulation"], new: false},
-  {title: "Clicker Heroes", description: "Defeat monsters and upgrade your heroes", image: "thumbnails/clickerheros.jpg", link: "games/clickerheroes/index.html", genre: ["Clicker", "RPG"], new: false},
-  {title: "PacMan", description: "The classic arcade maze chase game", image: "thumbnails/pacman.jpg", link: "games/pacman/index.html", genre: ["Arcade", "Classic"], new: false},
-  {title: "Coming Soon", description: "More exciting games are on the way...", image: "thumbnails/comingsoon.png", link: "#", genre: ["All"], new: false}
+      {title: "Block Blast", description: "Blocks", image: "thumbnails/IMG_4569.jpeg", link: "games/blockblast/index.html", genre: ["Strategy"], new: true},
+      {title: "Hill Climb Racer", description: "Race", image: "thumbnails/IMG_4570.jpeg", link: "games/hillclimb/index.html", genre: ["Racing"], new: true},
+      {title: "Eggy Car", description: "Eggs", image: "thumbnails/IMG_4568.jpeg", link: "games/eggycar/index.html", genre: ["Strategy"], new: true},
+      {title: "Golf Battel", description: "golf", image: "thumbnails/Golfbattel.jpg", link: "games/golfbattel/index.html", genre: ["Sports"], new: true},
+      {title: "Google Baseball", description: "baseball", image: "thumbnails/googlebaseball.jpg", link: "games/googlebaseball/index.html", genre: ["Sports"], new: true},
+      {title: "Geometry Dash SUB ZERO", description: "Sub Zero", image: "thumbnails/geometrydashsubzero.jpg", link: "games/geometrydashsubzero/index.html", genre: ["Arcade"], new: true},
+      {title: "Slither.io", description: "Slither", image: "thumbnails/slitherio.jpg", link: "games/slitherio/index.html", genre: ["Arcade"], new: true},
+      {title: "Sand Box City", description: "Sand Box", image: "thumbnails/sandboxcity.jpg", link: "games/Sandboxcity/index.html", genre: ["Simulation"], new: true},
+      {title: "Soccer Bros", description: "Soccer", image: "thumbnails/Soccerbros.jpg", link: "games/soccerbros/index.html", genre: ["Sports"], new: true},
+      {title: "Retro Bowl", description: "Football", image: "thumbnails/retrobowl.jpg", link: "games/retrobowl/index.html", genre: ["Sports"], new: false},
+      {title: "Drift Hunters", description: "Drifting", image: "thumbnails/drifthunters.jpg", link: "games/drifthunters/index.html", genre: ["Racing"], new: false},
+      {title: "Slope", description: "Slope", image: "thumbnails/slope.jpg", link: "games/slope/index.html", genre: ["Arcade"], new: false},
+      {title: "Level Devil", description: "Platformer", image: "thumbnails/leveldevil.jpg", link: "games/leveldevil/index.html", genre: ["Arcade"], new: true},
+      {title: "Boxing Random", description: "Boxing", image: "thumbnails/boxingrandom.jpg", link: "games/boxingrandom/index.html", genre: ["Sports"], new: true},
+      {title: "Speed Stars", description: "Soccer stars", image: "thumbnails/speedstars.jpg", link: "games/speedstars/index.html", genre: ["Sports"], new: true},
+      {title: "Ping Pong", description: "Table tennis", image: "thumbnails/pingpong.jpg", link: "games/pingpong/index.html", genre: ["Sports"], new: true},
+      {title: "Wrestle Bros", description: "Wrestling", image: "thumbnails/wrestlebros.jpg", link: "games/wrestlebros/index.html", genre: ["Sports"], new: true},
+      {title: "Vollyball Random", description: "Volleyball", image: "thumbnails/vollyballrandom.jpg", link: "games/vollyballrandom/index.html", genre: ["Sports"], new: true},
+      {title: "Moto X3M", description: "Moto racing", image: "thumbnails/motox3m.jpg", link: "games/motox3m/index.html", genre: ["Racing"], new: false}
     ];
 
     const GENRES = [
@@ -932,7 +988,9 @@
     let currentGenre = "all";
     let currentSearch = "";
     let favorites = new Set();
-    let cloakingEnabled = false, cloakingMode = "none", customCloakName = "";
+    let cloakingEnabled = false;
+    let cloakingMode = "none";
+    let customCloakName = "";
     let settings = { theme: "midnight", autoSaveFavorites: true };
     let currentGameTitle = "";
 
@@ -942,7 +1000,7 @@
       setTimeout(()=>{ loadingScreen.style.opacity = '0'; setTimeout(()=>loadingScreen.style.display='none',600); }, 1200);
     });
 
-    // Simple functions
+    // Notification functions
     function showNotification(title, msg) {
       const n = document.getElementById('notification');
       document.getElementById('notification-title').innerText = title;
@@ -1086,7 +1144,7 @@
       document.title = titleEl.innerText;
     }
 
-    // Theme
+    // Theme toggles
     document.getElementById('theme-toggle').addEventListener('click', (e)=>{
       e.stopPropagation();
       const opt = document.getElementById('theme-options');
@@ -1095,7 +1153,8 @@
     document.querySelectorAll('.theme-option').forEach(el=>{
       el.addEventListener('click', function(){
         const theme = this.dataset.theme;
-        document.body.style.background = theme==='light'?'#f5f5f5':'#0b0c15'; // quick mock, real theme would set vars
+        document.body.className = '';
+        document.body.classList.add('theme-'+theme);
         document.getElementById('theme-options').style.display='none';
         settings.theme=theme;
       });
@@ -1113,11 +1172,17 @@
       document.body.style.overflow = 'auto';
     };
     document.getElementById('fullscreen-btn').onclick = ()=> document.getElementById('game-frame').requestFullscreen();
-    document.getElementById('newtab-btn').onclick = ()=> window.open('about:blank','_blank');
+    
+    // NEW TAB FIX: opens about:blank with game iframe
+    document.getElementById('newtab-btn').onclick = ()=> {
+      let gameLink = document.getElementById('game-frame').src;
+      if (!gameLink || gameLink === '') return;
+      const win = window.open('about:blank', '_blank');
+      win.document.write(`<body style="margin:0;background:#000"><iframe src="${gameLink}" style="width:100%;height:100%;border:none;" allowfullscreen></iframe></body>`);
+    };
 
     // Save/load cookies
     function saveData() {
-      // dummy: just set cookie
       document.cookie = "favs="+JSON.stringify(Array.from(favorites))+";path=/";
     }
     function loadSavedData() {
