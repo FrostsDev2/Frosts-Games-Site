@@ -1,4 +1,4 @@
-html
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -109,7 +109,6 @@ html
     100% { background-position: 0% 0%; }
   }
 
-  /* rest same (I'll keep loading etc) */
   body {
     background: var(--bg);
     color: var(--text-primary);
@@ -386,7 +385,7 @@ html
     border-radius: var(--radius-md);
   }
 
-  /* MINECRAFT SMP CARD — prominently in sidebar */
+  /* MINECRAFT SMP CARD — prominently in sidebar with copy button */
   .minecraft-smp-card {
     background: linear-gradient(145deg, #1e2a3a, #0f1a24);
     border: 2px solid var(--mc-color);
@@ -429,20 +428,44 @@ html
     width: 20px;
     font-size: 0.9rem;
   }
-  .smp-ip {
+  .smp-ip-container {
+    display: flex;
+    align-items: center;
     background: #0a0f14;
-    padding: 0.6rem;
     border-radius: var(--radius-sm);
+    border: 1px dashed var(--mc-color);
+    margin-top: 8px;
+    overflow: hidden;
+  }
+  .smp-ip {
+    flex: 1;
+    padding: 0.6rem;
     font-family: monospace;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     word-break: break-all;
     color: #bbffbb;
-    margin-top: 8px;
-    border: 1px dashed var(--mc-color);
     text-align: center;
   }
-  .smp-ip i {
-    margin-right: 5px;
+  .copy-ip-btn {
+    background: var(--mc-color);
+    border: none;
+    color: #0a0f14;
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: var(--transition);
+    border-left: 1px solid #2a6b2a;
+  }
+  .copy-ip-btn:hover {
+    background: #66ff66;
+    color: #000;
+  }
+  .copy-ip-btn i {
+    font-size: 0.9rem;
   }
 
   /* main content */
@@ -810,17 +833,20 @@ html
 
   <!-- MAIN LAYOUT -->
   <div class="main-wrapper">
-    <!-- SIDEBAR (with Minecraft SMP card at the top) -->
+    <!-- SIDEBAR (with Minecraft SMP card and copy button) -->
     <aside class="sidebar" id="sidebar">
-      <!-- MINECRAFT SMP CARD - exactly as requested: steps to connect -->
+      <!-- MINECRAFT SMP CARD - with copy button and wss:// link -->
       <div class="minecraft-smp-card">
         <div class="smp-title">
-          <i class="fas fa-cube"></i> FrostsINC Minecraft SMP
+          <i class="fas fa-cube"></i> FrostsINC SMP
         </div>
         <div class="smp-step"><i class="fas fa-1"></i> Click Multiplayer</div>
         <div class="smp-step"><i class="fas fa-2"></i> Click Add Server</div>
         <div class="smp-step"><i class="fas fa-3"></i> Paste:</div>
-        <div class="smp-ip"><i class="fas fa-link"></i> wss://8a6a-98-97-23-47.ngrok-free.app</div>
+        <div class="smp-ip-container">
+          <span class="smp-ip" id="server-ip">wss://8a6a-98-97-23-47.ngrok-free.app</span>
+          <button class="copy-ip-btn" id="copy-ip-btn" onclick="copyServerIP()"><i class="fas fa-copy"></i> Copy</button>
+        </div>
         <div style="font-size:0.8rem; color:#aaffaa; margin-top:8px; text-align:center;">✨ official server ✨</div>
       </div>
 
@@ -1177,6 +1203,23 @@ html
       setTimeout(()=>{ loadingScreen.style.opacity = '0'; setTimeout(()=>loadingScreen.style.display='none',600); }, 1200);
     });
 
+    // Copy server IP function (wss://)
+    window.copyServerIP = function() {
+      const ipText = document.getElementById('server-ip').innerText;
+      navigator.clipboard.writeText(ipText).then(() => {
+        showNotification('Copied!', 'Server IP copied to clipboard');
+      }).catch(err => {
+        // fallback
+        const textarea = document.createElement('textarea');
+        textarea.value = ipText;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        showNotification('Copied!', 'Server IP copied to clipboard');
+      });
+    };
+
     // Notification functions
     function showNotification(title, msg) {
       const n = document.getElementById('notification');
@@ -1385,3 +1428,4 @@ html
   </script>
 </body>
 </html>
+```
