@@ -1,3 +1,4 @@
+html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,6 +35,7 @@
     --animated-gradient-1: #0b0c15;
     --animated-gradient-2: #1a1c2b;
     --animated-speed: 15s;
+    --mc-color: #44aa44;
   }
 
   /* theme variants (only background changes, surface stays dark) */
@@ -107,7 +109,6 @@
     100% { background-position: 0% 0%; }
   }
 
-  /* rest same (I'll keep loading etc) */
   body {
     background: var(--bg);
     color: var(--text-primary);
@@ -301,7 +302,7 @@
     transition: var(--transition);
   }
 
-  /* sidebar - cleaner, frosted */
+  /* sidebar - cleaner, frosted, with minecraft card */
   .sidebar {
     width: 280px;
     background: var(--surface);
@@ -314,6 +315,9 @@
     top: 90px;
     transition: var(--transition);
     transform: translateX(0);
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
   }
 
   .sidebar.closed {
@@ -375,10 +379,93 @@
   }
 
   .sidebar-stats {
-    margin-top: 2rem;
+    margin-top: 1rem;
     padding: 1rem;
     background: var(--surface-light);
     border-radius: var(--radius-md);
+  }
+
+  /* MINECRAFT SMP CARD — prominently in sidebar with copy button */
+  .minecraft-smp-card {
+    background: linear-gradient(145deg, #1e2a3a, #0f1a24);
+    border: 2px solid var(--mc-color);
+    border-radius: var(--radius-md);
+    padding: 1.2rem 1rem;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 0 15px rgba(68, 170, 68, 0.3);
+    transition: var(--transition);
+  }
+  .minecraft-smp-card:hover {
+    transform: scale(1.02);
+    border-color: #66ff66;
+  }
+  .smp-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #aaffaa;
+    margin-bottom: 12px;
+  }
+  .smp-title i {
+    color: var(--mc-color);
+    font-size: 1.5rem;
+  }
+  .smp-step {
+    background: rgba(0,0,0,0.3);
+    border-radius: var(--radius-sm);
+    padding: 0.6rem 0.8rem;
+    margin-bottom: 6px;
+    border-left: 3px solid var(--mc-color);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .smp-step i {
+    color: var(--mc-color);
+    width: 20px;
+    font-size: 0.9rem;
+  }
+  .smp-ip-container {
+    display: flex;
+    align-items: center;
+    background: #0a0f14;
+    border-radius: var(--radius-sm);
+    border: 1px dashed var(--mc-color);
+    margin-top: 8px;
+    overflow: hidden;
+  }
+  .smp-ip {
+    flex: 1;
+    padding: 0.6rem;
+    font-family: monospace;
+    font-size: 0.8rem;
+    word-break: break-all;
+    color: #bbffbb;
+    text-align: center;
+  }
+  .copy-ip-btn {
+    background: var(--mc-color);
+    border: none;
+    color: #0a0f14;
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: var(--transition);
+    border-left: 1px solid #2a6b2a;
+  }
+  .copy-ip-btn:hover {
+    background: #66ff66;
+    color: #000;
+  }
+  .copy-ip-btn i {
+    font-size: 0.9rem;
   }
 
   /* main content */
@@ -746,8 +833,24 @@
 
   <!-- MAIN LAYOUT -->
   <div class="main-wrapper">
-    <!-- SIDEBAR -->
+    <!-- SIDEBAR (with Minecraft SMP card and copy button) -->
     <aside class="sidebar" id="sidebar">
+      <!-- MINECRAFT SMP CARD - with copy button and wss:// link -->
+      <div class="minecraft-smp-card">
+        <div class="smp-title">
+          <i class="fas fa-cube"></i> FrostsINC SMP
+        </div>
+        <div class="smp-step"><i class="fas fa-1"></i> Click Multiplayer</div>
+        <div class="smp-step"><i class="fas fa-2"></i> Click Add Server</div>
+        <div class="smp-step"><i class="fas fa-3"></i> Paste:</div>
+        <div class="smp-ip-container">
+          <span class="smp-ip" id="server-ip">wss://8a6a-98-97-23-47.ngrok-free.app</span>
+          <button class="copy-ip-btn" id="copy-ip-btn" onclick="copyServerIP()"><i class="fas fa-copy"></i> Copy</button>
+        </div>
+        <div style="font-size:0.8rem; color:#aaffaa; margin-top:8px; text-align:center;">✨ official server ✨</div>
+      </div>
+
+      <!-- original sidebar content (genres, etc) -->
       <div class="sidebar-header"><i class="fas fa-compass" style="margin-right:8px;"></i> EXPLORE</div>
       <ul class="genre-list" id="genre-list"></ul>
       <div class="sidebar-stats">
@@ -969,7 +1072,7 @@
   </div>
 
   <script>
-    // --- GAME DATA (full list) ---
+    // --- GAME DATA (full list as provided, complete 100+ games) ---
     const GAMES = [
   {title: "Minecraft 1.8.8 MULTIPLAYER!", description: "TAKES A MINUTE TO LOAD!!", image: "thumbnails/IMG_4664.jpeg", link: "games/minecraft/Minecraft 1.8.8.html", genre: ["Cards", "Puzzle", "Arcade"], new: true},
   {title: "BlackJack", description: "Play Blackjack!", image: "thumbnails/blackjack.jpg", link: "games/blackjack/index.html", genre: ["Cards", "Puzzle", "Arcade"], new: true},
@@ -1099,6 +1202,23 @@
     window.addEventListener('load', ()=>{
       setTimeout(()=>{ loadingScreen.style.opacity = '0'; setTimeout(()=>loadingScreen.style.display='none',600); }, 1200);
     });
+
+    // Copy server IP function (wss://)
+    window.copyServerIP = function() {
+      const ipText = document.getElementById('server-ip').innerText;
+      navigator.clipboard.writeText(ipText).then(() => {
+        showNotification('Copied!', 'Server IP copied to clipboard');
+      }).catch(err => {
+        // fallback
+        const textarea = document.createElement('textarea');
+        textarea.value = ipText;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        showNotification('Copied!', 'Server IP copied to clipboard');
+      });
+    };
 
     // Notification functions
     function showNotification(title, msg) {
