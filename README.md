@@ -1,8 +1,6 @@
 # Links
 - https://frostsdev2.github.io/gfiles/ 
-|
-OR
-|
+- OR
 - https://frostsdev2.github.io/frosts-games-site
 ---
 # HTML5 Game Archive (FROSTS VERSION)
