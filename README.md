@@ -1,4 +1,6 @@
-https://frostsdev2.github.io/gfiles/
+https://frostsdev2.github.io/gfiles/ 
+OR
+https://frostsdev2.github.io/gfiles/index.html
 ---
 # HTML5 Game Archive (FROSTS VERSION)
 - Added ruffle player that loads games on click (saves space and faster)
