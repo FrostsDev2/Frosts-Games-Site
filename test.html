@@ -511,6 +511,66 @@
     }
 
     .hidden { display: none !important; }
+
+    .setting-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      background: var(--surface-elevated);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .setting-row:hover {
+      background: var(--border);
+    }
+    .setting-row span {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-size: 0.9rem;
+    }
+    .setting-row i {
+      width: 18px;
+      color: #a78bfa;
+    }
+    .setting-row input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #a78bfa;
+      cursor: pointer;
+    }
+    .setting-select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 0.9rem;
+      cursor: pointer;
+      margin-top: 0.5rem;
+    }
+    .setting-select:focus {
+      outline: none;
+      border-color: #a78bfa;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--surface);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #a78bfa;
+    }
   </style>
 </head>
 <body>
@@ -573,40 +633,175 @@
   </footer>
 
   <div id="settings-modal" class="modal">
-    <div class="modal-content">
+    <div class="modal-content" style="max-width: 520px;">
       <div class="modal-header">
         <h2><i class="fas fa-cog"></i> Settings</h2>
         <button class="close-btn" id="close-settings">&times;</button>
       </div>
-      <div style="display: flex; flex-direction: column; gap: 1rem;">
-        <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
-          <input type="checkbox" id="cloaking-enabled"> Cloaking Enabled
-        </label>
-        <label style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer;">
-          <input type="checkbox" id="auto-save-favorites" checked> Auto-save Favorites
-        </label>
-        <button class="btn" id="clear-favorites" style="width: 100%;"><i class="fas fa-trash"></i> Clear Favorites</button>
+      
+      <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+        <!-- General Settings -->
+        <div>
+          <h3 style="font-size: 0.8rem; color: #a78bfa; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem;">General</h3>
+          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <label class="setting-row">
+              <span><i class="fas fa-heart"></i> Auto-save Favorites</span>
+              <input type="checkbox" id="auto-save-favorites" checked>
+            </label>
+            <label class="setting-row">
+              <span><i class="fas fa-bell"></i> Show New Game Alerts</span>
+              <input type="checkbox" id="show-new-alerts" checked>
+            </label>
+            <label class="setting-row">
+              <span><i class="fas fa-infinity"></i> Infinite Scroll</span>
+              <input type="checkbox" id="infinite-scroll" checked>
+            </label>
+          </div>
+        </div>
+
+        <!-- Display Settings -->
+        <div>
+          <h3 style="font-size: 0.8rem; color: #a78bfa; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem;">Display</h3>
+          <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            <label class="setting-row">
+              <span><i class="fas fa-cloud-rain"></i> Rain Background</span>
+              <input type="checkbox" id="rain-enabled" checked>
+            </label>
+            <label class="setting-row">
+              <span><i class="fas fa-moon"></i> Dark Mode</span>
+              <input type="checkbox" id="dark-mode" checked disabled>
+            </label>
+            <label class="setting-row">
+              <span><i class="fas fa-compress"></i> Compact View</span>
+              <input type="checkbox" id="compact-view">
+            </label>
+          </div>
+        </div>
+
+        <!-- Cloaking Settings -->
+        <div>
+          <h3 style="font-size: 0.8rem; color: #a78bfa; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem;">Cloaking</h3>
+          <label class="setting-row">
+            <span><i class="fas fa-user-secret"></i> Enable Cloaking</span>
+            <input type="checkbox" id="cloaking-enabled">
+          </label>
+          <select id="cloaking-mode" class="setting-select">
+            <option value="none">No Cloaking</option>
+            <option value="calc">Calculator (Ctrl+Alt+C)</option>
+            <option value="doc">Document (Ctrl+Alt+D)</option>
+            <option value="sheet">Spreadsheet (Ctrl+Alt+S)</option>
+          </select>
+        </div>
+
+        <!-- Data -->
+        <div>
+          <h3 style="font-size: 0.8rem; color: #a78bfa; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem;">Data</h3>
+          <div style="display: flex; gap: 0.5rem;">
+            <button class="btn" id="export-favorites" style="flex: 1;"><i class="fas fa-download"></i> Export</button>
+            <button class="btn" id="import-favorites" style="flex: 1;"><i class="fas fa-upload"></i> Import</button>
+          </div>
+          <button class="btn" id="clear-favorites" style="width: 100%; margin-top: 0.5rem; color: #ef4444;"><i class="fas fa-trash"></i> Clear All Favorites</button>
+        </div>
       </div>
     </div>
   </div>
 
-  <div id="tos-modal" class="modal">
-    <div class="modal-content">
+  <div id="tos-modal" class="modal" style="padding: 1rem;">
+    <div class="modal-content" style="max-width: 680px; max-height: 85vh;">
       <div class="modal-header">
-        <h2><i class="fas fa-file-contract"></i> Terms of Service</h2>
+        <h2><i class="fas fa-file-contract"></i> Terms of Service & Privacy Policy</h2>
         <button class="close-btn" id="close-tos">&times;</button>
       </div>
-      <div style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.7;">
-        <p style="margin-bottom: 1rem;">Welcome to Lunar Games. By using this site, you agree to the following terms.</p>
-        <ul style="padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.5rem;">
-          <li>We don't own any games — all rights belong to their creators</li>
-          <li>Use responsibly and legally</li>
-          <li>Don't try to hack or abuse the site</li>
-          <li>You must be 13+ to use this service</li>
+      
+      <div style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; overflow-y: auto; max-height: 60vh; padding-right: 0.5rem;">
+        <div style="background: var(--surface-elevated); border-radius: 12px; padding: 1rem; margin-bottom: 1rem; border-left: 3px solid #a78bfa;">
+          <p style="font-size: 0.85rem;">By accessing and using <strong style="color: #a78bfa;">Lunar Games</strong>, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service. If you do not agree, please discontinue use immediately.</p>
+        </div>
+
+        <h3 style="font-size: 1rem; color: var(--text); margin: 1.25rem 0 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+          <i class="fas fa-copyright"></i> Intellectual Property
+        </h3>
+        <ul style="padding-left: 1.25rem; margin-bottom: 1rem; line-height: 1.8;">
+          <li>Lunar Games does not claim ownership of any games hosted on this platform</li>
+          <li>All games are the intellectual property of their respective copyright holders</li>
+          <li>This platform is not affiliated with, endorsed by, or connected to any educational institutions</li>
+          <li>We comply with DMCA takedown requests</li>
         </ul>
-        <p style="margin-top: 1.5rem; font-size: 0.85rem; opacity: 0.7;">This service is provided "as is" with no guarantees.</p>
+
+        <h3 style="font-size: 1rem; color: var(--text); margin: 1.25rem 0 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+          <i class="fas fa-user-shield"></i> User Responsibilities
+        </h3>
+        <ul style="padding-left: 1.25rem; margin-bottom: 1rem; line-height: 1.8;">
+          <li>Use the platform responsibly and legally</li>
+          <li>Do not use during school instructional time without proper authorization</li>
+          <li>Respect the intellectual property rights of game developers</li>
+          <li>Do not attempt to bypass security measures or hack the platform</li>
+          <li>Do not upload or distribute malicious content</li>
+          <li>Must be at least 13 years of age (COPPA compliance)</li>
+        </ul>
+
+        <h3 style="font-size: 1rem; color: var(--text); margin: 1.25rem 0 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+          <i class="fas fa-shield-alt"></i> Privacy & Data
+        </h3>
+        <ul style="padding-left: 1.25rem; margin-bottom: 1rem; line-height: 1.8;">
+          <li>We do not collect personal information without consent</li>
+          <li>Basic analytics are collected anonymously for service improvement</li>
+          <li>Cookies may be used for functionality and preferences</li>
+          <li>We do not sell or share user data with third parties</li>
+          <li>External games may have their own privacy policies</li>
+        </ul>
+
+        <h3 style="font-size: 1rem; color: var(--text); margin: 1.25rem 0 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+          <i class="fas fa-gamepad"></i> Game Content Disclaimer
+        </h3>
+        <ul style="padding-left: 1.25rem; margin-bottom: 1rem; line-height: 1.8;">
+          <li>Games are provided "as is" without warranty of any kind</li>
+          <li>We are not responsible for game content, ads, or external links</li>
+          <li>Some games may contain advertisements from third parties</li>
+          <li>Game availability may change without notice</li>
+          <li>We do not guarantee game functionality or compatibility</li>
+        </ul>
+
+        <h3 style="font-size: 1rem; color: var(--text); margin: 1.25rem 0 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+          <i class="fas fa-ban"></i> Prohibited Activities
+        </h3>
+        <ul style="padding-left: 1.25rem; margin-bottom: 1rem; line-height: 1.8;">
+          <li>Using automated scripts or bots to access the service</li>
+          <li>Attempting to disrupt service availability (DDoS attacks)</li>
+          <li>Reverse engineering or decompiling platform code</li>
+          <li>Using the platform for any illegal activities</li>
+          <li>Sharing inappropriate or harmful content</li>
+        </ul>
+
+        <h3 style="font-size: 1rem; color: var(--text); margin: 1.25rem 0 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+          <i class="fas fa-balance-scale"></i> Limitation of Liability
+        </h3>
+        <ul style="padding-left: 1.25rem; margin-bottom: 1rem; line-height: 1.8;">
+          <li>To the fullest extent permitted by law, Lunar Games shall not be liable for:</li>
+          <li>Any direct, indirect, incidental, or consequential damages</li>
+          <li>Loss of data, profits, or business opportunities</li>
+          <li>Game malfunctions or compatibility issues</li>
+          <li>Content provided by third-party game developers</li>
+          <li>Unauthorized access to user information</li>
+        </ul>
+
+        <h3 style="font-size: 1rem; color: var(--text); margin: 1.25rem 0 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+          <i class="fas fa-sync-alt"></i> Changes to Terms
+        </h3>
+        <p style="padding-left: 1.25rem; margin-bottom: 1rem;">We reserve the right to modify these Terms of Service at any time. Users will be notified of significant changes. Continued use of the platform constitutes acceptance of updated terms.</p>
+
+        <h3 style="font-size: 1rem; color: var(--text); margin: 1.25rem 0 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+          <i class="fas fa-envelope"></i> Contact
+        </h3>
+        <p style="padding-left: 1.25rem; margin-bottom: 1rem;">For questions, concerns, or DMCA takedown requests, please contact us through the platform's reporting system.</p>
+
+        <div style="background: rgba(239, 68, 68, 0.15); border-radius: 12px; padding: 1rem; margin-top: 1rem; border-left: 3px solid #ef4444;">
+          <p style="font-size: 0.85rem;">This service is provided "as is" with no guarantees. Use at your own risk.</p>
+        </div>
       </div>
-      <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem;">
+
+      <div style="display: flex; gap: 1rem; justify-content: flex-end; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border);">
+        <button class="btn" id="tos-disagree" style="color: #ef4444; border-color: #ef4444;">I Disagree</button>
         <button class="btn" id="tos-agree">I Agree</button>
       </div>
     </div>
@@ -628,7 +823,7 @@
   </div>
 
   <!-- V2 POPUP -->
-  <div id="v2-popup" class="modal" style="display: flex; background: rgba(0,0,0,0.9);">
+  <div id="v2-popup" class="modal active" style="background: rgba(0,0,0,0.9);">
     <div class="modal-content" style="text-align: center; max-width: 480px;">
       <div style="font-size: 3rem; margin-bottom: 0.5rem;">🌙</div>
       <h2 style="font-size: 1.8rem; margin-bottom: 0.5rem;">
@@ -896,6 +1091,9 @@
       document.getElementById("tos-modal").classList.remove("active");
       showToast("Terms accepted!");
     });
+    document.getElementById("tos-disagree").addEventListener("click", () => {
+      window.location.href = "https://google.com";
+    });
 
     document.getElementById("exit-btn").addEventListener("click", closeGame);
     document.getElementById("fullscreen-btn").addEventListener("click", () => gameFrame.requestFullscreen?.());
@@ -928,24 +1126,29 @@
       notification.classList.remove("show");
     });
 
-document.getElementById("currentYear").textContent = new Date().getFullYear();
+const loadingMessages = ["Loading games...", "Adding modules...", "Starting engines...", "Preparing launch...", "Almost ready..."];
+    let msgIndex = 0;
+    
+    const loaderText = document.getElementById("loader-text");
+    const msgInterval = setInterval(() => {
+      loaderText.textContent = loadingMessages[msgIndex];
+      msgIndex = (msgIndex + 1) % loadingMessages.length;
+    }, 800);
+
+    document.getElementById("currentYear").textContent = new Date().getFullYear();
     createRain();
     renderGenres();
     renderGames();
 
-    // V2 Popup
-    setTimeout(() => {
-      document.getElementById("v2-popup").classList.add("active");
-    }, 500);
-
+    // V2 Popup - shown by default
     document.getElementById("close-v2-popup").addEventListener("click", () => {
-      document.getElementById("v2-popup").classList.remove("active");
+      document.getElementById("v2-popup").style.display = "none";
     });
 
     setTimeout(() => {
       clearInterval(msgInterval);
       document.getElementById("loading-screen").classList.add("hidden");
-    }, 2500);
+    }, 2400);
   </script>
 </body>
 </html>
