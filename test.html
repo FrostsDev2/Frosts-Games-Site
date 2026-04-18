@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3294172390463223" crossorigin="anonymous"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<title>IXL | Dashboard</title>
+<link rel="icon" id="favicon" href="icons/IMG_4366.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  /* ----- MODERN CLEAN DESIGN WITH VARIABLES ----- */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  :root {
+    --bg: #0b0c15;
+    --surface: #14161f;
+    --surface-light: #1e212e;
+    --primary: #6366f1;
+    --primary-glow: rgba(99, 102, 241, 0.4);
+    --secondary: #c084fc;
+    --accent: #f43f5e;
+    --text-primary: #ffffff;
+    --text-secondary: #a1a5b7;
+    --border: #2a2e3f;
+    --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.75);
+    --radius-lg: 24px;
+    --radius-md: 16px;
+    --radius-sm: 12px;
+    --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    --animated-gradient-1: #0b0c15;
+    --animated-gradient-2: #1a1c2b;
+    --animated-speed: 15s;
+    --mc-color: #44aa44;
+  }
+
+  /* theme variants (only background changes, surface stays dark) */
+  body.theme-light {
+    --bg: #eef2f6;
+    --surface: #ffffff;
+    --surface-light: #f0f3f8;
+    --text-primary: #1a1e2b;
+    --text-secondary: #4a4f66;
+    --border: #d0d7e7;
+    --shadow-lg: 0 25px 50px -12px rgba(0,0,0,0.2);
+  }
+  body.theme-neon {
+    --bg: #0d0b1a;
+    --surface: #16112b;
+    --surface-light: #221b3a;
+    --primary: #00ff9f;
+    --primary-glow: rgba(0,255,159,0.3);
+    --secondary: #ff00c8;
+    --accent: #ffb347;
+    --border: #3f2e6b;
+  }
+  body.theme-midnight {
+    --bg: #0b0c15;
+    --surface: #14161f;
+    --surface-light: #1e212e;
+    --primary: #6366f1;
+    --border: #2a2e3f;
+  }
+  body.theme-ocean {
+    --bg: #0a1929;
+    --surface: #0f2744;
+    --surface-light: #1c3a5e;
+    --primary: #4ecdc4;
+    --primary-glow: rgba(78,205,196,0.4);
+    --secondary: #ff6b6b;
+    --accent: #ffe66d;
+    --border: #2b4b6f;
+  }
+  /* Animated backgrounds (only for themes with animation) */
+  body.theme-neon::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 30% 50%, #6b21a5, #0b0d1e 70%);
+    animation: drift 18s infinite alternate;
+    z-index: -2;
+  }
+  body.theme-ocean::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(125deg, #0b2b44, #1b506e, #0a3442);
+    background-size: 300% 300%;
+    animation: wave 20s ease infinite;
+    z-index: -2;
+  }
+  @keyframes drift {
+    0% { transform: scale(1) translate(0,0); opacity:0.7; }
+    100% { transform: scale(1.3) translate(3%,2%); opacity:1; }
+  }
+  @keyframes wave {
+    0% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+    100% { background-position: 0% 0%; }
+  }
+
+  /* ===== RAIN BACKGROUND ===== */
+  .rain-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+  }
+  .rain-drop {
+    position: absolute;
+    width: 2px;
+    height: 20px;
+    background: linear-gradient(transparent, rgba(124, 58, 237, 0.5));
+    border-radius: 2px;
+    animation: rain-fall linear infinite;
+  }
+  @keyframes rain-fall {
+    to { transform: translateY(100vh); }
+  }
+  .rain-glow {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 400px;
+    background: linear-gradient(to top, rgba(124, 58, 237, 0.12), transparent);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    line-height: 1.5;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    transition: background-color 0.4s, color 0.2s;
+  }
+
+  /* ===== COOL LOADING ANIMATION ===== */
+  #loading-screen {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
+  }
+
+  .loader-content {
+    text-align: center;
+  }
+
+  .loader-svg {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 24px;
+    position: relative;
+  }
+
+  .circular {
+    animation: rotate 2s linear infinite;
+    transform-origin: center center;
+    width: 100%;
+    height: 100%;
+  }
+
+  .circle-path {
+    stroke: url(#gradient);
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+    animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+    stroke-linecap: round;
+  }
+
+  @keyframes rotate {
+    100% { transform: rotate(360deg); }
+  }
+
+  @keyframes dash {
+    0% { stroke-dasharray: 1, 200; stroke-dashoffset: 0; }
+    50% { stroke-dasharray: 89, 200; stroke-dashoffset: -35px; }
+    100% { stroke-dasharray: 89, 200; stroke-dashoffset: -124px; }
+  }
+
+  @keyframes color {
+    0%, 100% { stroke: #6366f1; }
+    40% { stroke: #c084fc; }
+    80% { stroke: #f43f5e; }
+  }
+
+  .loader-text {
+    font-size: 1.5rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, #6366f1, #c084fc, #f43f5e);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: 2px;
+    animation: pulseText 1.8s ease infinite;
+  }
+
+  @keyframes pulseText {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(0.98); }
+  }
+
+  .loader-sub {
+    color: var(--text-secondary);
+    margin-top: 8px;
+    font-size: 0.95rem;
+  }
+
+  /* ===== LAYOUT & HEADER (clean, minimal) ===== */
+  .app-header {
+    position: sticky;
+    top: 0;
+    background: rgba(11, 12, 21, 0.8);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 100;
+  }
+
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .brand {
+    font-size: 1.8rem;
+    font-weight: 800;
+    background: linear-gradient(145deg, #fff, #a1a5b7);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: -0.5px;
+  }
+
+  .brand span {
+    background: linear-gradient(145deg, #6366f1, #c084fc);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 12px;
+  }
+
+  .btn {
+    background: var(--surface-light);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    padding: 0.6rem 1.2rem;
+    border-radius: 40px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+    backdrop-filter: blur(4px);
+  }
+
+  .btn i {
+    font-size: 1rem;
+    color: var(--primary);
+  }
+
+  .btn:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px var(--primary-glow);
+  }
+
+  .btn:hover i {
+    color: white;
+  }
+
+  /* sidebar toggle (modern) */
+  .sidebar-toggle {
+    background: var(--surface-light);
+    border: 1px solid var(--border);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-right: 8px;
+  }
+
+  .sidebar-toggle:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    transform: rotate(90deg);
+  }
+
+  /* main container */
+  .main-wrapper {
+    display: flex;
+    padding: 1.5rem 2rem;
+    gap: 24px;
+    transition: var(--transition);
+  }
+
+  /* sidebar - cleaner, frosted, with minecraft card */
+  .sidebar {
+    width: 280px;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    padding: 1.5rem 1rem;
+    backdrop-filter: blur(12px);
+    height: fit-content;
+    position: sticky;
+    top: 90px;
+    transition: var(--transition);
+    transform: translateX(0);
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+  }
+
+  .sidebar.closed {
+    transform: translateX(-320px);
+    width: 0;
+    min-width: 0;
+    padding: 0;
+    margin: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .sidebar-header {
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding-bottom: 1rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-secondary);
+    letter-spacing: 0.5px;
+  }
+
+  .genre-list {
+    list-style: none;
+  }
+
+  .genre-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0.8rem 1rem;
+    border-radius: var(--radius-sm);
+    margin-bottom: 4px;
+    cursor: pointer;
+    transition: var(--transition);
+    color: var(--text-secondary);
+  }
+
+  .genre-item i {
+    width: 20px;
+    color: var(--primary);
+  }
+
+  .genre-item.active {
+    background: var(--primary);
+    color: white;
+  }
+
+  .genre-item.active i {
+    color: white;
+  }
+
+  .genre-item .count {
+    margin-left: auto;
+    background: rgba(255,255,255,0.1);
+    padding: 2px 8px;
+    border-radius: 40px;
+    font-size: 0.8rem;
+  }
+
+  .sidebar-stats {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--surface-light);
+    border-radius: var(--radius-md);
+  }
+
+  /* MINECRAFT SMP CARD — prominently in sidebar with copy button */
+  .minecraft-smp-card {
+    background: linear-gradient(145deg, #1e2a3a, #0f1a24);
+    border: 2px solid var(--mc-color);
+    border-radius: var(--radius-md);
+    padding: 1.2rem 1rem;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 0 15px rgba(68, 170, 68, 0.3);
+    transition: var(--transition);
+  }
+  .minecraft-smp-card:hover {
+    transform: scale(1.02);
+    border-color: #66ff66;
+  }
+  .smp-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #aaffaa;
+    margin-bottom: 12px;
+  }
+  .smp-title i {
+    color: var(--mc-color);
+    font-size: 1.5rem;
+  }
+  .smp-step {
+    background: rgba(0,0,0,0.3);
+    border-radius: var(--radius-sm);
+    padding: 0.6rem 0.8rem;
+    margin-bottom: 6px;
+    border-left: 3px solid var(--mc-color);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .smp-step i {
+    color: var(--mc-color);
+    width: 20px;
+    font-size: 0.9rem;
+  }
+  .smp-ip-container {
+    display: flex;
+    align-items: center;
+    background: #0a0f14;
+    border-radius: var(--radius-sm);
+    border: 1px dashed var(--mc-color);
+    margin-top: 8px;
+    overflow: hidden;
+  }
+  .smp-ip {
+    flex: 1;
+    padding: 0.6rem;
+    font-family: monospace;
+    font-size: 0.8rem;
+    word-break: break-all;
+    color: #bbffbb;
+    text-align: center;
+  }
+  .copy-ip-btn {
+    background: var(--mc-color);
+    border: none;
+    color: #0a0f14;
+    padding: 0.6rem 1rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: var(--transition);
+    border-left: 1px solid #2a6b2a;
+  }
+  .copy-ip-btn:hover {
+    background: #66ff66;
+    color: #000;
+  }
+  .copy-ip-btn i {
+    font-size: 0.9rem;
+  }
+
+  /* main content */
+  .content {
+    flex: 1;
+    transition: var(--transition);
+  }
+
+  .search-section {
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .search-wrapper {
+    flex: 1;
+    max-width: 400px;
+    position: relative;
+  }
+
+  .search-wrapper i {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+  }
+
+  #gameSearch {
+    width: 100%;
+    padding: 0.9rem 1rem 0.9rem 48px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 60px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    outline: none;
+    transition: var(--transition);
+  }
+
+  #gameSearch:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 4px var(--primary-glow);
+  }
+
+  #totalGames {
+    background: var(--surface);
+    padding: 0.5rem 1.2rem;
+    border-radius: 40px;
+    border: 1px solid var(--border);
+    font-weight: 500;
+    color: var(--primary);
+  }
+
+  /* game grid - cleaner cards */
+  .games-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 20px;
+  }
+
+  .game-card {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition: var(--transition);
+    text-decoration: none;
+    color: var(--text-primary);
+    position: relative;
+  }
+
+  .game-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--primary);
+    box-shadow: 0 20px 30px -15px black;
+  }
+
+  .card-image {
+    width: 100%;
+    aspect-ratio: 1 / 0.8;
+    object-fit: cover;
+    background: var(--surface-light);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .card-content {
+    padding: 1rem;
+  }
+
+  .game-title {
+    font-weight: 600;
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .game-description {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .genre-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .genre-tag {
+    background: var(--surface-light);
+    padding: 2px 8px;
+    border-radius: 40px;
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+  }
+
+  .play-btn {
+    background: linear-gradient(145deg, var(--primary), #4f46e5);
+    border: none;
+    width: 100%;
+    padding: 0.7rem;
+    border-radius: 40px;
+    color: white;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+
+  .play-btn:hover {
+    filter: brightness(1.1);
+    transform: scale(1.02);
+  }
+
+  /* update logs */
+  .update-section {
+    margin-top: 3rem;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    padding: 2rem;
+  }
+
+  .update-title {
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+  }
+
+  .update-log {
+    background: var(--surface-light);
+    border-radius: var(--radius-md);
+    padding: 1.2rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid var(--primary);
+  }
+
+  /* modal clean design */
+  .modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(8px);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  .modal.active {
+    display: flex;
+  }
+
+  .modal-content {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    max-width: 600px;
+    width: 90%;
+    max-height: 85vh;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .settings-grid {
+    display: grid;
+    gap: 16px;
+    margin: 20px 0;
+  }
+
+  .cloaking-option {
+    background: var(--surface-light);
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+    border: 1px solid var(--border);
+    cursor: pointer;
+  }
+
+  /* game menu */
+  #game-menu {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    z-index: 2000;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  #game-menu.active {
+    display: flex;
+  }
+
+  #game-frame {
+    width: min(1200px, 95vw);
+    height: min(700px, 80vh);
+    border: none;
+    border-radius: var(--radius-lg);
+    background: black;
+  }
+
+  .menu-buttons {
+    margin-top: 20px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .menu-btn {
+    background: var(--surface-light);
+    border: 1px solid var(--border);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 40px;
+    cursor: pointer;
+  }
+
+  /* footer */
+  .footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-secondary);
+    border-top: 1px solid var(--border);
+    margin-top: 3rem;
+  }
+
+  /* misc */
+  .hidden { display: none !important; }
+  .badge-new {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--accent);
+    color: white;
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 40px;
+    font-weight: 600;
+  }
+
+  /* ----- MODAL TOS REDESIGN (clean) ----- */
+  #tos-modal .tos-content {
+    background: var(--surface);
+    color: var(--text-primary);
+    max-width: 750px;
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 2rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-lg);
+  }
+  #tos-modal h2 { font-size: 2rem; margin-bottom: 1.5rem; display: flex; gap: 0.5rem; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 1rem; }
+  #tos-modal h3 { font-size: 1.3rem; margin: 1.2rem 0 0.8rem; display: flex; gap: 0.6rem; align-items: center; color: var(--primary); }
+  #tos-modal .tos-section { background: var(--surface-light); border-radius: var(--radius-md); padding: 1.2rem; margin-bottom: 1.5rem; border-left: 4px solid var(--primary); }
+  #tos-modal .tos-warning { background: rgba(244,63,94,0.1); border-left: 4px solid var(--accent); padding: 1.2rem; border-radius: var(--radius-md); margin-bottom: 1.5rem; }
+  #tos-modal ul { padding-left: 1.5rem; margin-top: 0.6rem; }
+  #tos-modal li { margin-bottom: 0.3rem; color: var(--text-secondary); }
+  #tos-modal .tos-buttons { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem; }
+  .tos-button { padding: 0.9rem 2rem; border-radius: 60px; border: none; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.6rem; transition: var(--transition); font-size: 1rem; }
+  .tos-button.agree { background: var(--primary); color: white; }
+  .tos-button.disagree { background: transparent; border: 1px solid var(--border); color: var(--text-primary); }
+  .tos-button.agree:hover { filter: brightness(1.1); transform: scale(1.02); }
+  .tos-button.disagree:hover { background: var(--accent); border-color: var(--accent); color: white; }
+
+  #notification {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--surface);
+    border-left: 4px solid var(--primary);
+    border-radius: var(--radius-sm);
+    padding: 1rem;
+    box-shadow: var(--shadow-lg);
+    z-index: 3000;
+    display: none;
+    align-items: center;
+    gap: 16px;
+  }
+</style>
+</head>
+<body class="theme-midnight">
+  <!-- Rain Background -->
+  <div class="rain-container" id="rain"></div>
+  <div class="rain-glow"></div>
+
+  <!-- COOL LOADING SCREEN (SVG animation) -->
+  <div id="loading-screen">
+    <div class="loader-content">
+      <div class="loader-svg">
+        <svg viewBox="25 25 50 50">
+          <defs>
+            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#6366f1" />
+              <stop offset="50%" stop-color="#c084fc" />
+              <stop offset="100%" stop-color="#f43f5e" />
+            </linearGradient>
+          </defs>
+          <circle class="circular" cx="50" cy="50" r="20" fill="none" stroke-width="4" stroke-miterlimit="10" class="circle-path" />
+        </svg>
+      </div>
+      <div class="loader-text">FROSTS INC</div>
+      <div class="loader-sub">loading experiences ...</div>
+    </div>
+  </div>
+
+  <!-- APP HEADER (clean) -->
+  <header class="app-header">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <button class="sidebar-toggle" id="sidebar-toggle"><i class="fas fa-bars"></i></button>
+      <div class="logo-area">
+        <span class="brand"><span>FROSTS</span> GAMES</span>
+      </div>
+    </div>
+    <div class="action-buttons">
+      <button class="btn" id="tos-btn"><i class="fas fa-file-contract"></i> Terms</button>
+      <button class="btn" id="settings-btn"><i class="fas fa-cog"></i> Settings</button>
+      <div class="theme-selector" style="position:relative;">
+        <button class="btn" id="theme-toggle"><i class="fas fa-palette"></i> Theme</button>
+        <div id="theme-options" style="position:absolute; top:60px; right:0; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-md); padding:8px; display:none; flex-direction:column; gap:4px; min-width:150px; z-index:200;">
+          <div class="theme-option" data-theme="dark" style="padding:8px 12px; border-radius:8px; cursor:pointer;">🌙 Dark (static)</div>
+          <div class="theme-option" data-theme="light" style="padding:8px 12px; border-radius:8px; cursor:pointer;">☀️ Light (static)</div>
+          <div class="theme-option" data-theme="neon" style="padding:8px 12px; border-radius:8px; cursor:pointer;">💡 Neon (animated)</div>
+          <div class="theme-option active" data-theme="midnight" style="padding:8px 12px; border-radius:8px; cursor:pointer;">🌃 Midnight (static)</div>
+          <div class="theme-option" data-theme="ocean" style="padding:8px 12px; border-radius:8px; cursor:pointer;">🌊 Ocean (animated)</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN LAYOUT -->
+  <div class="main-wrapper">
+    <!-- SIDEBAR -->
+      <div class="sidebar-header"><i class="fas fa-compass" style="margin-right:8px;"></i> EXPLORE</div>
+      <ul class="genre-list" id="genre-list"></ul>
+      <div class="sidebar-stats">
+        <div style="color: var(--primary); margin-bottom:8px;"><i class="fas fa-fire"></i> Trending</div>
+        <div style="color:var(--text-secondary); font-size:0.9rem;">Slope · Drift · Run3</div>
+      </div>
+      <div class="sidebar-stats" style="margin-top:12px;">
+        <div><i class="fas fa-heart" style="color:var(--accent);"></i> <span id="favorites-count">0 Games</span></div>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="content" id="content">
+      <div class="search-section">
+        <div class="search-wrapper">
+          <i class="fas fa-search"></i>
+          <input type="text" id="gameSearch" placeholder="Search games...">
+        </div>
+        <div id="totalGames">0 Games</div>
+      </div>
+
+      <!-- GAMES GRID (dynamic) -->
+      <div class="games-grid" id="games-container"></div>
+
+      <!-- UPDATE LOGS (cleaned) -->
+      <section class="update-section">
+        <h2 class="update-title"><i class="fas fa-history" style="color:var(--primary);"></i> What's New</h2>
+        <div class="update-log">
+          <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+            <span><i class="fas fa-calendar"></i> February 18, 2026</span>
+            <span class="badge-new" style="position:static;">+7 GAMES</span>
+          </div>
+          <p><strong>Added:</strong> FNAF 1-4, Dodge Miner, Dodge Miner 2, BlackJack</p>
+          <div style="background:var(--surface-light); padding:12px; border-radius:var(--radius-sm); margin-top:12px;">
+            <i class="fas fa-star" style="color:var(--accent);"></i> <strong>Now 100+ games total!</strong>
+          </div>
+        </div>
+        <div class="update-log">
+          <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+            <span><i class="fas fa-calendar"></i> February 17, 2026</span>
+            <span class="badge-new" style="position:static;">+8 GAMES</span>
+          </div>
+          <p><strong>Added 8 new games!</strong> – Learn to Fly 3, Escape Road, Subway Surfers, Water Works, Snash Karts, Space Waves, Little Alchemy 2, Five Nights At Epstines.</p>
+        </div>
+        <div class="update-log">
+          <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+            <span><i class="fas fa-calendar"></i> February 17, 2026</span>
+            <span class="badge-new" style="position:static;">MAJOR</span>
+          </div>
+          <p><strong>Website Redesign and Terms Update</strong> – Completely redesigned Terms of Service with detailed sections, new theme options with animated backgrounds, improved "Open in New Tab" functionality, and additional settings for cloaking and favorites.</p>
+        </div>
+        <div class="update-log">
+          <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+            <span><i class="fas fa-calendar"></i> February 6, 2026</span>
+            <span class="badge-new" style="position:static;">+13 GAMES</span>
+          </div>
+          <p><strong>Added:</strong> Level Devil, Boxing Random, Speed Stars, Ping Pong, Wrestle bros, Soccer Bros, Soccor Random, Vollyball Random, Google Baseball, Golf Battel, Geometry Dash Sub Zero, Slither.io, Sand Box City.</p>
+          <div style="background:var(--surface-light); padding:12px; border-radius:var(--radius-sm); margin-top:12px;">
+            <i class="fas fa-star" style="color:var(--accent);"></i> <strong>Now 83 games total!</strong>
+          </div>
+        </div>
+        <div class="update-log">
+          <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+            <span><i class="fas fa-calendar"></i> January 20, 2026</span>
+            <span style="background:var(--primary); padding:2px 8px; border-radius:40px;">UI Refresh</span>
+          </div>
+          <p>Moto X3M series, Snow Rider 3D, Learn To Fly 1&2. Cleaner interface and reactive backgrounds.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <footer class="footer">
+    <p>Frosts Inc Game Portal © <span id="currentYear"></span> — curated with <i class="fas fa-heart" style="color:var(--accent);"></i></p>
+  </footer>
+
+  <!-- MODALS / SETTINGS / TOS / GAME MENU -->
+  <div id="settings-modal" class="modal">
+    <div class="modal-content">
+      <h2 style="margin-bottom:1rem;"><i class="fas fa-cog"></i> Settings</h2>
+      <div class="settings-grid">
+        <div style="display:flex; align-items:center; gap:12px;"><label>Cloaking Enabled</label> <input type="checkbox" id="cloaking-enabled"></div>
+        <div style="display:flex; align-items:center; gap:12px;"><label>Auto-save Favorites</label> <input type="checkbox" id="auto-save-favorites" checked></div>
+        <div><button class="btn" id="clear-favorites" style="width:100%;"><i class="fas fa-trash"></i> Clear Favorites</button></div>
+      </div>
+      <h3>Cloaking presets</h3>
+      <div class="settings-grid" id="cloaking-options">
+        <div class="cloaking-option" data-mode="calculator"><i class="fas fa-calculator"></i> Calculator</div>
+        <div class="cloaking-option" data-mode="docs"><i class="fas fa-file-alt"></i> Document</div>
+        <div class="cloaking-option" data-mode="research"><i class="fas fa-search"></i> Research</div>
+        <div class="cloaking-option active" data-mode="none"><i class="fas fa-times"></i> None</div>
+      </div>
+      <div style="margin:15px 0;"><input type="text" id="custom-cloak-input" placeholder="Custom title..." class="btn" style="width:100%;"></div>
+      <div style="display:flex; gap:12px; justify-content:flex-end;">
+        <button class="btn" id="save-settings">Save</button>
+        <button class="btn" id="close-settings">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- REDESIGNED TOS MODAL -->
+  <div id="tos-modal" class="modal">
+    <div class="tos-content">
+      <h2><i class="fas fa-file-contract"></i> Terms of Service & Privacy Policy</h2>
+      
+      <div class="tos-section">
+        <h3><i class="fas fa-exclamation-triangle"></i> Important Notice</h3>
+        <p>Welcome to Frosts Inc Game Portal. By accessing and using this website, you acknowledge that you have read, understood, and agree to be bound by the following Terms of Service. If you do not agree with these terms, please discontinue use immediately.</p>
+      </div>
+      
+      <div class="tos-section">
+        <h3><i class="fas fa-gavel"></i> Legal Disclaimer</h3>
+        <p>Frosts Inc Game Portal ("we", "our", or "us") operates as an independent gaming platform. We want to make clear that:</p>
+        <ul>
+          <li>We do not claim ownership of any games hosted on this platform</li>
+          <li>All games are the intellectual property of their respective copyright holders</li>
+          <li>This portal is not affiliated with, endorsed by, or connected to any educational institutions</li>
+          <li>We do not host any illegal content and comply with DMCA takedown requests</li>
+        </ul>
+      </div>
+      
+      <div class="tos-section">
+        <h3><i class="fas fa-user"></i> User Responsibilities</h3>
+        <p>By using this service, you agree to:</p>
+        <ul>
+          <li>Use the platform responsibly and legally</li>
+          <li>Not use the service during school instructional time without proper authorization</li>
+          <li>Respect the intellectual property rights of game developers</li>
+          <li>Not attempt to bypass security measures or hack the platform</li>
+          <li>Not upload or distribute malicious content</li>
+          <li>Be at least 13 years of age (COPPA compliance)</li>
+        </ul>
+      </div>
+      
+      <div class="tos-section">
+        <h3><i class="fas fa-shield-alt"></i> Privacy & Data Collection</h3>
+        <p>We value your privacy. Our data practices include:</p>
+        <ul>
+          <li>We do not collect personal information without consent</li>
+          <li>Basic analytics are collected anonymously for service improvement</li>
+          <li>Cookies may be used for functionality and preferences</li>
+          <li>We do not sell or share user data with third parties</li>
+          <li>External games may have their own privacy policies</li>
+        </ul>
+      </div>
+      
+      <div class="tos-section">
+        <h3><i class="fas fa-gamepad"></i> Game Content Disclaimer</h3>
+        <p>Regarding the games available on this platform:</p>
+        <ul>
+          <li>Games are provided "as is" without warranty of any kind</li>
+          <li>We are not responsible for game content, ads, or external links</li>
+          <li>Some games may contain advertisements from third parties</li>
+          <li>Game availability may change without notice</li>
+          <li>We do not guarantee game functionality or compatibility</li>
+        </ul>
+      </div>
+      
+      <div class="tos-warning">
+        <h4><i class="fas fa-ban"></i> Prohibited Activities</h4>
+        <p>Users are strictly prohibited from:</p>
+        <ul>
+          <li>Using automated scripts or bots to access the service</li>
+          <li>Attempting to disrupt service availability (DDoS attacks)</li>
+          <li>Reverse engineering or decompiling platform code</li>
+          <li>Using the platform for any illegal activities</li>
+          <li>Sharing inappropriate or harmful content</li>
+        </ul>
+      </div>
+      
+      <div class="tos-section">
+        <h3><i class="fas fa-balance-scale"></i> Limitation of Liability</h3>
+        <p>To the fullest extent permitted by law, Frosts Inc Game Portal shall not be liable for:</p>
+        <ul>
+          <li>Any direct, indirect, incidental, or consequential damages</li>
+          <li>Loss of data, profits, or business opportunities</li>
+          <li>Game malfunctions or compatibility issues</li>
+          <li>Content provided by third-party game developers</li>
+          <li>Unauthorized access to user information</li>
+        </ul>
+      </div>
+      
+      <div class="tos-section">
+        <h3><i class="fas fa-sync-alt"></i> Changes to Terms</h3>
+        <p>We reserve the right to modify these Terms of Service at any time. Users will be notified of significant changes. Continued use of the platform constitutes acceptance of updated terms.</p>
+      </div>
+      
+      <div class="tos-section">
+        <h3><i class="fas fa-question-circle"></i> Contact & Support</h3>
+        <p>For questions, concerns, or takedown requests:</p>
+        <ul>
+          <li>Report Issues: Use the in-platform reporting system</li>
+          <li>DMCA: Contact for copyright infringement claims</li>
+        </ul>
+      </div>
+      
+      <div class="tos-buttons">
+        <button class="tos-button agree" id="tos-agree"><i class="fas fa-check-circle"></i> I Understand & Agree</button>
+        <button class="tos-button disagree" id="tos-disagree"><i class="fas fa-times-circle"></i> I Disagree</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="game-menu">
+    <iframe id="game-frame" allowfullscreen></iframe>
+    <div class="menu-buttons">
+      <button class="menu-btn" id="fav-btn"><i class="fas fa-heart"></i> Favorite</button>
+      <button class="menu-btn" id="fullscreen-btn"><i class="fas fa-expand"></i> Fullscreen</button>
+      <button class="menu-btn" id="newtab-btn"><i class="fas fa-external-link-alt"></i> New Tab</button>
+      <button class="menu-btn" id="exit-btn"><i class="fas fa-times"></i> Exit</button>
+    </div>
+  </div>
+
+  <!-- NOTIFICATION (toast) -->
+  <div id="notification">
+    <span id="notification-title" style="font-weight:600;"></span>
+    <span id="notification-content"></span>
+    <button id="notification-close" style="background:none; border:none; color:var(--text-primary);">✕</button>
+  </div>
+
+  <script>
+    // --- GAME DATA (full list as provided, complete 100+ games) ---
+    const GAMES = [
+  {title: "Minecraft 1.8.8 MULTIPLAYER!", description: "TAKES A MINUTE TO LOAD!!", image: "thumbnails/IMG_4664.jpeg", link: "games/minecraft/Minecraft 1.8.8.html", genre: ["Cards", "Puzzle", "Arcade"], new: true},
+  {title: "BlackJack", description: "Play Blackjack!", image: "thumbnails/blackjack.jpg", link: "games/blackjack/index.html", genre: ["Cards", "Puzzle", "Arcade"], new: true},
+  {title: "Dodge Miner", description: "THE 100th GAME!", image: "thumbnails/dm2.jpg", link: "games/dm2/index.html", genre: ["Clicker", "Puzzle", "Arcade"], new: true},
+  {title: "Dodge Miner", description: "Mine Dodge Coins", image: "thumbnails/dm1.jpg", link: "games/dm1/index.html", genre: ["Clicker", "Puzzle", "Arcade"], new: true},
+  {title: "FNAF 4", description: "FNAF 4", image: "thumbnails/fnaf4.jpg", link: "games/fnaf4/index.html", genre: ["Strategy", "Puzzle", "Action"], new: true},
+  {title: "FNAF 3", description: "FNAF 3", image: "thumbnails/fnaf3.jpg", link: "games/fnaf3/index.html", genre: ["Strategy", "Puzzle", "Action"], new: true},
+  {title: "FNAF 2", description: "FNAF 2", image: "thumbnails/fnaf2.jpg", link: "games/fnaf2/index.html", genre: ["Strategy", "Puzzle", "Action"], new: true},
+  {title: "FNAF 1", description: "FNAF 1", image: "thumbnails/fnaf1.jpg", link: "games/fnaf1/index.html", genre: ["Strategy", "Puzzle", "Action"], new: true},
+  {title: "Water Works!", description: "Card-based stratge game", image: "thumbnails/waterworks.jpg", link: "games/waterworks/index.html", genre: ["Strategy", "Puzzle", "Action", "Racing"], new: true},
+  {title: "Smash Karts", description: "SMASH KARTS", image: "thumbnails/smashkarts.jpg", link: "games/smashkarts/index.html", genre: ["Adventure", "Arcade", "Action", "Racing"], new: true},
+  {title: "Space Waves", description: "Space Geometry Dash", image: "thumbnails/spacewaves.jpg", link: "games/spacewaves/index.html", genre: ["Puzzle", "Adventure", "Arcade", "Action"], new: true},
+  {title: "Little Alchemy 2", description: "Create Stuff", image: "thumbnails/littlealchemy2.jpg", link: "games/littlealchemy/index.html", genre: ["Puzzle", "Adventure", "Arcade", "Action"], new: true},   
+  {title: "Learn To Fly 3", description: "USING FLASH/Ruffle!", image: "thumbnails/ltf3.jpg", link: "games/learntofly3/index.html", genre: ["Puzzle", "Adventure", "Arcade", "Action"], new: true},    
+  {title: "Escape Road", description: "Escape", image: "thumbnails/escaperoad.jpg", link: "games/escaperoad/index.html", genre: ["Strategy", "Arcade", "Action"], new: true},
+  {title: "Subway Surfers: Beijing", description: "Subway Surfers", image: "thumbnails/swsbj.jpg", link: "games/subwaysurfers/index.html", genre: ["Strategy"], new: true},
+  {title: "Block Blast", description: "Blocks", image: "thumbnails/IMG_4569.jpeg", link: "games/blockblast/index.html", genre: ["Strategy"], new: false},
+  {title: "Hill Climb Racer (Coming Soon)", description: "Race", image: "thumbnails/IMG_4570.jpeg", link: "games/hillclimb/index.html", genre: ["Strategy"], new: false},
+  {title: "Eggy Car", description: "Eggs", image: "thumbnails/IMG_4568.jpeg", link: "games/eggycar/index.html", genre: ["Strategy"], new: false},
+  {title: "Worlds Hardest Game", description: "hard", image: "thumbnails/IMG_4556.jpeg", link: "games/worldshardestgame/index.html", genre: ["Strategy"], new: false},
+  {title: "Golf Battel", description: "golf", image: "thumbnails/Golfbattel.jpg", link: "games/golfbattel/index.html", genre: ["Strategy", "Sports"], new: false},
+  {title: "Google Baseball", description: "baseball", image: "thumbnails/googlebaseball.jpg", link: "games/googlebaseball/index.html", genre: ["Strategy", "Sports"], new: false},
+  {title: "Geometry Dash SUB ZERO", description: "Sub Zero", image: "thumbnails/geometrydashsubzero.jpg", link: "games/geometrydashsubzero/index.html", genre: ["Strategy", "Sports"], new: false},
+  {title: "Slither.io", description: "Slither", image: "thumbnails/slitherio.jpg", link: "games/slitherio/index.html", genre: ["Strategy", "Sports"], new: false},
+  {title: "Sand Box City", description: "Sand Box", image: "thumbnails/sandboxcity.jpg", link: "games/Sandboxcity/index.html", genre: ["Strategy", "Sports"], new: false},
+  {title: "Soccer Bros", description: "Soccer", image: "thumbnails/Soccerbros.jpg", link: "games/soccerbros/index.html", genre: ["Strategy", "Sports"], new: false},
+  {title: "Wrestle Bros", description: "Wrestling", image: "thumbnails/wrestlebros.jpg", link: "games/wrestlebros/index.html", genre: ["Strategy", "Sports"], new: false},
+  {title: "Ping Pong", description: "Ping Pong", image: "thumbnails/pingpongrandom.jpg", link: "games/PingPongRandom/index.html", genre: ["Strategy", "Sports"], new: false},
+  {title: "Soccer Random", description: "Soccer", image: "thumbnails/Soccerrandom.jpg", link: "games/soccerrandom/index.html", genre: ["Strategy", "Sports"], new: false},
+  {title: "Five Nights At Epstines", description: "idek At this point", image: "thumbnails/fivenightsateptines.jpg", link: "games/fivenightsatepstines/index.html", genre: ["Strategy", "Sports"], new: true},
+  {title: "Volly Random", description: "VollyBall", image: "thumbnails/Vollyrandom.jpg", link: "games/VollyRandom/index.html", genre: ["Strategy", "Sports"], new: false},
+  {title: "Level Devil", description: "Hard/Fun game", image: "thumbnails/leveldevil.jpg", link: "games/leveldevil/index.html", genre: ["Strategy"], new: false},
+  {title: "Boxing Random", description: "Boxing", image: "thumbnails/boxingrandom.jpg", link: "games/boxingrandom/index.html", genre: ["Strategy", "Racing"], new: false},
+  {title: "Kart Bros", description: "Karts", image: "thumbnails/kartbros.jpg", link: "games/kartbros/index.html", genre: ["Strategy", "Racing"], new: false},
+  {title: "8 Ball Pool", description: "8Ball", image: "thumbnails/8ballpool.jpg", link: "games/8ballpool/index.html", genre: ["Strategy", "Simulator"], new: false},
+  {title: "Crazy Cattle 3D", description: "Cattle", image: "thumbnails/crazycattle3d.jpg", link: "games/crazycattle3d/index.html", genre: ["Strategy", "Simulator"], new: false},
+  {title: "We Become What We Behold", description: "Dino Game", image: "thumbnails/wbwwb.jpg", link: "games/webecomewhatwebehold/index.html", genre: ["Strategy", "Simulator"], new: false},
+  {title: "Chrome Dino", description: "Dino Game", image: "thumbnails/chromedino.jpg", link: "games/chromedino/index.html", genre: ["Strategy", "Platformer"], new: false},
+  {title: "Stickman hook", description: "Stickman", image: "thumbnails/stickmanhook.jpg", link: "games/stickman-hook/index.html", genre: ["Puzzle", "Strategy", "Platformer"], new: false},
+  {title: "Moto 3XM", description: "Motocycle", image: "thumbnails/moto3xm.jpg", link: "games/motox3m/index.html", genre: ["Racing", "Sports"], new: false},
+  {title: "Moto 3XM 2", description: "Motocycle", image: "thumbnails/moto3xm2.jpg", link: "games/moto3xm2/index.html", genre: ["Racing", "Sports"], new: false},
+  {title: "Moto 3XM 3", description: "Motocycle", image: "thumbnails/moto3xm3.jpg", link: "games/moto3xm3/index.html", genre: ["Racing", "Sports"], new: false},
+  {title: "Snow Rider 3D", description: "Snow Rider", image: "thumbnails/snowrider3d.jpg", link: "games/snowrider3d/index.html", genre: ["Racing", "Sports"], new: false},
+  {title: "Mountain Bike Racer", description: "HTML", image: "thumbnails/mountainbikeracer.jpg", link: "games/mountainbikeracer/index.html", genre: ["Puzzle", "Adventure", "Racing"], new: false},
+  {title: "Portal 2D", description: "USING FLASH/Ruffle!", image: "thumbnails/portal2d.jpg", link: "games/ruffle/index.html?swf=games/Portal_wcs2.swf", genre: ["Puzzle", "Adventure"], new: false},
+  {title: "Learn To Fly", description: "USING FLASH/Ruffle!", image: "thumbnails/l2f.jpg", link: "games/ruffle/index.html?swf=games/learn-to-fly-3789.swf", genre: ["Puzzle", "Adventure", "Arcade", "Action"], new: false},
+  {title: "Learn To Fly 2", description: "USING FLASH/Ruffle!", image: "thumbnails/l2f2.jpg", link: "games/ruffle/index.html?swf=games/learn-to-fly-2-11967.swf", genre: ["Puzzle", "Adventure", "Arcade", "Action"], new: false},
+  {title: "Jack Smith", description: "USING FLASH/Ruffle!", image: "thumbnails/jacksmith.jpg", link: "games/ruffle/index.html?swf=games/jacksmith.swf", genre: ["Adventure", "Crafting"], new: false},
+  {title: "Run 2", description: "USING FLASH/Ruffle!", image: "thumbnails/run2.jpg", link: "games/ruffle/index.html?swf=games/run2.swf", genre: ["Platformer", "Arcade"], new: false},
+  {title: "Run 3", description: "USING FLASH/Ruffle!", image: "thumbnails/run3.jpg", link: "games/ruffle/index.html?swf=games/run3-new.swf", genre: ["Platformer", "Arcade"], new: false},
+  {title: "Awesome Tanks 2", description: "USING FLASH/Ruffle!", image: "thumbnails/at2.jpg", link: "games/ruffle/index.html?swf=games/awesome_tanks_2.swf", genre: ["Action", "Shooter"], new: false},
+  {title: "Ballons Tower Defense 5", description: "USING FLASH/Ruffle!", image: "thumbnails/btd5.jpg", link: "games/ruffle/index.html?swf=games/bloonstd5", genre: ["Strategy", "Tower Defense"], new: false},
+  {title: "Cut The Rope", description: "cut the rope", image: "thumbnails/cuttherope.jpg", link: "games/cuttherope/index.html", genre: ["Puzzle", "Casual"], new: false},
+  {title: "RaftWars", description: "USING FLASH/Ruffle!", image: "thumbnails/raftwars1.jpg", link: "games/ruffle/index.html?swf=games/raftwars.swf", genre: ["Action", "Shooter"], new: false},
+  {title: "Bloxorz", description: "USING FLASH/Ruffle!", image: "thumbnails/bloxorz.jpg", link: "games/ruffle/index.html?swf=games/bloxorz.swf", genre: ["Puzzle", "Strategy"], new: false},
+  {title: "Cut The Rope HOLIDAY", description: "cut the rope", image: "thumbnails/cuttheropeh.jpg", link: "games/cuttheropeholiday/index.html", genre: ["Puzzle", "Casual"], new: false},
+  {title: "Baseball Bros", description: "Baseball :)", image: "thumbnails/baseballbros.jpg", link: "games/baseballbros/index.html", genre: ["Sports", "Multiplayer"], new: false},
+  {title: "Free Rider 3", description: "FLASH/Ruffle!", image: "thumbnails/freerider3.jpg", link: "games/ruffle/index.html?swf=games/freerider-3.swf", genre: ["Racing", "Sports"], new: false},
+  {title: "Monkey Mart", description: "Monkey Works", image: "thumbnails/monkeymart.jpg", link: "games/monkeymart/index.html", genre: ["Simulation", "Strategy"], new: false},
+  {title: "Drive Mad", description: "Drive Truck :)", image: "thumbnails/drivemad.jpg", link: "games/drivemad/index.html", genre: ["Racing", "Arcade"], new: false},
+  {title: "Temple Run", description: "Run From Moneky", image: "thumbnails/templerun.jpg", link: "games/templerun/index.html", genre: ["Arcade", "Platformer"], new: false},
+  {title: "Flappy Bird", description: "Flappy Bird", image: "thumbnails/flappybird.jpg", link: "games/flappybird/index.html", genre: ["Arcade", "Casual"], new: false},
+  {title: "Football Bros", description: "Football :)", image: "thumbnails/footballbros.jpg", link: "games/footballbros/index.html", genre: ["Sports", "Multiplayer"], new: false},
+  {title: "Duck Clicker", description: "Ducks :)", image: "thumbnails/duckclicker.jpg", link: "games/duckclicker/index.html", genre: ["Clicker", "Casual"], new: false},
+  {title: "Basketrandom", description: "Basketrandom", image: "thumbnails/basketrandom.jpg", link: "games/basketrandom/index.html", genre: ["Sports", "Arcade"], new: false},
+  {title: "Raft Wars 2", description: "RAFT WARS!", image: "thumbnails/raftwars2.jpg", link: "games/raftwars/index.html", genre: ["Action", "Shooter"], new: false},
+  {title: "Vex3", description: "vex3", image: "thumbnails/vex3.jpg", link: "games/vex3/index.html", genre: ["Platformer", "Arcade"], new: false},
+  {title: "Vex4", description: "vex4", image: "thumbnails/vex4.jpg", link: "games/vex4/index.html", genre: ["Platformer", "Arcade"], new: false},
+  {title: "Vex5", description: "vex5", image: "thumbnails/vex5.jpg", link: "games/vex5/index.html", genre: ["Platformer", "Arcade"], new: false},
+  {title: "Vex6", description: "vex6", image: "thumbnails/vex6.jpg", link: "games/vex6/index.html", genre: ["Platformer", "Arcade"], new: false},
+  {title: "Ducklife", description: "Ducklife", image: "thumbnails/ducklife.jpg", link: "games/ducklife/index.html", genre: ["Simulation", "Sports"], new: false},
+  {title: "Ducklife 2", description: "Ducklife 2", image: "thumbnails/ducklife2.jpg", link: "games/ducklife2/index.html", genre: ["Simulation", "Sports"], new: false},
+  {title: "Ducklife 3", description: "Ducklife 3", image: "thumbnails/ducklife3.jpg", link: "games/ducklife3/index.html", genre: ["Simulation", "Sports"], new: false},
+  {title: "Ducklife 4", description: "Ducklife 4", image: "thumbnails/ducklife4.jpg", link: "games/ducklife4/index.html", genre: ["Simulation", "Sports"], new: false},
+  {title: "Tunnel Rush", description: "Tunnel Rush", image: "thumbnails/tunnelrush.jpg", link: "games/tunnelrush/index.html", genre: ["Racing", "Arcade"], new: false},
+  {title: "Slope", description: "Slope 1", image: "thumbnails/slope.jpg", link: "games/slope/index.html", genre: ["Racing", "Arcade"], new: false},
+  {title: "Slope 2", description: "Slope 2", image: "thumbnails/slope2.jpg", link: "games/slope2/index.html", genre: ["Racing", "Arcade"], new: false},
+  {title: "The Impossiable Quiz", description: "Hard Quiz", image: "thumbnails/theimpossiablequiz.jpg", link: "games/theimpossiablequiz/index.html", genre: ["Puzzle", "Trivia"], new: false},
+  {title: "Line Rider", description: "Line Rider", image: "thumbnails/linerider.jpg", link: "games/linerider/index.html", genre: ["Physics", "Casual"], new: false},
+  {title: "CSGO Clicker", description: "Click your way to victory in this CSGO-themed clicker game!", image: "thumbnails/csgo.png", link: "games/csgoclicker/index.html", genre: ["Clicker", "Action"], new: false},
+  {title: "Doodle Jump", description: "Doodle Jump", image: "thumbnails/doodlejump.jpg", link: "games/doodlejump/index.html", genre: ["Platformer", "Arcade"], new: false},
+  {title: "Nut Simulator", description: "Collect nuts in this hilarious simulation game", image: "thumbnails/nut.png", link: "games/nut-simulator/index.html", genre: ["Simulation", "Clicker"], new: false},
+  {title: "Tiny Fishing", description: "Relaxing fishing game with cute graphics 🎣", image: "thumbnails/tiny-fishing.jpg", link: "games/tinyfishing/index.html", genre: ["Simulation", "Casual"], new: false},
+  {title: "Cluster Rush", description: "Navigate through challenging obstacle courses", image: "thumbnails/clusterrush.jpg", link: "games/clusterrush/index.html", genre: ["Arcade", "Platformer"], new: false},
+  {title: "Bit Life", description: "Live a virtual life and make important decisions", image: "thumbnails/bitlife.jpg", link: "games/bitlife/index.html", genre: ["Simulation", "Life"], new: false},
+  {title: "Stack", description: "Stack blocks as high as you can without falling", image: "thumbnails/stack.jpg", link: "games/stack/game.html", genre: ["Puzzle", "Arcade"], new: false},
+  {title: "Crossy Roads", description: "Help the chicken cross the road safely 🐔🚙", image: "thumbnails/crossyroads.jpg", link: "games/crossyroad/index.html", genre: ["Arcade", "Casual"], new: false},
+  {title: "Poly Track", description: "🏎️", image: "thumbnails/pollytrack.jpg", link: "games/polytrack/index.html", genre: ["Racing", "Arcade"], new: false},
+  {title: "House Of Hazards", description: "🏎️", image: "thumbnails/hoh.jpg", link: "games/hoh/index.html", genre: ["Arcade", "Multiplayer"], new: false},
+  {title: "Geometry Dash", description: "Rhythm-based action platformer", image: "thumbnails/geodash.jpg", link: "games/geometrydash/index.html", genre: ["Music", "Platformer"], new: false},
+  {title: "Retro Bowl COLLEGE", description: "🏈", image: "thumbnails/rrbc.jpg", link: "games/rrbc/index.html", genre: ["Sports", "Simulation"], new: false},
+  {title: "OvO", description: "Platformer", image: "thumbnails/ovo.jpg", link: "games/ovo/index.html", genre: ["Platformer", "Arcade"], new: false},
+  {title: "Drift Hunters", description: "Realistic drifting simulation with tuning options", image: "thumbnails/drifthunters.jpg", link: "games/drifthunters/index.html", genre: ["Racing", "Simulation"], new: false},
+  {title: "Fire boy And Water Girl", description: "Cool Game", image: "thumbnails/fireboyandwatergirl.jpg", link: "games/fireboyandwatergirlforesttemple/index.html", genre: ["Puzzle", "Co-op"], new: false},
+  {title: "Paper.io", description: "Cool Game 👍", image: "thumbnails/paperio.jpg", link: "games/paperio/index.html", genre: ["Strategy", "Multiplayer"], new: false},
+  {title: "Basketball Legends 2020", description: "Epic basketball duels with special powers", image: "thumbnails/basketball1.jpg", link: "games/basketballlegends/index.html", genre: ["Sports", "Fighting"], new: false},
+  {title: "Basketball Stars", description: "One-on-one basketball with slick moves", image: "thumbnails/basketball2.jpg", link: "games/basketballstars/index.html", genre: ["Sports", "Arcade"], new: false},
+  {title: "Basketball Bros IO", description: "Multiplayer basketball madness", image: "thumbnails/basketball3.jpg", link: "games/basketbrosio/index.html", genre: ["Sports", "Multiplayer"], new: false},
+  {title: "Cookie Clicker", description: "The classic clicker game - bake cookies!", image: "thumbnails/cookieclicker.jpg", link: "games/cookieclicker/index.html", genre: ["Clicker", "Incremental"], new: false},
+  {title: "Retro Bowl", description: "Classic football management game 🏈", image: "thumbnails/retrobowl.jpg", link: "games/retrobowl/index.html", genre: ["Sports", "Simulation"], new: false},
+  {title: "Clicker Heroes", description: "Defeat monsters and upgrade your heroes", image: "thumbnails/clickerheros.jpg", link: "games/clickerheroes/index.html", genre: ["Clicker", "RPG"], new: false},
+  {title: "PacMan", description: "The classic arcade maze chase game", image: "thumbnails/pacman.jpg", link: "games/pacman/index.html", genre: ["Arcade", "Classic"], new: false},
+  {title: "Coming Soon", description: "More exciting games are on the way...", image: "thumbnails/comingsoon.png", link: "#", genre: ["All"], new: false}
+    ];
+
+    const GENRES = [
+      {id: "all", name: "All Games", icon: "fa-gamepad", count: GAMES.length},
+      {id: "favorites", name: "Favorites", icon: "fa-heart", count: 0},
+      {id: "new", name: "New", icon: "fa-rocket", count: GAMES.filter(g=>g.new).length},
+      {id: "racing", name: "Racing", icon: "fa-car", count: GAMES.filter(g=>g.genre.includes("Racing")).length},
+      {id: "sports", name: "Sports", icon: "fa-futbol", count: GAMES.filter(g=>g.genre.includes("Sports")).length},
+      {id: "arcade", name: "Arcade", icon: "fa-gamepad", count: GAMES.filter(g=>g.genre.includes("Arcade")).length}
+    ];
+
+    // --- STATE ---
+    let currentGenre = "all";
+    let currentSearch = "";
+    let favorites = new Set();
+    let cloakingEnabled = false;
+    let cloakingMode = "none";
+    let customCloakName = "";
+    let settings = { theme: "midnight", autoSaveFavorites: true };
+    let currentGameTitle = "";
+
+    // DOM elements
+    const loadingScreen = document.getElementById('loading-screen');
+    window.addEventListener('load', ()=>{
+      setTimeout(()=>{ loadingScreen.style.opacity = '0'; setTimeout(()=>loadingScreen.style.display='none',600); }, 1200);
+    });
+
+    // Copy server IP function (wss://)
+    window.copyServerIP = function() {
+      const ipText = document.getElementById('server-ip').innerText;
+      navigator.clipboard.writeText(ipText).then(() => {
+        showNotification('Copied!', 'Server IP copied to clipboard');
+      }).catch(err => {
+        // fallback
+        const textarea = document.createElement('textarea');
+        textarea.value = ipText;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        showNotification('Copied!', 'Server IP copied to clipboard');
+      });
+    };
+
+    // Notification functions
+    function showNotification(title, msg) {
+      const n = document.getElementById('notification');
+      document.getElementById('notification-title').innerText = title;
+      document.getElementById('notification-content').innerText = msg;
+      n.style.display = 'flex';
+      setTimeout(()=>n.style.display='none', 3000);
+    }
+    document.getElementById('notification-close').onclick = ()=>document.getElementById('notification').style.display='none';
+
+    // Render games
+    function renderGames() {
+      let filtered = GAMES;
+      if(currentGenre === "favorites") filtered = filtered.filter(g=>favorites.has(g.title));
+      else if(currentGenre === "new") filtered = filtered.filter(g=>g.new);
+      else if(currentGenre !== "all") filtered = filtered.filter(g=>g.genre.map(x=>x.toLowerCase()).includes(currentGenre));
+      if(currentSearch) {
+        const s = currentSearch.toLowerCase();
+        filtered = filtered.filter(g=> g.title.toLowerCase().includes(s) || g.description.toLowerCase().includes(s));
+      }
+      document.getElementById('totalGames').innerText = filtered.length + ' Games';
+      const container = document.getElementById('games-container');
+      container.innerHTML = filtered.map(game=>`
+        <div class="game-card ${game.new ? 'new-game' : ''}">
+          ${game.new ? '<span class="badge-new">NEW</span>' : ''}
+          <img src="${game.image}" alt="${game.title}" class="card-image" onerror="this.src='thumbnails/comingsoon.png'">
+          <div class="card-content">
+            <div class="game-title">${game.title}</div>
+            <div class="game-description">${game.description}</div>
+            <div class="genre-tags">${game.genre.map(g=>`<span class="genre-tag">${g}</span>`).join('')}</div>
+            <button class="play-btn" onclick="openGame('${game.link}','${game.title}')"><i class="fas fa-play"></i> PLAY</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Genre sidebar
+    function initGenres() {
+      const list = document.getElementById('genre-list');
+      list.innerHTML = GENRES.map(g=>`
+        <li class="genre-item ${g.id===currentGenre?'active':''}" data-genre="${g.id}">
+          <i class="fas ${g.icon}"></i> ${g.name} <span class="count">${g.id==='favorites'?favorites.size:g.count}</span>
+        </li>
+      `).join('');
+      document.querySelectorAll('.genre-item').forEach(el=>{
+        el.addEventListener('click', function(){
+          document.querySelectorAll('.genre-item').forEach(x=>x.classList.remove('active'));
+          this.classList.add('active');
+          currentGenre = this.dataset.genre;
+          renderGames();
+          if(window.innerWidth<900) document.getElementById('sidebar').classList.add('closed');
+        });
+      });
+    }
+
+    // openGame
+    window.openGame = function(link, title) {
+      currentGameTitle = title;
+      if(link==='#') { showNotification("Coming Soon","Stay tuned"); return; }
+      const iframe = document.getElementById('game-frame');
+      iframe.src = link;
+      document.getElementById('game-menu').classList.add('active');
+      document.body.style.overflow = 'hidden';
+      updateFavButton();
+    };
+
+    function updateFavButton() {
+      const btn = document.getElementById('fav-btn');
+      if(favorites.has(currentGameTitle)) {
+        btn.innerHTML = '<i class="fas fa-heart"></i> Favorited';
+      } else btn.innerHTML = '<i class="fas fa-heart"></i> Favorite';
+    }
+
+    // Sidebar toggle
+    document.getElementById('sidebar-toggle').addEventListener('click', ()=>{
+      document.getElementById('sidebar').classList.toggle('closed');
+    });
+
+    // Search
+    document.getElementById('gameSearch').addEventListener('input', (e)=>{
+      currentSearch = e.target.value;
+      renderGames();
+    });
+
+    // Favorites
+    document.getElementById('fav-btn').addEventListener('click', ()=>{
+      if(!currentGameTitle) return;
+      if(favorites.has(currentGameTitle)) {
+        favorites.delete(currentGameTitle);
+        showNotification("Removed","from favorites");
+      } else {
+        favorites.add(currentGameTitle);
+        showNotification("Added","to favorites");
+      }
+      updateFavButton();
+      updateFavoritesCount();
+      if(settings.autoSaveFavorites) saveData();
+      renderGames();
+    });
+
+    function updateFavoritesCount() {
+      document.getElementById('favorites-count').innerText = favorites.size + ' Games';
+      const favGenre = document.querySelector('.genre-item[data-genre="favorites"] .count');
+      if(favGenre) favGenre.innerText = favorites.size;
+    }
+
+    // Settings modal
+    document.getElementById('settings-btn').addEventListener('click', ()=>document.getElementById('settings-modal').classList.add('active'));
+    document.getElementById('close-settings').addEventListener('click', ()=>document.getElementById('settings-modal').classList.remove('active'));
+    document.getElementById('save-settings').addEventListener('click', ()=>{
+      cloakingEnabled = document.getElementById('cloaking-enabled').checked;
+      settings.autoSaveFavorites = document.getElementById('auto-save-favorites').checked;
+      saveData();
+      showNotification("Settings","saved");
+      document.getElementById('settings-modal').classList.remove('active');
+    });
+    document.getElementById('clear-favorites').addEventListener('click', ()=>{
+      favorites.clear(); renderGames(); updateFavoritesCount(); saveData(); showNotification("Favorites","cleared");
+    });
+
+    // Cloaking options
+    document.querySelectorAll('.cloaking-option').forEach(opt=>{
+      opt.addEventListener('click', function(){
+        document.querySelectorAll('.cloaking-option').forEach(o=>o.classList.remove('active'));
+        this.classList.add('active');
+        cloakingMode = this.dataset.mode;
+        if(cloakingEnabled) applyCloaking(cloakingMode);
+      });
+    });
+    document.getElementById('cloaking-enabled').addEventListener('change', (e)=>{
+      cloakingEnabled = e.target.checked;
+      if(cloakingEnabled && cloakingMode!=='none') applyCloaking(cloakingMode);
+      else if(!cloakingEnabled) applyCloaking('none');
+    });
+
+    function applyCloaking(mode) {
+      const titleEl = document.querySelector('.brand');
+      if(mode==='none') titleEl.innerHTML = '<span>FROSTS</span> GAMES';
+      else if(mode==='calculator') titleEl.innerText = 'CALCULATOR PRO';
+      else if(mode==='docs') titleEl.innerText = 'DOCUMENT EDITOR';
+      else if(mode==='research') titleEl.innerText = 'RESEARCH PORTAL';
+      document.title = titleEl.innerText;
+    }
+
+    // Theme toggles
+    document.getElementById('theme-toggle').addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const opt = document.getElementById('theme-options');
+      opt.style.display = opt.style.display==='flex' ? 'none' : 'flex';
+    });
+    document.querySelectorAll('.theme-option').forEach(el=>{
+      el.addEventListener('click', function(){
+        const theme = this.dataset.theme;
+        document.body.className = '';
+        document.body.classList.add('theme-'+theme);
+        document.getElementById('theme-options').style.display='none';
+        settings.theme=theme;
+      });
+    });
+
+    // TOS
+    document.getElementById('tos-btn').addEventListener('click', ()=>document.getElementById('tos-modal').classList.add('active'));
+    document.getElementById('tos-agree').addEventListener('click', ()=>document.getElementById('tos-modal').classList.remove('active'));
+    document.getElementById('tos-disagree').addEventListener('click', ()=>window.location.href='https://google.com');
+
+    // Exit game menu
+    document.getElementById('exit-btn').onclick = ()=>{
+      document.getElementById('game-frame').src = '';
+      document.getElementById('game-menu').classList.remove('active');
+      document.body.style.overflow = 'auto';
+    };
+    document.getElementById('fullscreen-btn').onclick = ()=> document.getElementById('game-frame').requestFullscreen();
+    
+    // NEW TAB FIX: opens about:blank with game iframe
+    document.getElementById('newtab-btn').onclick = ()=> {
+      let gameLink = document.getElementById('game-frame').src;
+      if (!gameLink || gameLink === '') return;
+      const win = window.open('about:blank', '_blank');
+      win.document.write(`<body style="margin:0;background:#000"><iframe src="${gameLink}" style="width:100%;height:100%;border:none;" allowfullscreen></iframe></body>`);
+    };
+
+    // Save/load cookies
+    function saveData() {
+      document.cookie = "favs="+JSON.stringify(Array.from(favorites))+";path=/";
+    }
+    function loadSavedData() {
+      const cookie = document.cookie.split('; ').find(row=>row.startsWith('favs='));
+      if(cookie) {
+        try { favorites = new Set(JSON.parse(cookie.split('=')[1])); } catch(e){}
+      }
+      updateFavoritesCount();
+    }
+
+    // init
+    document.addEventListener('DOMContentLoaded', ()=>{
+      document.getElementById('currentYear').innerText = new Date().getFullYear();
+      loadSavedData();
+      initGenres();
+      renderGames();
+      createRain();
+    });
+
+    // Create rain drops
+    function createRain() {
+      const container = document.getElementById('rain');
+      const dropCount = 80;
+      for(let i = 0; i < dropCount; i++) {
+        const drop = document.createElement('div');
+        drop.className = 'rain-drop';
+        drop.style.left = Math.random() * 100 + '%';
+        drop.style.animationDuration = (Math.random() * 0.5 + 0.5) + 's';
+        drop.style.animationDelay = Math.random() * 2 + 's';
+        drop.style.opacity = Math.random() * 0.5 + 0.3;
+        container.appendChild(drop);
+      }
+    }
+
+    // misc close modal outside click
+    window.onclick = (e)=>{
+      if(e.target.classList.contains('modal')) e.target.classList.remove('active');
+    };
+  </script>
+</body>
+</html>
